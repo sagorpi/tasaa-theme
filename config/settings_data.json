@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": "Dawn",
   "presets": {
@@ -6,62 +15,62 @@
       "color_schemes": {
         "scheme-1": {
           "settings": {
-            "background": "#FFFFFF",
+            "background": "#FBF7F1",
             "background_gradient": "",
-            "text": "#121212",
-            "button": "#121212",
-            "button_label": "#FFFFFF",
-            "secondary_button_label": "#121212",
-            "shadow": "#121212"
+            "text": "#3A2E26",
+            "button": "#A24332",
+            "button_label": "#FBF7F1",
+            "secondary_button_label": "#3A2E26",
+            "shadow": "#3A2E26"
           }
         },
         "scheme-2": {
           "settings": {
-            "background": "#F3F3F3",
+            "background": "#F1E7D9",
             "background_gradient": "",
-            "text": "#121212",
-            "button": "#121212",
-            "button_label": "#F3F3F3",
-            "secondary_button_label": "#121212",
-            "shadow": "#121212"
+            "text": "#3A2E26",
+            "button": "#3A2E26",
+            "button_label": "#F1E7D9",
+            "secondary_button_label": "#3A2E26",
+            "shadow": "#3A2E26"
           }
         },
         "scheme-3": {
           "settings": {
-            "background": "#242833",
+            "background": "#3A2E26",
             "background_gradient": "",
-            "text": "#FFFFFF",
-            "button": "#FFFFFF",
-            "button_label": "#000000",
-            "secondary_button_label": "#FFFFFF",
-            "shadow": "#121212"
+            "text": "#FBF7F1",
+            "button": "#FBF7F1",
+            "button_label": "#3A2E26",
+            "secondary_button_label": "#FBF7F1",
+            "shadow": "#1F1812"
           }
         },
         "scheme-4": {
           "settings": {
-            "background": "#121212",
+            "background": "#2A211B",
             "background_gradient": "",
-            "text": "#FFFFFF",
-            "button": "#FFFFFF",
-            "button_label": "#121212",
-            "secondary_button_label": "#FFFFFF",
-            "shadow": "#121212"
+            "text": "#FBF7F1",
+            "button": "#FBF7F1",
+            "button_label": "#2A211B",
+            "secondary_button_label": "#FBF7F1",
+            "shadow": "#1F1812"
           }
         },
         "scheme-5": {
           "settings": {
-            "background": "#334FB4",
+            "background": "#A24332",
             "background_gradient": "",
-            "text": "#FFFFFF",
-            "button": "#FFFFFF",
-            "button_label": "#334FB4",
-            "secondary_button_label": "#FFFFFF",
-            "shadow": "#121212"
+            "text": "#FBF7F1",
+            "button": "#FBF7F1",
+            "button_label": "#A24332",
+            "secondary_button_label": "#FBF7F1",
+            "shadow": "#1F1812"
           }
         }
       },
-      "type_header_font": "assistant_n4",
-      "heading_scale": 100,
+      "type_header_font": "playfair_display_n4",
+      "heading_scale": 110,
       "type_body_font": "assistant_n4",
       "body_scale": 100,
       "page_width": 1200,

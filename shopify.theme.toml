@@ -1,0 +1,7 @@
+[environments.development]
+store = "tasaa-dev.myshopify.com"
+theme = "dev-theme-id"
+
+[environments.production]
+store = "tasaa.myshopify.com"
+theme = "live-theme-id"
