@@ -13,13 +13,26 @@
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
 
+  /* ── Mobile carousel (< 750 px) ─────────────────────────────────────────
+     Flex row with snap scrolling. Each item is exactly 20 % of the
+     container so precisely 5 circles are visible at once.
+     Scrollbar, arrows, and dots are all hidden.                           */
   #shopify-section-{{ section.id }} .collection-circles {
-    display: grid;
-    grid-template-columns: repeat({{ section.settings.columns_mobile }}, minmax(0, 1fr));
-    gap: 1.5rem 1rem;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 0;
     list-style: none;
     margin: 0;
     padding: 0;
+  }
+
+  #shopify-section-{{ section.id }} .collection-circles::-webkit-scrollbar {
+    display: none;
   }
 
   #shopify-section-{{ section.id }} .collection-circles-wrapper {
@@ -28,6 +41,11 @@
   }
 
   #shopify-section-{{ section.id }} .collection-circles__item {
+    flex: 0 0 20%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding-inline: 0.4rem;
+    scroll-snap-align: start;
     margin: 0;
   }
 
@@ -75,13 +93,25 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
 
-    /* auto-fit: fills the row and collapses empty tracks so items always
-       share the full container width. 9 rem (≈ 144 px) is the minimum
-       track width — below it a column wraps to the next row instead of
-       shrinking further. gap scales fluidly with the viewport. */
+    /* Switch from mobile flex carousel back to the fluid auto-fit grid.
+       overflow and snap are reset so desktop is unaffected by mobile rules. */
     #shopify-section-{{ section.id }} .collection-circles {
+      display: grid;
       grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+      overflow: visible;
+      scroll-snap-type: none;
       gap: clamp(1.2rem, 1.5vw, 2.4rem);
+    }
+
+    /* Reset the 0.4 rem padding added for carousel spacing.
+       Clones injected by the infinite-loop script must not appear in the grid. */
+    #shopify-section-{{ section.id }} .collection-circles__item {
+      flex: none;
+      padding-inline: 0;
+    }
+
+    #shopify-section-{{ section.id }} .collection-circles__item[data-clone] {
+      display: none;
     }
 
     #shopify-section-{{ section.id }} .collection-circles__title {
@@ -147,7 +177,7 @@
                     {{ collection.featured_image | image_url }} {{ collection.featured_image.width }}w
                   "
                   src="{{ collection.featured_image | image_url: width: 330 }}"
-                  sizes="(min-width: 1600px) 10vw, (min-width: 750px) 12vw, {{ 100 | divided_by: section.settings.columns_mobile }}vw"
+                  sizes="(min-width: 1600px) 10vw, (min-width: 750px) 12vw, 20vw"
                   alt="{{ collection.featured_image.alt | escape }}"
                   width="{{ collection.featured_image.width }}"
                   height="{{ collection.featured_image.height }}"
@@ -171,6 +201,85 @@
     </ul>
   </div>
 </div>
+
+<script>
+(function () {
+  'use strict';
+
+  var MOBILE_BREAKPOINT  = 750;
+  /* How long (ms) to wait for the smooth-scroll animation to finish before
+     performing the silent instant reset. Must be less than duration * 1000. */
+  var SCROLL_SETTLE_MS   = 380;
+
+  var duration = {{ section.settings.autoplay_duration }};
+
+  /* Only active on mobile viewports with autoplay enabled */
+  if (duration === 0 || window.innerWidth >= MOBILE_BREAKPOINT) return;
+
+  var list = document.querySelector('#shopify-section-{{ section.id }} .collection-circles');
+  if (!list) return;
+
+  /* ── 1. Collect real items and build clones ──────────────────────────── */
+  var realItems = Array.from(list.querySelectorAll('.collection-circles__item'));
+  var total = realItems.length;
+  if (total < 2) return;
+
+  realItems.forEach(function (item) {
+    var clone = item.cloneNode(true);
+    /* data-clone lets the desktop CSS rule hide these nodes in the grid */
+    clone.setAttribute('data-clone', '');
+    /* Remove clones from keyboard/screen-reader flow */
+    clone.setAttribute('aria-hidden', 'true');
+    clone.querySelectorAll('a, button, [tabindex]').forEach(function (el) {
+      el.setAttribute('tabindex', '-1');
+    });
+    list.appendChild(clone);
+  });
+
+  /* Re-query so allItems includes the clones (indices 0 … 2N-1) */
+  var allItems = list.querySelectorAll('.collection-circles__item');
+
+  /* ── 2. Autoplay with infinite-loop logic ────────────────────────────── */
+  var currentIndex = 0;
+  var jumping      = false; /* guard: skip interval ticks during silent reset */
+
+  setInterval(function () {
+    if (jumping) return;
+
+    currentIndex++;
+
+    /* Smooth-scroll forward to the next item (real or clone) */
+    list.scrollTo({
+      left: allItems[currentIndex].offsetLeft,
+      behavior: 'smooth'
+    });
+
+    /* ── 3. Silent reset when we land on the first clone ─────────────────
+       clone[0] is visually identical to real[0].  Once the smooth animation
+       settles we instantly jump the scroll position back to real[0].
+       The user sees no rewind because the pixels look the same.           */
+    if (currentIndex >= total) {
+      jumping = true;
+
+      setTimeout(function () {
+        /* Disable snap so the browser engine does not fight the instant jump */
+        list.style.scrollSnapType = 'none';
+        list.scrollLeft = allItems[0].offsetLeft; /* instant — no animation */
+
+        /* Two rAF calls: first flush the scrollLeft change to the GPU,
+           second re-enable snap after the frame has been painted */
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            list.style.scrollSnapType = ''; /* restore CSS value */
+            currentIndex = 0;
+            jumping      = false;
+          });
+        });
+      }, SCROLL_SETTLE_MS);
+    }
+  }, duration * 1000);
+})();
+</script>
 
 {% schema %}
 {
@@ -210,6 +319,20 @@
       ],
       "default": "3",
       "label": "Number of columns on mobile"
+    },
+    {
+      "type": "header",
+      "content": "Mobile carousel"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_duration",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 0,
+      "label": "Mobile autoplay duration (0 = disabled)"
     },
     {
       "type": "header",

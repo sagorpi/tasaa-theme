@@ -81,37 +81,37 @@
         "cat_3": {
           "type": "collection",
           "settings": {
-            "collection": ""
+            "collection": "blouse"
           }
         },
         "cat_4": {
           "type": "collection",
           "settings": {
-            "collection": ""
+            "collection": "saree-copy-copy"
           }
         },
         "cat_5": {
           "type": "collection",
           "settings": {
-            "collection": ""
+            "collection": "saree-copy-copy-copy"
           }
         },
         "cat_6": {
           "type": "collection",
           "settings": {
-            "collection": ""
+            "collection": "saree-copy-copy-1"
           }
         },
         "collection_AENRpA": {
           "type": "collection",
           "settings": {
-            "collection": ""
+            "collection": "saree-copy-1"
           }
         },
         "collection_imG7wj": {
           "type": "collection",
           "settings": {
-            "collection": ""
+            "collection": "lehenga-copy"
           }
         }
       },
@@ -129,7 +129,6 @@
         "title": "",
         "heading_size": "h1",
         "color_scheme": "scheme-1",
-        "columns_desktop": 8,
         "columns_mobile": "2",
         "padding_top": 36,
         "padding_bottom": 36
