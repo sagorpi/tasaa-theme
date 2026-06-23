@@ -70,13 +70,35 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
 
+    /* auto-fit: fills the row and collapses empty tracks so items always
+       share the full container width. 9 rem (≈ 144 px) is the minimum
+       track width — below it a column wraps to the next row instead of
+       shrinking further. gap scales fluidly with the viewport. */
     #shopify-section-{{ section.id }} .collection-circles {
-      grid-template-columns: repeat({{ section.settings.columns_desktop }}, minmax(0, 1fr));
-      gap: 2.4rem 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+      gap: clamp(1.2rem, 1.5vw, 2.4rem);
     }
 
     #shopify-section-{{ section.id }} .collection-circles__title {
       font-size: 1.6rem;
+    }
+  }
+
+  /* ── Ultra-wide (≥ 1600 px) ─────────────────────────────────────────────
+     Lift the global .page-width cap (typically 120 rem / 1200 px) for this
+     section only. auto-fit + 1fr then distributes all items across the
+     expanded container automatically — no column-count override needed.   */
+  @media screen and (min-width: 1600px) {
+    #shopify-section-{{ section.id }} .collection-circles-wrapper {
+      max-width: min(90vw, 220rem);
+    }
+
+    #shopify-section-{{ section.id }} .collection-circles {
+      gap: clamp(2rem, 1.5vw, 3.2rem);
+    }
+
+    #shopify-section-{{ section.id }} .collection-circles__title {
+      font-size: clamp(1.6rem, 1.2vw, 2.4rem);
     }
   }
 {%- endstyle -%}
@@ -119,7 +141,7 @@
                     {{ collection.featured_image | image_url }} {{ collection.featured_image.width }}w
                   "
                   src="{{ collection.featured_image | image_url: width: 330 }}"
-                  sizes="(min-width: 750px) {{ 100 | divided_by: section.settings.columns_desktop }}vw, {{ 100 | divided_by: section.settings.columns_mobile }}vw"
+                  sizes="(min-width: 1600px) 10vw, (min-width: 750px) 12vw, {{ 100 | divided_by: section.settings.columns_mobile }}vw"
                   alt="{{ collection.featured_image.alt | escape }}"
                   width="{{ collection.featured_image.width }}"
                   height="{{ collection.featured_image.height }}"
@@ -172,15 +194,6 @@
       "id": "color_scheme",
       "default": "scheme-1",
       "label": "Color scheme"
-    },
-    {
-      "type": "range",
-      "id": "columns_desktop",
-      "min": 3,
-      "max": 8,
-      "step": 1,
-      "default": 6,
-      "label": "Number of columns on desktop"
     },
     {
       "type": "select",

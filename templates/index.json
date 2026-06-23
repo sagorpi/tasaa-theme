@@ -67,6 +67,7 @@
       "blocks": {
         "cat_1": {
           "type": "collection",
+          "disabled": true,
           "settings": {
             "collection": ""
           }
@@ -74,7 +75,7 @@
         "cat_2": {
           "type": "collection",
           "settings": {
-            "collection": ""
+            "collection": "hydrogen"
           }
         },
         "cat_3": {
