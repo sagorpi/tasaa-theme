@@ -2,6 +2,102 @@
 {{ 'component-slider.css' | asset_url | stylesheet_tag }}
 {{ 'component-slideshow.css' | asset_url | stylesheet_tag }}
 
+{%- style -%}
+  /* ── Positioning context ────────────────────────────────────────────────
+     slideshow-component is a custom element (display:inline by default).
+     Setting display:block + position:relative lets .slideshow__controls
+     be placed absolutely inside the banner area.                         */
+  #shopify-section-{{ section.id }} slideshow-component {
+    display: block;
+    position: relative;
+  }
+
+  /* ── Controls overlay — bottom-right corner ─────────────────────────── */
+  #shopify-section-{{ section.id }} .slideshow__controls {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 10;
+    border: none;
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 0;
+  }
+
+  /* Hide prev/next arrows and the pause/play button — dots only */
+  #shopify-section-{{ section.id }} .slider-button--prev,
+  #shopify-section-{{ section.id }} .slider-button--next,
+  #shopify-section-{{ section.id }} .slideshow__autoplay {
+    display: none;
+  }
+
+  /* Reset order so the --top variant doesn't fight the absolute position */
+  #shopify-section-{{ section.id }} .slideshow__controls--top {
+    order: unset;
+  }
+
+  /* ── SVG progress dot ───────────────────────────────────────────────── */
+  #shopify-section-{{ section.id }} .progress-dot-svg {
+    display: block;
+    overflow: visible;
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Reduce the button padding so dots sit closer together */
+  #shopify-section-{{ section.id }} .slider-counter__link {
+    padding: 0.3rem;
+  }
+
+  /* Outer ring — always visible, faint on inactive dots */
+  #shopify-section-{{ section.id }} .progress-dot-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Inner filled circle — dim on inactive, bright on active */
+  #shopify-section-{{ section.id }} .progress-dot-center {
+    fill: rgba(255, 255, 255, 0.45);
+    transition: fill 0.25s ease;
+  }
+
+  #shopify-section-{{ section.id }} .slider-counter__link--active .progress-dot-center {
+    fill: rgb(255, 255, 255);
+  }
+
+  /* Progress ring — stroke-dashoffset 56.55 = fully hidden arc
+     (circumference of r=9 circle: 2π×9 ≈ 56.55)                        */
+  #shopify-section-{{ section.id }} .progress-dot-fill {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.9);
+    stroke-dasharray: 56.55;
+    stroke-dashoffset: 56.55;   /* start fully hidden */
+    transform-origin: 12px 12px;
+    transform: rotate(-90deg);  /* begin stroke at clock 12 */
+  }
+
+  /* Active slide: animate from empty → full over exactly the autoplay speed */
+  #shopify-section-{{ section.id }} .slider-counter__link--active .progress-dot-fill {
+    animation: ss-{{ section.id }}-progress {{ section.settings.change_slides_speed }}s linear forwards;
+  }
+
+  @keyframes ss-{{ section.id }}-progress {
+    from { stroke-dashoffset: 56.55; }
+    to   { stroke-dashoffset: 0; }
+  }
+
+  /* ── Mobile: tighten the overlay inset ─────────────────────────────── */
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} .slideshow__controls {
+      bottom: 1.2rem;
+      right: 1.2rem;
+      padding: 0.3rem 0.6rem;
+    }
+  }
+{%- endstyle -%}
+
 {%- if section.settings.slide_height == 'adapt_image' and section.blocks.first.settings.image != blank -%}
   {%- style -%}
     @media screen and (max-width: 749px) {
@@ -61,7 +157,11 @@
                 {%- if section.settings.slider_visual == 'numbers' -%}
                   {{ forloop.index -}}
                 {%- else -%}
-                  <span class="dot"></span>
+                  <svg class="progress-dot-svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                    <circle class="progress-dot-bg"     cx="12" cy="12" r="9"   stroke-width="1.5"/>
+                    <circle class="progress-dot-fill"   cx="12" cy="12" r="9"   stroke-width="1.5"/>
+                    <circle class="progress-dot-center" cx="12" cy="12" r="2.5"/>
+                  </svg>
                 {%- endif -%}
               </button>
             {%- endfor -%}
@@ -220,7 +320,11 @@
                 {%- if section.settings.slider_visual == 'numbers' -%}
                   {{ forloop.index -}}
                 {%- else -%}
-                  <span class="dot"></span>
+                  <svg class="progress-dot-svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                    <circle class="progress-dot-bg"     cx="12" cy="12" r="9"   stroke-width="1.5"/>
+                    <circle class="progress-dot-fill"   cx="12" cy="12" r="9"   stroke-width="1.5"/>
+                    <circle class="progress-dot-center" cx="12" cy="12" r="2.5"/>
+                  </svg>
                 {%- endif -%}
               </button>
             {%- endfor -%}
