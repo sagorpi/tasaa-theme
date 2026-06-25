@@ -37,9 +37,14 @@
     display: none;
   }
 
+  /* Override .page-width so the wrapper spans the full viewport width.
+     max-width: 100% lifts the ~1200 px cap; margin-inline: 0 removes the
+     auto-centering. Together they let the fluid grid columns fill edge-to-edge
+     with no exposed page background on either side.                          */
   #shopify-section-{{ section.id }} .collection-circles-wrapper {
-    padding-inline: 0;
+    max-width: 100%;
     margin-inline: 0;
+    padding-inline: 0;
   }
 
   /* Clip any child overflow on mobile only. Scoped to max-width so it does
@@ -112,13 +117,23 @@
     }
 
     /* Switch from mobile flex carousel back to the fluid auto-fit grid.
-       overflow and snap are reset so desktop is unaffected by mobile rules. */
+       overflow and snap are reset so desktop is unaffected by mobile rules.
+
+       minmax minimum uses clamp() so circles scale with the viewport:
+         floor  7 rem  — prevents columns becoming too narrow on small desktops
+         fluid  12vw   — resolves to exactly 9 rem (144 px) at 1200 px,
+                         matching the previous fixed value at the page-width cap
+         ceil   12 rem — circles never grow wider than ~192 px, keeping
+                         auto-fit distributing items across the row
+
+       The container stays within the standard .page-width cap (~1200 px);
+       all scaling happens through the column minimum, not the wrapper width. */
     #shopify-section-{{ section.id }} .collection-circles {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(clamp(7rem, 12vw, 12rem), 1fr));
       overflow: visible;
       scroll-snap-type: none;
-      gap: clamp(1.2rem, 1.5vw, 2.4rem);
+      gap: clamp(1rem, 1.8vw, 2.4rem);
     }
 
     /* Reset the 0.4 rem padding added for carousel spacing.
@@ -132,27 +147,13 @@
       display: none;
     }
 
+    /* Title scales proportionally with circle size within the page-width cap.
+       2vw resolves to ≈ 1.5 rem at 1200 px (close to the original 1.6 rem),
+       is floored at 1.4 rem so labels stay readable on small desktops, and
+       is capped at 1.8 rem — tight enough that text never dominates the
+       circles inside the standard container width.                          */
     #shopify-section-{{ section.id }} .collection-circles__title {
-      font-size: 1.6rem;
-    }
-  }
-
-  /* ── Ultra-wide (≥ 1600 px) ─────────────────────────────────────────────
-     Lift the global .page-width cap (typically 120 rem / 1200 px) for this
-     section only. auto-fit + 1fr then distributes all items across the
-     expanded container automatically — no column-count override needed.   */
-  @media screen and (min-width: 1600px) {
-    #shopify-section-{{ section.id }} .collection-circles-wrapper {
-      max-width: min(90vw, 220rem);
-      margin-inline: auto;
-    }
-
-    #shopify-section-{{ section.id }} .collection-circles {
-      gap: clamp(2rem, 1.5vw, 3.2rem);
-    }
-
-    #shopify-section-{{ section.id }} .collection-circles__title {
-      font-size: clamp(1.6rem, 1.2vw, 2.4rem);
+      font-size: clamp(1.4rem, 2vw, 1.8rem);
     }
   }
 {%- endstyle -%}
