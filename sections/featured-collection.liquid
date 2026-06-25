@@ -47,16 +47,20 @@
     #shopify-section-{{ section.id }} .product-grid {
       --grid-desktop-horizontal-spacing: {{ section.settings.column_gap | divided_by: 10.0 }}%;
     }
+
+    /* Desktop & up: percentage-based horizontal gutters driven by the
+       Horizontal padding setting. Mobile keeps the standard .page-width
+       padding from base.css unchanged. */
+    #shopify-section-{{ section.id }} .page-width {
+      padding-inline: {{ section.settings.padding_horizontal }}%;
+    }
   }
 
-  /* Ultra-wide: custom padding and expanded max-width apply only at 1600px+.
-     Below this breakpoint the section inherits the standard .page-width
-     gutters from base.css unchanged. */
+  /* Ultra-wide: expanded max-width at 1600px+. Horizontal gutters are
+     handled by the percentage-based rule in the 750px+ block above. */
   @media screen and (min-width: 1600px) {
     #shopify-section-{{ section.id }} .page-width {
       max-width: min(90vw, 220rem);
-      padding-left: {{ section.settings.padding_left }}px;
-      padding-right: {{ section.settings.padding_right }}px;
       margin-inline: auto;
     }
   }
@@ -545,22 +549,12 @@
     },
     {
       "type": "range",
-      "id": "padding_left",
+      "id": "padding_horizontal",
       "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "Padding left",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "padding_right",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "Padding right",
+      "max": 10,
+      "step": 1,
+      "unit": "%",
+      "label": "Horizontal padding",
       "default": 0
     },
     {
