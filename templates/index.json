@@ -162,97 +162,26 @@
         "swipe_on_mobile": false,
         "padding_top": 36,
         "padding_bottom": 36,
-        "padding_left": 0,
-        "padding_right": 0,
+        "padding_horizontal": 8,
         "column_gap": 20,
         "column_gap_mobile": 20
       }
     },
-    "new_launches": {
-      "type": "featured-collection",
+    "image_banner_NhpTYY": {
+      "type": "image-banner",
+      "name": "t:sections.image-banner.presets.name",
       "settings": {
-        "collection": "all",
-        "products_to_show": 8,
-        "title": "New launches",
-        "heading_size": "h1",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": true,
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "outline",
-        "color_scheme": "scheme-1",
-        "image_ratio": "portrait",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "standard",
-        "columns_mobile": "2",
-        "swipe_on_mobile": true,
-        "padding_top": 36,
-        "padding_bottom": 36,
-        "padding_left": 0,
-        "padding_right": 0,
-        "column_gap": 20,
-        "column_gap_mobile": 10
-      }
-    },
-    "promo_banner": {
-      "type": "image-with-text",
-      "blocks": {
-        "caption": {
-          "type": "caption",
-          "settings": {
-            "caption": "Rewards",
-            "text_style": "caption-with-letter-spacing",
-            "text_size": "medium"
-          }
-        },
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Earn on every purchase",
-            "heading_size": "h1"
-          }
-        },
-        "text": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Join our loyalty program and collect points on everything you buy — every 1 point is worth ₹1 towards your next order.</p>",
-            "text_style": "body"
-          }
-        },
-        "button": {
-          "type": "button",
-          "settings": {
-            "button_label": "Learn more",
-            "button_link": "",
-            "button_style_secondary": false
-          }
-        }
-      },
-      "block_order": [
-        "caption",
-        "heading",
-        "text",
-        "button"
-      ],
-      "settings": {
-        "height": "large",
-        "desktop_image_width": "medium",
-        "layout": "image_first",
+        "image": "shopify://shop_images/1920_X_500_Blouses.jpg",
+        "image_overlay_opacity": 0,
+        "image_height": "small",
         "image_behavior": "none",
-        "content_layout": "no-overlap",
-        "desktop_content_position": "middle",
-        "desktop_content_alignment": "left",
-        "mobile_content_alignment": "left",
-        "section_color_scheme": "scheme-2",
-        "color_scheme": "scheme-2",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "desktop_content_position": "middle-center",
+        "desktop_content_alignment": "center",
+        "show_text_box": true,
+        "color_scheme": "",
+        "stack_images_on_mobile": true,
+        "mobile_content_alignment": "center",
+        "show_text_below": true
       }
     },
     "explore_collections": {
@@ -301,242 +230,13 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
-    },
-    "bestsellers": {
-      "type": "featured-collection",
-      "settings": {
-        "collection": "all",
-        "products_to_show": 8,
-        "title": "Bestsellers",
-        "heading_size": "h1",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": false,
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "color_scheme": "scheme-2",
-        "image_ratio": "portrait",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "standard",
-        "columns_mobile": "2",
-        "swipe_on_mobile": true,
-        "padding_top": 36,
-        "padding_bottom": 36,
-        "padding_left": 0,
-        "padding_right": 0,
-        "column_gap": 20,
-        "column_gap_mobile": 10
-      }
-    },
-    "benefits": {
-      "type": "multicolumn",
-      "blocks": {
-        "col_1": {
-          "type": "column",
-          "settings": {
-            "title": "Free shipping",
-            "text": "<p>Free shipping on all orders above ₹1999.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "col_2": {
-          "type": "column",
-          "settings": {
-            "title": "Cash on delivery",
-            "text": "<p>Pay the way you like — COD available across India.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "col_3": {
-          "type": "column",
-          "settings": {
-            "title": "Easy returns",
-            "text": "<p>Simple, hassle-free returns & exchanges within 7 days.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "col_4": {
-          "type": "column",
-          "settings": {
-            "title": "Earn rewards",
-            "text": "<p>Collect points on every order and redeem on the next.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "col_1",
-        "col_2",
-        "col_3",
-        "col_4"
-      ],
-      "settings": {
-        "title": "Why shop with us",
-        "heading_size": "h1",
-        "image_width": "half",
-        "image_ratio": "adapt",
-        "button_label": "",
-        "button_link": "",
-        "columns_desktop": 4,
-        "column_alignment": "center",
-        "background_style": "none",
-        "color_scheme": "scheme-3",
-        "columns_mobile": "2",
-        "swipe_on_mobile": false,
-        "padding_top": 40,
-        "padding_bottom": 40
-      }
-    },
-    "brand_story": {
-      "type": "rich-text",
-      "blocks": {
-        "caption": {
-          "type": "caption",
-          "settings": {
-            "caption": "Our story",
-            "text_style": "caption-with-letter-spacing",
-            "text_size": "medium"
-          }
-        },
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Made by hand, made to last",
-            "heading_size": "h1"
-          }
-        },
-        "text": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Every piece begins with the people who make it — woven, dyed and finished by skilled artisans. We design slow, intentional clothing meant to be loved for years, not seasons.</p>"
-          }
-        },
-        "button": {
-          "type": "button",
-          "settings": {
-            "button_label": "About us",
-            "button_link": "",
-            "button_style_secondary": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "caption",
-        "heading",
-        "text",
-        "button"
-      ],
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-1",
-        "full_width": true,
-        "padding_top": 52,
-        "padding_bottom": 52
-      }
-    },
-    "our_world": {
-      "type": "multirow",
-      "blocks": {
-        "row_1": {
-          "type": "row",
-          "settings": {
-            "caption": "The craft",
-            "heading": "Woven with intention",
-            "text": "<p>From the first thread to the final stitch, our pieces are crafted in small batches with natural fabrics and traditional techniques.</p>",
-            "button_label": "Discover more",
-            "button_link": ""
-          }
-        },
-        "row_2": {
-          "type": "row",
-          "settings": {
-            "caption": "The community",
-            "heading": "Designed for everyone",
-            "text": "<p>Comfortable, versatile silhouettes that celebrate every body and every occasion.</p>",
-            "button_label": "Shop the edit",
-            "button_link": ""
-          }
-        }
-      },
-      "block_order": [
-        "row_1",
-        "row_2"
-      ],
-      "settings": {
-        "image_height": "medium",
-        "desktop_image_width": "medium",
-        "image_layout": "alternate-left",
-        "heading_size": "h1",
-        "text_style": "body",
-        "button_style": "secondary",
-        "desktop_content_position": "middle",
-        "desktop_content_alignment": "left",
-        "mobile_content_alignment": "left",
-        "section_color_scheme": "scheme-2",
-        "row_color_scheme": "scheme-1",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "newsletter": {
-      "type": "newsletter",
-      "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Join the family",
-            "heading_size": "h1"
-          }
-        },
-        "paragraph": {
-          "type": "paragraph",
-          "settings": {
-            "text": "<p>Be first to know about new launches, restocks and members-only offers.</p>"
-          }
-        },
-        "email_form": {
-          "type": "email_form",
-          "settings": {}
-        }
-      },
-      "block_order": [
-        "heading",
-        "paragraph",
-        "email_form"
-      ],
-      "settings": {
-        "color_scheme": "scheme-3",
-        "full_width": true,
-        "padding_top": 52,
-        "padding_bottom": 52
-      }
     }
   },
   "order": [
     "hero_slideshow",
     "shop_by_category",
     "featured_collection_tahdRE",
-    "new_launches",
-    "promo_banner",
-    "explore_collections",
-    "bestsellers",
-    "benefits",
-    "brand_story",
-    "our_world",
-    "newsletter"
+    "image_banner_NhpTYY",
+    "explore_collections"
   ]
 }
