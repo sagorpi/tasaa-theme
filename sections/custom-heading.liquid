@@ -1,0 +1,172 @@
+{% comment %}
+  Custom heading — a heading flanked by decorative horizontal lines,
+  e.g. "— BESTSELLER BLOUSES —". A lightweight, Dawn-styled custom section.
+{% endcomment %}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  /* Override .page-width so the wrapper spans the full viewport width,
+     matching collection-circles.liquid. max-width: 100% lifts the
+     ~1200 px cap; margin-inline: 0 removes the auto-centering.
+     padding-inline uses the mobile percentage setting below 750px. */
+  #shopify-section-{{ section.id }} .custom-heading-wrapper {
+    max-width: 100%;
+    margin-inline: 0;
+    padding-inline: {{ section.settings.padding_horizontal_mobile }}%;
+  }
+
+  #shopify-section-{{ section.id }} .custom-heading {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Both lines are always visible. By default (center) they share the
+     leftover space equally, so the heading sits in the middle. */
+  #shopify-section-{{ section.id }} .custom-heading__line {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 0.1rem;
+    background-color: rgba(var(--color-foreground), 0.35);
+  }
+
+  /* Left alignment: the leading line shrinks to a small fixed dash and the
+     trailing line expands to fill the rest, pushing the heading toward
+     the left edge. Right alignment mirrors this — trailing line is the
+     small dash, leading line expands — pushing the heading right. */
+  #shopify-section-{{ section.id }} .custom-heading--left .custom-heading__line--start,
+  #shopify-section-{{ section.id }} .custom-heading--right .custom-heading__line--end {
+    flex: 0 0 2rem;
+  }
+
+  #shopify-section-{{ section.id }} .custom-heading__text {
+    flex: 0 0 auto;
+    margin: 0;
+    padding-inline: 5px;
+    letter-spacing: 0.15rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+
+    /* Percentage-based horizontal gutters, consistent with the
+       featured-collection.liquid refactor. Overrides the mobile value
+       above at 750px+; default is 0 (edge-to-edge). */
+    #shopify-section-{{ section.id }} .custom-heading-wrapper {
+      padding-inline: {{ section.settings.padding_horizontal }}%;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="custom-heading-wrapper page-width section-{{ section.id }}-padding">
+    {%- unless section.settings.heading == blank -%}
+      <div class="custom-heading custom-heading--{{ section.settings.alignment }}">
+        <span class="custom-heading__line custom-heading__line--start" aria-hidden="true"></span>
+        <h2 class="custom-heading__text {{ section.settings.heading_size }} uppercase{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          {{ section.settings.heading | escape }}
+        </h2>
+        <span class="custom-heading__line custom-heading__line--end" aria-hidden="true"></span>
+      </div>
+    {%- endunless -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom heading",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Bestseller blouses",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h3", "label": "Small" },
+        { "value": "h2", "label": "Medium" },
+        { "value": "h1", "label": "Large" }
+      ],
+      "default": "h2",
+      "label": "Heading size"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center",
+      "label": "Alignment"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "%",
+      "label": "Horizontal padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal_mobile",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "%",
+      "label": "Horizontal padding (mobile)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom heading"
+    }
+  ]
+}
+{% endschema %}

@@ -12,31 +12,69 @@
     "hero_slideshow": {
       "type": "slideshow",
       "blocks": {
-        "slide_1": {
+        "slide_eTfb6t": {
           "type": "slide",
           "settings": {
-            "image_overlay_opacity": 30,
-            "heading": "Handcrafted, with love",
+            "image": "shopify://shop_images/desktop_banner.jpg",
+            "image_overlay_opacity": 0,
+            "heading": "",
             "heading_size": "h1",
-            "subheading": "Discover our new season of sarees, blouses & more",
-            "button_label": "Shop new arrivals",
-            "link": "shopify://collections/all",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
             "button_style_secondary": false,
             "show_text_box": false,
             "box_align": "middle-center",
             "text_alignment": "center",
             "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3"
+            "color_scheme": "scheme-1"
           }
         },
-        "slide_2": {
+        "slide_d8pyBG": {
           "type": "slide",
           "settings": {
-            "image_overlay_opacity": 30,
-            "heading": "Everyday elegance",
+            "image": "shopify://shop_images/desktop_banner_13.jpg",
+            "image_overlay_opacity": 0,
+            "heading": "",
             "heading_size": "h1",
-            "subheading": "Timeless pieces designed to be lived in",
-            "button_label": "Explore the collection",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
+        },
+        "slide_FkTLBD": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/desktop_banner_1.webp",
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
+        },
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/desktop_banner_copy.jpg",
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
             "link": "shopify://collections/all",
             "button_style_secondary": false,
             "show_text_box": false,
@@ -48,8 +86,10 @@
         }
       },
       "block_order": [
-        "slide_1",
-        "slide_2"
+        "slide_eTfb6t",
+        "slide_d8pyBG",
+        "slide_FkTLBD",
+        "slide_1"
       ],
       "settings": {
         "layout": "full_bleed",
@@ -135,13 +175,26 @@
         "padding_bottom": 36
       }
     },
+    "custom_heading_MLBCm9": {
+      "type": "custom-heading",
+      "name": "Custom heading",
+      "settings": {
+        "heading": "Bestseller blouses",
+        "heading_size": "h2",
+        "alignment": "left",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 0,
+        "padding_horizontal": 8
+      }
+    },
     "featured_collection_tahdRE": {
       "type": "featured-collection",
       "name": "t:sections.featured-collection.presets.name",
       "settings": {
         "collection": "bestseller-sarees",
         "products_to_show": 4,
-        "title": "Featured collection",
+        "title": "",
         "heading_size": "h1",
         "description": "",
         "show_description": false,
@@ -160,7 +213,7 @@
         "quick_add": "none",
         "columns_mobile": "2",
         "swipe_on_mobile": false,
-        "padding_top": 36,
+        "padding_top": 8,
         "padding_bottom": 36,
         "padding_horizontal": 8,
         "column_gap": 20,
@@ -235,6 +288,7 @@
   "order": [
     "hero_slideshow",
     "shop_by_category",
+    "custom_heading_MLBCm9",
     "featured_collection_tahdRE",
     "image_banner_NhpTYY",
     "explore_collections"
