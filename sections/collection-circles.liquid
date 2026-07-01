@@ -1,0 +1,473 @@
+{% comment %}
+  Collection circles — circular "Shop by Category" buttons.
+  A lightweight, Dawn-styled custom section. Each block points to a collection and
+  renders its featured image as a circle with the title below. Falls back to a
+  placeholder image so the section previews correctly before collections are assigned.
+{% endcomment %}
+
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  /* ── Mobile carousel (< 750 px) ─────────────────────────────────────────
+     Flex row with snap scrolling. Each item is exactly 20 % of the
+     container so precisely 5 circles are visible at once.
+     Scrollbar, arrows, and dots are all hidden.                           */
+  #shopify-section-{{ section.id }} .collection-circles {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;         /* lock vertical axis — prevents bounce/bleed  */
+    overscroll-behavior-x: contain; /* stop vertical pull-to-refresh triggering   */
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  #shopify-section-{{ section.id }} .collection-circles::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Override .page-width so the wrapper spans the full viewport width.
+     max-width: 100% lifts the ~1200 px cap; margin-inline: 0 removes the
+     auto-centering. Together they let the fluid grid columns fill edge-to-edge
+     with no exposed page background on either side.                          */
+  #shopify-section-{{ section.id }} .collection-circles-wrapper {
+    max-width: 100%;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+
+  /* Clip any child overflow on mobile only. Scoped to max-width so it does
+     not interfere with the desktop grid which needs overflow: visible.      */
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} .collection-circles-wrapper {
+      overflow: hidden;
+    }
+
+    /* Prevent the title's top margin from creating space outside the item
+       that could contribute to perceived vertical scroll.                   */
+    #shopify-section-{{ section.id }} .collection-circles__title {
+      margin-top: 0.8rem;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .collection-circles__item {
+    flex: 0 0 20%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding-inline: 0.4rem;
+    scroll-snap-align: start;
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .collection-circles__link {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  #shopify-section-{{ section.id }} .collection-circles__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    overflow: hidden;
+    background: rgba(var(--color-foreground), 0.04);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  #shopify-section-{{ section.id }} .collection-circles__media img,
+  #shopify-section-{{ section.id }} .collection-circles__media svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (hover: hover) {
+    #shopify-section-{{ section.id }} .collection-circles__link:hover .collection-circles__media {
+      transform: translateY(-4px);
+      box-shadow: 0 1.2rem 2.4rem rgba(var(--color-shadow), 0.18);
+    }
+  }
+
+  #shopify-section-{{ section.id }} .collection-circles__title {
+    margin: 1.2rem 0 0;
+    font-size: 1.5rem;
+    line-height: 1.3;
+    letter-spacing: 0.04rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+
+    /* Switch from mobile flex carousel back to the fluid auto-fit grid.
+       overflow and snap are reset so desktop is unaffected by mobile rules.
+
+       minmax minimum uses clamp() so circles scale with the viewport:
+         floor  7 rem  — prevents columns becoming too narrow on small desktops
+         fluid  12vw   — resolves to exactly 9 rem (144 px) at 1200 px,
+                         matching the previous fixed value at the page-width cap
+         ceil   12 rem — circles never grow wider than ~192 px, keeping
+                         auto-fit distributing items across the row
+
+       The container stays within the standard .page-width cap (~1200 px);
+       all scaling happens through the column minimum, not the wrapper width. */
+    #shopify-section-{{ section.id }} .collection-circles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(clamp(7rem, 12vw, 12rem), 1fr));
+      overflow: visible;
+      scroll-snap-type: none;
+      gap: clamp(1rem, 1.8vw, 2.4rem);
+    }
+
+    /* Reset the 0.4 rem padding added for carousel spacing.
+       Clones injected by the infinite-loop script must not appear in the grid. */
+    #shopify-section-{{ section.id }} .collection-circles__item {
+      flex: none;
+      padding-inline: 0;
+    }
+
+    #shopify-section-{{ section.id }} .collection-circles__item[data-clone] {
+      display: none;
+    }
+
+    /* Title scales proportionally with circle size within the page-width cap.
+       2vw resolves to ≈ 1.5 rem at 1200 px (close to the original 1.6 rem),
+       is floored at 1.4 rem so labels stay readable on small desktops, and
+       is capped at 1.8 rem — tight enough that text never dominates the
+       circles inside the standard container width.                          */
+    #shopify-section-{{ section.id }} .collection-circles__title {
+      font-size: clamp(1.4rem, 2vw, 1.8rem);
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="collection-circles-wrapper page-width isolate section-{{ section.id }}-padding">
+    {%- unless section.settings.title == blank -%}
+      <div class="title-wrapper-with-link title-wrapper--self-padded-mobile title-wrapper--no-top-margin">
+        <h2 class="collection-circles-title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          {{ section.settings.title }}
+        </h2>
+      </div>
+    {%- endunless -%}
+
+    <ul class="collection-circles" role="list">
+      {%- for block in section.blocks -%}
+        {%- assign collection = block.settings.collection -%}
+        <li
+          class="collection-circles__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+          {{ block.shopify_attributes }}
+          {% if settings.animations_reveal_on_scroll %}
+            data-cascade
+            style="--animation-order: {{ forloop.index }};"
+          {% endif %}
+        >
+          <a
+            href="{{ collection.url | default: routes.collections_url }}"
+            class="collection-circles__link"
+            {% if collection == blank %}
+              role="link" aria-disabled="true"
+            {% endif %}
+          >
+            <div class="collection-circles__media media">
+              {%- if collection.featured_image -%}
+                <img
+                  srcset="
+                    {%- if collection.featured_image.width >= 165 -%}{{ collection.featured_image | image_url: width: 165 }} 165w,{%- endif -%}
+                    {%- if collection.featured_image.width >= 330 -%}{{ collection.featured_image | image_url: width: 330 }} 330w,{%- endif -%}
+                    {%- if collection.featured_image.width >= 535 -%}{{ collection.featured_image | image_url: width: 535 }} 535w,{%- endif -%}
+                    {{ collection.featured_image | image_url }} {{ collection.featured_image.width }}w
+                  "
+                  src="{{ collection.featured_image | image_url: width: 330 }}"
+                  sizes="(min-width: 1600px) 10vw, (min-width: 750px) 12vw, 20vw"
+                  alt="{{ collection.featured_image.alt | escape }}"
+                  width="{{ collection.featured_image.width }}"
+                  height="{{ collection.featured_image.height }}"
+                  loading="lazy"
+                >
+              {%- else -%}
+                {%- assign placeholder_index = forloop.index0 | modulo: 4 | plus: 1 -%}
+                {{ 'collection-apparel-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
+            <p class="collection-circles__title">
+              {%- if collection.title != blank -%}
+                {{- collection.title | escape -}}
+              {%- else -%}
+                {{- 'onboarding.collection_title' | t -}}
+              {%- endif -%}
+            </p>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var MOBILE_BREAKPOINT  = 750;
+  /* After touchend, delay before resuming autoplay — long enough for the
+     snap animation to settle (~300 ms) but shorter than the minimum 1 s
+     autoplay interval so the beat is not noticeably disrupted. */
+  var RESUME_DELAY_MS    = 600;
+  /* Debounce window used only on browsers that lack the scrollend event */
+  var SCROLL_DEBOUNCE_MS = 150;
+
+  var duration = {{ section.settings.autoplay_duration }};
+
+  /* Strictly mobile — do nothing on desktop or after an orientation change
+     that crosses the breakpoint */
+  if (window.innerWidth >= MOBILE_BREAKPOINT) return;
+
+  var list = document.querySelector('#shopify-section-{{ section.id }} .collection-circles');
+  if (!list) return;
+
+  /* ── 1. Build the infinite runway by cloning all real items ─────────── */
+  var realItems = Array.from(list.querySelectorAll('.collection-circles__item'));
+  var total     = realItems.length;
+  if (total < 2) return;
+
+  realItems.forEach(function (item) {
+    var clone = item.cloneNode(true);
+    /* data-clone hides these nodes in the desktop grid via the CSS rule */
+    clone.setAttribute('data-clone', '');
+    /* Remove clones from keyboard / screen-reader flow */
+    clone.setAttribute('aria-hidden', 'true');
+    clone.querySelectorAll('a, button, [tabindex]').forEach(function (el) {
+      el.setAttribute('tabindex', '-1');
+    });
+    list.appendChild(clone);
+  });
+
+  /* allItems: real[0 … N-1] followed by clone[0 … N-1] */
+  var allItems = list.querySelectorAll('.collection-circles__item');
+
+  /* ── 2. Live index from scroll position ─────────────────────────────── */
+  /* Always derived from scrollLeft — never a stale counter — so the index
+     is correct after both autoplay advances and manual swipes. */
+  function indexFromScroll() {
+    var w = allItems[0].offsetWidth;
+    return w ? Math.round(list.scrollLeft / w) : 0;
+  }
+
+  /* ── 3. Silent wrap — unified for autoplay AND manual swipes ─────────── */
+  /* When scroll settles anywhere in the clone zone (idx >= total), we map
+     clone[i] → real[i] and jump instantly.  Because both positions are
+     pixel-identical the transition is invisible to the user. */
+  var jumping = false;
+
+  function doSilentReset(realIndex) {
+    if (jumping) return;
+    jumping = true;
+
+    /* Disable snap so the browser won't animate to the nearest snap point
+       after the direct scrollLeft assignment */
+    list.style.scrollSnapType = 'none';
+    list.scrollLeft = allItems[realIndex].offsetLeft;
+
+    /* Two rAFs: the first commits the new scrollLeft to the compositor;
+       the second restores snap after that frame has been painted */
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        list.style.scrollSnapType = ''; /* CSS value is restored */
+        jumping = false;
+      });
+    });
+  }
+
+  /* ── 4. Scroll-settled handler ──────────────────────────────────────── */
+  function onScrollSettled() {
+    /* jumping guard prevents re-entry during the silent reset's own scroll */
+    if (jumping) return;
+    var idx = indexFromScroll();
+    if (idx >= total) {
+      doSilentReset(idx - total); /* clone[i] → real[i] */
+    }
+  }
+
+  /* Prefer the dedicated scrollend event (Chrome 114+, Firefox 109+,
+     Safari 17.4+); fall back to a passive debounced scroll listener */
+  if ('onscrollend' in window) {
+    list.addEventListener('scrollend', onScrollSettled);
+  } else {
+    var debounceTimer = null;
+    list.addEventListener('scroll', function () {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(onScrollSettled, SCROLL_DEBOUNCE_MS);
+    }, { passive: true });
+  }
+
+  /* ── 5. Autoplay ────────────────────────────────────────────────────── */
+  /* Clone setup and scroll-listener (above) run even when duration = 0 so
+     that manual swipes also get the seamless infinite loop.  The timed
+     advance below is only wired up when autoplay is actually enabled. */
+  if (duration === 0) return;
+
+  var autoplayTimer = null;
+
+  function stopAutoplay() {
+    clearInterval(autoplayTimer);
+    autoplayTimer = null;
+  }
+
+  function startAutoplay() {
+    stopAutoplay(); /* clear any existing timer before creating a new one */
+    autoplayTimer = setInterval(function () {
+      if (jumping) return; /* silent reset in progress — skip this tick */
+
+      /* Read the live scroll position so any manual swipe is honoured */
+      var next = indexFromScroll() + 1;
+
+      /* Guard: should never exceed 2N-1 if scrollend fired correctly,
+         but prevents an out-of-bounds crash in extreme edge cases */
+      if (next >= allItems.length) return;
+
+      list.scrollTo({
+        left: allItems[next].offsetLeft,
+        behavior: 'smooth'
+      });
+      /* scrollend (or debounced scroll) handles the silent reset if next
+         lands in the clone zone — no setTimeout needed here */
+    }, duration * 1000);
+  }
+
+  /* ── 6. Pause on touch, resume after snap settles ───────────────────── */
+  list.addEventListener('touchstart', stopAutoplay, { passive: true });
+
+  list.addEventListener('touchend', function () {
+    /* RESUME_DELAY_MS lets the snap animation finish before the next
+       autoplay tick so the two never fight over scroll position */
+    setTimeout(startAutoplay, RESUME_DELAY_MS);
+  }, { passive: true });
+
+  startAutoplay();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Collection circles",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Shop by category",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        { "value": "2", "label": "2 columns" },
+        { "value": "3", "label": "3 columns" }
+      ],
+      "default": "3",
+      "label": "Number of columns on mobile"
+    },
+    {
+      "type": "header",
+      "content": "Mobile carousel"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_duration",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 0,
+      "label": "Mobile autoplay duration (0 = disabled)"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Collection circles",
+      "blocks": [
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" }
+      ]
+    }
+  ]
+}
+{% endschema %}
