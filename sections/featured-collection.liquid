@@ -30,10 +30,38 @@
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
 
+  /* Mobile & tablet: override the native spacing variable so base.css
+     width calc() and column-gap stay in sync at the custom value. */
+  #shopify-section-{{ section.id }} .product-grid {
+    --grid-mobile-horizontal-spacing: {{ section.settings.column_gap_mobile | divided_by: 10.0 }}%;
+  }
+
   @media screen and (min-width: 750px) {
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+
+    /* Update the native spacing variable so base.css width calc()
+       and column-gap both use the same value — no wrapping possible. */
+    #shopify-section-{{ section.id }} .product-grid {
+      --grid-desktop-horizontal-spacing: {{ section.settings.column_gap | divided_by: 10.0 }}%;
+    }
+
+    /* Desktop & up: percentage-based horizontal gutters driven by the
+       Horizontal padding setting. Mobile keeps the standard .page-width
+       padding from base.css unchanged. */
+    #shopify-section-{{ section.id }} .page-width {
+      padding-inline: {{ section.settings.padding_horizontal }}%;
+    }
+  }
+
+  /* Ultra-wide: expanded max-width at 1600px+. Horizontal gutters are
+     handled by the percentage-based rule in the 750px+ block above. */
+  @media screen and (min-width: 1600px) {
+    #shopify-section-{{ section.id }} .page-width {
+      max-width: min(90vw, 220rem);
+      margin-inline: auto;
     }
   }
 {%- endstyle -%}
@@ -518,6 +546,36 @@
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
       "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "%",
+      "label": "Horizontal padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "label": "Column spacing (desktop)",
+      "info": "Value ÷ 10 = actual gap %. e.g. 20 → 2.0%, 25 → 2.5%",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "column_gap_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "label": "Column spacing (mobile & tablet)",
+      "info": "Value ÷ 10 = actual gap %. e.g. 10 → 1.0%, 15 → 1.5%",
+      "default": 10
     }
   ],
   "presets": [
