@@ -1,0 +1,18 @@
+{% comment %}
+  Responsive hero artwork. Only the source for the current viewport is downloaded.
+  Accepts: desktop_image, mobile_image, tablet_image, first_slide, image_sizes.
+{% endcomment %}
+{%- assign source_widths = '375,550,750,1100,1500,2000,3000,3840' | split: ',' -%}
+<picture>
+  {%- if mobile_image != blank -%}
+    <source media="(max-width: 749px)" width="{{ mobile_image.width }}" height="{{ mobile_image.height }}" sizes="{{ image_sizes }}" srcset="{%- for source_width in source_widths -%}{%- assign pixel_width = source_width | plus: 0 -%}{{ mobile_image | image_url: width: pixel_width }} {{ source_width }}w{% unless forloop.last %}, {% endunless %}{%- endfor -%}">
+  {%- endif -%}
+  {%- if tablet_image != blank -%}
+    <source media="(min-width: 750px) and (max-width: 989px)" width="{{ tablet_image.width }}" height="{{ tablet_image.height }}" sizes="{{ image_sizes }}" srcset="{%- for source_width in source_widths -%}{%- assign pixel_width = source_width | plus: 0 -%}{{ tablet_image | image_url: width: pixel_width }} {{ source_width }}w{% unless forloop.last %}, {% endunless %}{%- endfor -%}">
+  {%- endif -%}
+  {%- if first_slide -%}
+    {{ desktop_image | image_url: width: 3840 | image_tag: widths: '375,550,750,1100,1500,2000,3000,3840', sizes: image_sizes, loading: 'eager', fetchpriority: 'high', draggable: false }}
+  {%- else -%}
+    {{ desktop_image | image_url: width: 3840 | image_tag: widths: '375,550,750,1100,1500,2000,3000,3840', sizes: image_sizes, loading: 'lazy', draggable: false }}
+  {%- endif -%}
+</picture>

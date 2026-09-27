@@ -3,6 +3,7 @@
 
 {{ 'component-slider.css' | asset_url | stylesheet_tag }}
 {{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{{ 'section-featured-collection.css' | asset_url | stylesheet_tag }}
 
 {% if section.settings.image_shape == 'blob' %}
   {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
@@ -30,35 +31,16 @@
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
 
-  /* Mobile & tablet: override the native spacing variable so base.css
-     width calc() and column-gap stay in sync at the custom value. */
-  #shopify-section-{{ section.id }} .product-grid {
-    --grid-mobile-horizontal-spacing: {{ section.settings.column_gap_mobile | divided_by: 10.0 }}%;
-  }
+  {{ section.settings.collection_font | font_face: font_display: 'swap' }}
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-
-    /* Update the native spacing variable so base.css width calc()
-       and column-gap both use the same value — no wrapping possible. */
-    #shopify-section-{{ section.id }} .product-grid {
-      --grid-desktop-horizontal-spacing: {{ section.settings.column_gap | divided_by: 10.0 }}%;
-    }
-  }
-
-  /* Ultra-wide: custom padding and expanded max-width apply only at 1600px+.
-     Below this breakpoint the section inherits the standard .page-width
-     gutters from base.css unchanged. */
-  @media screen and (min-width: 1600px) {
-    #shopify-section-{{ section.id }} .page-width {
-      max-width: min(90vw, 220rem);
-      padding-left: {{ section.settings.padding_left }}px;
-      padding-right: {{ section.settings.padding_right }}px;
-      margin-inline: auto;
-    }
+  #collection-{{ section.id }} {
+    --featured-font: {{ section.settings.collection_font.family | default: 'Jost' }}, {{ section.settings.collection_font.fallback_families | default: 'sans-serif' }};
+    --featured-columns: {{ section.settings.columns_desktop }};
+    --featured-columns-mobile: {{ section.settings.columns_mobile }};
+    --featured-gap: {{ section.settings.column_gap }}px;
+    --featured-gap-mobile: {{ section.settings.column_gap_mobile }}px;
+    --featured-padding-left: {{ section.settings.padding_left }}%;
+    --featured-padding-right: {{ section.settings.padding_right }}%;
   }
 {%- endstyle -%}
 
@@ -92,14 +74,14 @@
   class="color-{{ section.settings.color_scheme }} isolate gradient"
 >
   <div
-    class="collection{% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %} section-{{ section.id }}-padding{% if section.settings.full_width %} collection--full-width{% endif %}"
+    class="collection featured-collection{% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %} section-{{ section.id }}-padding{% if section.settings.full_width %} collection--full-width{% endif %}"
     id="collection-{{ section.id }}"
     data-id="{{ section.id }}"
   >
     <div class="collection__title title-wrapper title-wrapper--no-top-margin page-width{% if show_mobile_slider %} title-wrapper--self-padded-tablet-down{% endif %}{% if show_desktop_slider %} collection__title--desktop-slider{% endif %}">
       {%- if section.settings.title != blank -%}
         <h2 class="title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-          {{ section.settings.title }}
+          <span>{{ section.settings.title }}</span>
         </h2>
       {%- endif -%}
       {%- if section.settings.description != blank
@@ -152,7 +134,10 @@
                   skip_styles: skip_card_product_styles,
                   section_id: section.id,
                   quick_add: section.settings.quick_add,
-                  product_view_context: 'collection'
+                  product_view_context: 'collection',
+                  featured_card: true,
+                  collection_label: section.settings.collection.title,
+                  show_collection_label: section.settings.show_collection_label
                 %}
               </li>
               {%- assign skip_card_product_styles = true -%}
@@ -182,7 +167,8 @@
                 media_aspect_ratio: section.settings.image_ratio,
                 image_shape: section.settings.image_shape,
                 lazy_load: false,
-                placeholder_image: placeholder_image
+                placeholder_image: placeholder_image,
+                featured_card: true
               %}
             </li>
           {%- endfor -%}
@@ -245,7 +231,10 @@
   "tag": "section",
   "class": "section",
   "disabled_on": {
-    "groups": ["header", "footer"]
+    "groups": [
+      "header",
+      "footer"
+    ]
   },
   "settings": [
     {
@@ -259,18 +248,31 @@
       "min": 2,
       "max": 25,
       "step": 1,
-      "default": 4,
+      "default": 8,
       "label": "t:sections.featured-collection.settings.products_to_show.label"
-    },     
+    },
     {
       "type": "header",
       "content": "t:sections.featured-collection.settings.header_text.content"
-    },   
+    },
     {
       "type": "inline_richtext",
       "id": "title",
       "default": "t:sections.featured-collection.settings.title.default",
       "label": "t:sections.featured-collection.settings.title.label"
+    },
+    {
+      "type": "font_picker",
+      "id": "collection_font",
+      "label": "Collection font",
+      "default": "jost_n4"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_label",
+      "label": "Show collection label on images",
+      "default": true,
+      "info": "Uses the product custom.collection_label metafield when set, otherwise the selected collection title."
     },
     {
       "type": "select",
@@ -309,7 +311,7 @@
       "type": "checkbox",
       "id": "show_description",
       "label": "t:sections.featured-collection.settings.show_description.label",
-      "default": false   
+      "default": false
     },
     {
       "type": "select",
@@ -334,7 +336,7 @@
     {
       "type": "header",
       "content": "t:sections.featured-collection.settings.header_collection.content"
-    },    
+    },
     {
       "type": "range",
       "id": "columns_desktop",
@@ -344,7 +346,7 @@
       "default": 4,
       "label": "t:sections.featured-collection.settings.columns_desktop.label"
     },
-        {
+    {
       "type": "checkbox",
       "id": "enable_desktop_slider",
       "label": "t:sections.featured-collection.settings.enable_desktop_slider.label",
@@ -354,7 +356,7 @@
       "type": "checkbox",
       "id": "full_width",
       "label": "t:sections.featured-collection.settings.full_width.label",
-      "default": false
+      "default": true
     },
     {
       "type": "checkbox",
@@ -382,7 +384,7 @@
         }
       ],
       "default": "solid"
-    }, 
+    },
     {
       "type": "color_scheme",
       "id": "color_scheme",
@@ -411,7 +413,7 @@
           "label": "t:sections.featured-collection.settings.image_ratio.options__3.label"
         }
       ],
-      "default": "adapt",
+      "default": "portrait",
       "label": "t:sections.featured-collection.settings.image_ratio.label"
     },
     {
@@ -457,7 +459,7 @@
     {
       "type": "checkbox",
       "id": "show_secondary_image",
-      "default": false,
+      "default": true,
       "label": "t:sections.featured-collection.settings.show_secondary_image.label"
     },
     {
@@ -469,14 +471,14 @@
     {
       "type": "checkbox",
       "id": "show_rating",
-      "default": false,
+      "default": true,
       "label": "t:sections.featured-collection.settings.show_rating.label",
       "info": "t:sections.featured-collection.settings.show_rating.info"
     },
     {
       "type": "select",
       "id": "quick_add",
-      "default": "none",
+      "default": "standard",
       "label": "t:sections.main-collection-product-grid.settings.quick_add.label",
       "options": [
         {
@@ -512,13 +514,13 @@
           "label": "t:sections.featured-collection.settings.columns_mobile.options__2.label"
         }
       ]
-    },    
+    },
     {
       "type": "checkbox",
       "id": "swipe_on_mobile",
       "default": false,
       "label": "t:sections.featured-collection.settings.swipe_on_mobile.label"
-    },          
+    },
     {
       "type": "header",
       "content": "t:sections.all.padding.section_padding_heading"
@@ -547,41 +549,43 @@
       "type": "range",
       "id": "padding_left",
       "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "Padding left",
-      "default": 0
+      "max": 20,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop left gutter",
+      "default": 8
     },
     {
       "type": "range",
       "id": "padding_right",
       "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "Padding right",
-      "default": 0
+      "max": 20,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop right gutter",
+      "default": 8
     },
     {
       "type": "range",
       "id": "column_gap",
       "min": 0,
-      "max": 100,
-      "step": 5,
-      "label": "Column spacing (desktop)",
-      "info": "Value ÷ 10 = actual gap %. e.g. 20 → 2.0%, 25 → 2.5%",
-      "default": 20
+      "max": 64,
+      "step": 1,
+      "label": "Column spacing (750px and wider)",
+      "info": "Fixed spacing between product cards.",
+      "default": 32,
+      "unit": "px"
     },
     {
       "type": "range",
       "id": "column_gap_mobile",
       "min": 0,
-      "max": 80,
-      "step": 5,
-      "label": "Column spacing (mobile & tablet)",
-      "info": "Value ÷ 10 = actual gap %. e.g. 10 → 1.0%, 15 → 1.5%",
-      "default": 10
+      "max": 64,
+      "step": 1,
+      "label": "Column spacing (below 750px)",
+      "info": "Fixed spacing between product cards.",
+      "default": 16,
+      "unit": "px"
     }
   ],
   "presets": [
