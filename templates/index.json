@@ -207,14 +207,27 @@
         "banner_2"
       ],
       "settings": {
+        "variant": "slideshow",
+        "heading": "",
         "show_arrows": true,
+        "heading_font": "jost_n4",
         "show_dots": true,
         "enable_swipe": true,
         "auto_rotate": false,
         "change_slides_speed": 2,
         "auto_rotate_mobile": false,
         "mobile_slides_speed": 2,
-        "accessibility_info": "Featured promotions"
+        "accessibility_info": "Featured promotions",
+        "columns_desktop": 6,
+        "columns_tablet": 6,
+        "columns_mobile": 3,
+        "image_ratio": "landscape",
+        "image_fit": "contain",
+        "color_scheme": "",
+        "gap_mobile": 16,
+        "gap_desktop": 32,
+        "padding_top": 32,
+        "padding_bottom": 32
       }
     },
     "new_launches": {
@@ -251,108 +264,6 @@
         "column_gap_mobile": 16
       }
     },
-    "promo_banner": {
-      "type": "image-with-text",
-      "blocks": {
-        "caption": {
-          "type": "caption",
-          "settings": {
-            "caption": "Rewards",
-            "text_style": "caption-with-letter-spacing",
-            "text_size": "medium"
-          }
-        },
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Earn on every purchase",
-            "heading_size": "h1"
-          }
-        },
-        "text": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Join our loyalty program and collect points on everything you buy — every 1 point is worth ₹1 towards your next order.</p>",
-            "text_style": "body"
-          }
-        },
-        "button": {
-          "type": "button",
-          "settings": {
-            "button_label": "Learn more",
-            "button_link": "",
-            "button_style_secondary": false
-          }
-        }
-      },
-      "block_order": [
-        "caption",
-        "heading",
-        "text",
-        "button"
-      ],
-      "settings": {
-        "height": "large",
-        "desktop_image_width": "medium",
-        "layout": "image_first",
-        "image_behavior": "none",
-        "content_layout": "no-overlap",
-        "desktop_content_position": "middle",
-        "desktop_content_alignment": "left",
-        "mobile_content_alignment": "left",
-        "section_color_scheme": "scheme-2",
-        "color_scheme": "scheme-2",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "explore_collections": {
-      "type": "collection-list",
-      "blocks": {
-        "col_1": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": ""
-          }
-        },
-        "col_2": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": ""
-          }
-        },
-        "col_3": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": ""
-          }
-        },
-        "col_4": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": ""
-          }
-        }
-      },
-      "block_order": [
-        "col_1",
-        "col_2",
-        "col_3",
-        "col_4"
-      ],
-      "settings": {
-        "title": "Explore collections",
-        "heading_size": "h1",
-        "image_ratio": "square",
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "show_view_all": true,
-        "columns_mobile": "2",
-        "swipe_on_mobile": true,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
     "bestsellers": {
       "type": "featured-collection",
       "settings": {
@@ -387,195 +298,210 @@
         "column_gap_mobile": 16
       }
     },
-    "benefits": {
-      "type": "multicolumn",
+    "testimonials": {
+      "type": "testimonial-carousel",
       "blocks": {
-        "col_1": {
-          "type": "column",
+        "review_1": {
+          "type": "testimonial",
           "settings": {
-            "title": "Free shipping",
-            "text": "<p>Free shipping on all orders above ₹1999.</p>",
-            "link_label": "",
-            "link": ""
+            "image": "shopify://shop_images/testimonial_1.png",
+            "review": "<p>This one is sooooo soft and the color is perfect This one is sooooo soft and the color is perfect.</p>",
+            "reviewer": "Sample customer",
+            "date": "",
+            "rating": 5,
+            "product": "",
+            "product_name": ""
           }
         },
-        "col_2": {
-          "type": "column",
+        "review_2": {
+          "type": "testimonial",
           "settings": {
-            "title": "Cash on delivery",
-            "text": "<p>Pay the way you like — COD available across India.</p>",
-            "link_label": "",
-            "link": ""
+            "image": "shopify://shop_images/testimonial_3.png",
+            "review": "<p>Beautiful!</p>",
+            "reviewer": "Sample customer",
+            "date": "",
+            "rating": 5,
+            "product": "",
+            "product_name": ""
           }
         },
-        "col_3": {
-          "type": "column",
+        "review_3": {
+          "type": "testimonial",
           "settings": {
-            "title": "Easy returns",
-            "text": "<p>Simple, hassle-free returns & exchanges within 7 days.</p>",
-            "link_label": "",
-            "link": ""
+            "image": "shopify://shop_images/testimonial_2.png",
+            "review": "<p>It's A beautiful Saree !</p>",
+            "reviewer": "Sample customer",
+            "date": "",
+            "rating": 5,
+            "product": "",
+            "product_name": ""
           }
         },
-        "col_4": {
-          "type": "column",
+        "review_4": {
+          "type": "testimonial",
           "settings": {
-            "title": "Earn rewards",
-            "text": "<p>Collect points on every order and redeem on the next.</p>",
-            "link_label": "",
-            "link": ""
+            "image": "shopify://shop_images/testimonial_4.png",
+            "review": "<p>✨ \"The Saree That Stayed With Me All Day — Comfort, Elegance & Suta Magic.\" I recently visited the Suta store in Bangalore and picked up this beautiful red saree…</p>",
+            "reviewer": "Sample customer",
+            "date": "",
+            "rating": 5,
+            "product": "",
+            "product_name": ""
+          }
+        },
+        "testimonial_yqUAAm": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/testimonial_5.png",
+            "review": "<p>Sample testimonial — replace this text with a real customer review before publishing.</p>",
+            "reviewer": "Sample customer",
+            "date": "",
+            "rating": 5,
+            "product": "",
+            "product_name": ""
+          }
+        },
+        "testimonial_TiMkei": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/testimonial_7.png",
+            "review": "<p>Sample testimonial — replace this text with a real customer review before publishing.</p>",
+            "reviewer": "Sample customer",
+            "date": "",
+            "rating": 5,
+            "product": "",
+            "product_name": ""
+          }
+        },
+        "testimonial_Kkrdwx": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/testimonial_6.png",
+            "review": "<p>Sample testimonial — replace this text with a real customer review before publishing.</p>",
+            "reviewer": "Sample customer",
+            "date": "",
+            "rating": 5,
+            "product": "",
+            "product_name": ""
           }
         }
       },
       "block_order": [
-        "col_1",
-        "col_2",
-        "col_3",
-        "col_4"
+        "review_1",
+        "review_2",
+        "review_3",
+        "review_4",
+        "testimonial_yqUAAm",
+        "testimonial_TiMkei",
+        "testimonial_Kkrdwx"
       ],
       "settings": {
-        "title": "Why shop with us",
-        "heading_size": "h1",
-        "image_width": "half",
-        "image_ratio": "adapt",
-        "button_label": "",
-        "button_link": "",
+        "heading": "Customer testimonials",
+        "heading_font": "jost_n4",
         "columns_desktop": 4,
-        "column_alignment": "center",
-        "background_style": "none",
-        "color_scheme": "scheme-3",
-        "columns_mobile": "2",
-        "swipe_on_mobile": false,
-        "padding_top": 40,
-        "padding_bottom": 40
+        "columns_tablet": 4,
+        "columns_mobile": 2,
+        "show_arrows": true,
+        "enable_quick_view": true,
+        "excerpt_words": 10,
+        "color_scheme": "",
+        "gap_mobile": 16,
+        "gap_desktop": 32,
+        "padding_top": 32,
+        "padding_bottom": 32
       }
     },
-    "brand_story": {
-      "type": "rich-text",
+    "image_link_scroll": {
+      "type": "image-link-banner",
       "blocks": {
-        "caption": {
-          "type": "caption",
+        "image_3": {
+          "type": "slide",
           "settings": {
-            "caption": "Our story",
-            "text_style": "caption-with-letter-spacing",
-            "text_size": "medium"
+            "image": "shopify://shop_images/fi1.png",
+            "link": "",
+            "link_label": ""
           }
         },
-        "heading": {
-          "type": "heading",
+        "image_4": {
+          "type": "slide",
           "settings": {
-            "heading": "Made by hand, made to last",
-            "heading_size": "h1"
+            "image": "shopify://shop_images/fi2.jpg",
+            "link": "",
+            "link_label": ""
           }
         },
-        "text": {
-          "type": "text",
+        "slide_CBaMEW": {
+          "type": "slide",
           "settings": {
-            "text": "<p>Every piece begins with the people who make it — woven, dyed and finished by skilled artisans. We design slow, intentional clothing meant to be loved for years, not seasons.</p>"
+            "image": "shopify://shop_images/fi6.jpg",
+            "link": "",
+            "link_label": ""
           }
         },
-        "button": {
-          "type": "button",
+        "image_5": {
+          "type": "slide",
           "settings": {
-            "button_label": "About us",
-            "button_link": "",
-            "button_style_secondary": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "image": "shopify://shop_images/fi3.png",
+            "link": "",
+            "link_label": ""
+          }
+        },
+        "image_6": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/fi4.png",
+            "link": "",
+            "link_label": ""
+          }
+        },
+        "image_7": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/fi6.jpg",
+            "link": "",
+            "link_label": ""
+          }
+        },
+        "slide_GTjkpy": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/fi2.jpg",
+            "link": "",
+            "link_label": ""
           }
         }
       },
       "block_order": [
-        "caption",
-        "heading",
-        "text",
-        "button"
+        "image_3",
+        "image_4",
+        "slide_CBaMEW",
+        "image_5",
+        "image_6",
+        "image_7",
+        "slide_GTjkpy"
       ],
       "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-1",
-        "full_width": true,
-        "padding_top": 52,
-        "padding_bottom": 52
-      }
-    },
-    "our_world": {
-      "type": "multirow",
-      "blocks": {
-        "row_1": {
-          "type": "row",
-          "settings": {
-            "caption": "The craft",
-            "heading": "Woven with intention",
-            "text": "<p>From the first thread to the final stitch, our pieces are crafted in small batches with natural fabrics and traditional techniques.</p>",
-            "button_label": "Discover more",
-            "button_link": ""
-          }
-        },
-        "row_2": {
-          "type": "row",
-          "settings": {
-            "caption": "The community",
-            "heading": "Designed for everyone",
-            "text": "<p>Comfortable, versatile silhouettes that celebrate every body and every occasion.</p>",
-            "button_label": "Shop the edit",
-            "button_link": ""
-          }
-        }
-      },
-      "block_order": [
-        "row_1",
-        "row_2"
-      ],
-      "settings": {
-        "image_height": "medium",
-        "desktop_image_width": "medium",
-        "image_layout": "alternate-left",
-        "heading_size": "h1",
-        "text_style": "body",
-        "button_style": "secondary",
-        "desktop_content_position": "middle",
-        "desktop_content_alignment": "left",
-        "mobile_content_alignment": "left",
-        "section_color_scheme": "scheme-2",
-        "row_color_scheme": "scheme-1",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "newsletter": {
-      "type": "newsletter",
-      "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Join the family",
-            "heading_size": "h1"
-          }
-        },
-        "paragraph": {
-          "type": "paragraph",
-          "settings": {
-            "text": "<p>Be first to know about new launches, restocks and members-only offers.</p>"
-          }
-        },
-        "email_form": {
-          "type": "email_form",
-          "settings": {}
-        }
-      },
-      "block_order": [
-        "heading",
-        "paragraph",
-        "email_form"
-      ],
-      "settings": {
-        "color_scheme": "scheme-3",
-        "full_width": true,
-        "padding_top": 52,
-        "padding_bottom": 52
+        "variant": "scroll",
+        "heading": "Featured in",
+        "show_arrows": false,
+        "heading_font": "jost_n4",
+        "show_dots": true,
+        "enable_swipe": true,
+        "auto_rotate": false,
+        "change_slides_speed": 2,
+        "auto_rotate_mobile": false,
+        "mobile_slides_speed": 2,
+        "accessibility_info": "Featured promotions",
+        "columns_desktop": 6,
+        "columns_tablet": 6,
+        "columns_mobile": 3,
+        "image_ratio": "landscape",
+        "image_fit": "contain",
+        "color_scheme": "",
+        "gap_mobile": 16,
+        "gap_desktop": 32,
+        "padding_top": 32,
+        "padding_bottom": 32
       }
     }
   },
@@ -585,12 +511,8 @@
     "featured_collection_tahdRE",
     "image_link_banner",
     "new_launches",
-    "promo_banner",
-    "explore_collections",
     "bestsellers",
-    "benefits",
-    "brand_story",
-    "our_world",
-    "newsletter"
+    "testimonials",
+    "image_link_scroll"
   ]
 }

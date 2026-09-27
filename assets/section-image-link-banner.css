@@ -25,3 +25,11 @@
   .image-link-banner .hero-slideshow__arrow { width: 48px; height: 48px; }
   .image-link-banner .hero-slideshow__arrow svg { width: 25.6px; height: 25.6px; }
 }
+
+.image-link-banner__heading { display: flex; align-items: center; gap: 6px; margin: 0 0 24px; font-size: 22px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; }
+.image-link-banner__heading::before, .image-link-banner__heading::after { content: ""; height: 1px; background: currentColor; opacity: .4; }
+.image-link-banner__heading::before { flex: 0 0 18px; }
+.image-link-banner__heading::after { flex: 1; }
+@media (min-width: 750px) {
+  .image-link-banner__heading { font-size: 30px; letter-spacing: 5px; margin-bottom: 32px; }
+}

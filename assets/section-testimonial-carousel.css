@@ -1,0 +1,24 @@
+.testimonials .image-links__heading { margin-bottom: 25px; }
+.testimonials .image-links__heading span { min-width: 0; }
+.testimonials .image-links__track { align-items: start; }
+.testimonial-card { display: flex; flex-direction: column; gap: 12px; padding: 10px; min-height: 300px; border: 1px solid rgba(0,0,0,.08); border-radius: 12px; background: #fff; color: #222; text-align: left; font-family: var(--heading-font); font-size: 14px; letter-spacing: 0; line-height: 1.5; }
+.testimonial-card__photo img, .testimonial-card__photo svg { display: block; width: 100%; height: auto; border-radius: 10px; user-select: none; -webkit-user-drag: none; }
+.testimonial-card__photo > svg { aspect-ratio: 1150 / 1920; object-fit: cover; background: #f4f1eb; }
+.testimonial-card__open { display: block; width: 100%; border: 0; padding: 0; background: none; cursor: pointer; position: relative; }
+.testimonial-card__open .loading__spinner { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+.testimonial-card__review { min-height: 65px; }
+.testimonial-card .rte > :first-child { margin-top: 0; }
+.testimonial-card .rte > :last-child { margin-bottom: 0; }
+.testimonial-card__details summary { display: block; cursor: pointer; position: static; list-style: none; }
+.testimonial-card__details summary::-webkit-details-marker { display: none; }
+.testimonial-card__more, .testimonial-card__less { color: #499149; text-decoration: underline; font-size: 11px; }
+.testimonial-card__less, .testimonial-card__details[open] .testimonial-card__more, .testimonial-card__details[open] .testimonial-card__excerpt { display: none; }
+.testimonial-card__details[open] .testimonial-card__less { display: inline; }
+.testimonial-card__meta { display: flex; flex-direction: column; gap: 4px; }
+.testimonial-card__reviewer { font-size: 12px; text-transform: uppercase; letter-spacing: .6px; opacity: .7; }
+.testimonial-card__date { font-size: 10px; font-style: italic; opacity: .6; }
+.testimonial-card__product { font-size: 13px; letter-spacing: .3px; }
+.testimonial-card__product a { text-decoration: none; }
+.testimonial-card__product a:hover { text-decoration: underline; }
+.testimonial-card__stars { display: flex; gap: 3px; align-items: center; color: #ffb400; }
+@media (max-width: 749px) { .testimonials .image-links__heading { margin-bottom: 20px; font-size: 20px; letter-spacing: 0; } }
