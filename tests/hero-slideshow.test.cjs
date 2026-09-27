@@ -133,3 +133,28 @@ test('theme editor removal clears timers and observers', () => {
   assert.equal(cleaned, 3);
   assert.equal(carousel.controller, null);
 });
+
+test('image banners slide in the requested direction across loop boundaries and cancel interrupted animations', () => {
+  const { carousel } = fixture();
+  const animations = [];
+  carousel.dataset.transition = 'slide';
+  carousel.track.getBoundingClientRect = () => ({ width: 1000 });
+  carousel.slides.forEach(slide => {
+    slide.animate = (frames, options) => {
+      const animation = { frames, options, cancelled: false, cancel() { this.cancelled = true; } };
+      animations.push(animation);
+      return animation;
+    };
+  });
+  carousel.goTo(-1);
+  assert.equal(carousel.current, 2);
+  assert.equal(animations[1].frames[0].transform, 'translateX(-1032px)');
+  carousel.goTo(3);
+  assert.equal(carousel.current, 0);
+  assert.ok(animations[0].cancelled && animations[1].cancelled);
+  assert.equal(animations[3].frames[0].transform, 'translateX(1032px)');
+  carousel.reducedMotion.matches = true;
+  carousel.goTo(1);
+  assert.equal(animations.length, 4);
+  assert.ok(animations[3].cancelled);
+});

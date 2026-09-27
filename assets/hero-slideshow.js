@@ -87,6 +87,8 @@ if (!customElements.get('hero-slideshow')) {
 
     goTo(index) {
       if (!this.slides?.length) return;
+      const previous = this.current;
+      this.slideAnimations?.forEach(animation => animation.cancel());
       this.current = (index + this.slides.length) % this.slides.length;
       this.slides.forEach((slide, i) => {
         const active = i === this.current;
@@ -99,6 +101,21 @@ if (!customElements.get('hero-slideshow')) {
           if (image) image.loading = 'eager';
         }
       });
+      if (this.dataset.transition === 'slide' && previous !== this.current && !this.reducedMotion.matches) {
+        const direction = (index > previous ? 1 : -1) * (getComputedStyle(this).direction === 'rtl' ? -1 : 1);
+        const distance = this.track.getBoundingClientRect().width + (this.mobile.matches ? 16 : 32);
+        const options = { duration: 400, easing: 'cubic-bezier(0.25, 1, 0.5, 1)' };
+        this.slideAnimations = [
+          this.slides[previous].animate([
+            { transform: 'translateX(0)', opacity: 1, visibility: 'visible' },
+            { transform: `translateX(${-direction * distance}px)`, opacity: 1, visibility: 'visible' }
+          ], options),
+          this.slides[this.current].animate([
+            { transform: `translateX(${direction * distance}px)` },
+            { transform: 'translateX(0)' }
+          ], options)
+        ];
+      }
       this.dots.forEach((dot, i) => {
         dot.classList.toggle('is-active', i === this.current);
         if (i === this.current) dot.setAttribute('aria-current', 'true');
@@ -155,6 +172,7 @@ if (!customElements.get('hero-slideshow')) {
 
     disconnectedCallback() {
       clearTimeout(this.timer);
+      this.slideAnimations?.forEach(animation => animation.cancel());
       this.controller?.abort();
       this.controller = null;
       this.observer?.disconnect();

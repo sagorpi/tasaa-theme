@@ -482,6 +482,7 @@ class MenuDrawer extends HTMLElement {
   }
 
   openMenuDrawer(summaryElement) {
+    this.closeVersion = (this.closeVersion || 0) + 1;
     setTimeout(() => {
       this.mainDetailsToggle.classList.add('menu-opening');
     });
@@ -531,15 +532,21 @@ class MenuDrawer extends HTMLElement {
 
   closeAnimation(detailsElement) {
     let animationStart;
+    const navigationDrawer = this.closest('.store-navigation');
+    const duration = navigationDrawer
+      ? (window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 300)
+      : 400;
+    const closeVersion = this.closeVersion = (this.closeVersion || 0) + 1;
 
     const handleAnimation = (time) => {
+      if (this.closeVersion !== closeVersion) return;
       if (animationStart === undefined) {
         animationStart = time;
       }
 
       const elapsedTime = time - animationStart;
 
-      if (elapsedTime < 400) {
+      if (elapsedTime < duration) {
         window.requestAnimationFrame(handleAnimation);
       } else {
         detailsElement.removeAttribute('open');
@@ -561,12 +568,14 @@ class HeaderDrawer extends MenuDrawer {
   }
 
   openMenuDrawer(summaryElement) {
+    this.closeVersion = (this.closeVersion || 0) + 1;
     this.header = this.header || document.querySelector('.section-header');
+    this.drawerAnchor = this.closest('.store-navigation') ? this.closest('header') : this.header;
     this.borderOffset =
       this.borderOffset || this.closest('.header-wrapper').classList.contains('header-wrapper--border-bottom') ? 1 : 0;
     document.documentElement.style.setProperty(
       '--header-bottom-position',
-      `${parseInt(this.header.getBoundingClientRect().bottom - this.borderOffset)}px`
+      `${Math.floor(this.drawerAnchor.getBoundingClientRect().bottom - (this.drawerAnchor === this.header ? this.borderOffset : 0))}px`
     );
     this.header.classList.add('menu-open');
 
@@ -591,7 +600,7 @@ class HeaderDrawer extends MenuDrawer {
     this.header &&
       document.documentElement.style.setProperty(
         '--header-bottom-position',
-        `${parseInt(this.header.getBoundingClientRect().bottom - this.borderOffset)}px`
+        `${Math.floor(this.drawerAnchor.getBoundingClientRect().bottom - (this.drawerAnchor === this.header ? this.borderOffset : 0))}px`
       );
     document.documentElement.style.setProperty('--viewport-height', `${window.innerHeight}px`);
   };

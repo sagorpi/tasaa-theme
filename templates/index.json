@@ -15,24 +15,29 @@
         "slide_1": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/desktop_banner_1.jpg",
+            "image_mobile": "shopify://shop_images/mobile_banner_1.jpg",
+            "whole_slide_link": true,
+            "link_label": "",
             "image_overlay_opacity": 30,
-            "heading": "Handcrafted, with love",
+            "heading": "",
             "heading_size": "h1",
-            "subheading": "Discover our new season of sarees, blouses & more",
-            "button_label": "Shop new arrivals",
-            "link": "shopify://collections/all",
+            "subheading": "",
+            "button_label": "",
+            "link": "shopify://collections/blouse",
             "button_style_secondary": false,
             "show_text_box": false,
             "box_align": "middle-center",
             "text_alignment": "center",
             "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3",
-            "whole_slide_link": true
+            "color_scheme": "scheme-3"
           }
         },
         "slide_2": {
           "type": "slide",
           "settings": {
+            "whole_slide_link": true,
+            "link_label": "",
             "image_overlay_opacity": 30,
             "heading": "Everyday elegance",
             "heading_size": "h1",
@@ -44,8 +49,7 @@
             "box_align": "middle-center",
             "text_alignment": "center",
             "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3",
-            "whole_slide_link": true
+            "color_scheme": "scheme-3"
           }
         }
       },
@@ -59,13 +63,13 @@
         "slider_visual": "dots",
         "auto_rotate": true,
         "change_slides_speed": 5,
-        "image_behavior": "none",
-        "show_text_below": false,
-        "accessibility_info": "Slideshow about our brand. Use the previous and next buttons to navigate.",
         "auto_rotate_mobile": true,
         "mobile_slides_speed": 3,
         "show_arrows": true,
-        "enable_swipe": true
+        "enable_swipe": true,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "accessibility_info": "Slideshow about our brand. Use the previous and next buttons to navigate."
       }
     },
     "shop_by_category": {
@@ -148,6 +152,8 @@
         "collection": "bestseller-sarees",
         "products_to_show": 8,
         "title": "Featured collection",
+        "collection_font": "jost_n4",
+        "show_collection_label": true,
         "heading_size": "h1",
         "description": "",
         "show_description": false,
@@ -171,9 +177,44 @@
         "padding_left": 8,
         "padding_right": 8,
         "column_gap": 32,
-        "column_gap_mobile": 16,
-        "collection_font": "jost_n4",
-        "show_collection_label": true
+        "column_gap_mobile": 16
+      }
+    },
+    "image_link_banner": {
+      "type": "image-link-banner",
+      "blocks": {
+        "banner_1": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/1920_X_500_Blouses_4.jpg",
+            "image_mobile": "shopify://shop_images/600_X_350_Blouses_4.jpg",
+            "link": "shopify://products/patakha-bindu",
+            "link_label": "Explore the collection"
+          }
+        },
+        "banner_2": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/1920_X_500_Blouses_3.jpg",
+            "image_mobile": "shopify://shop_images/600_X_350_Blouses_3.jpg",
+            "link": "shopify://collections/blouse",
+            "link_label": "Shop blouses"
+          }
+        }
+      },
+      "block_order": [
+        "banner_1",
+        "banner_2"
+      ],
+      "settings": {
+        "show_arrows": true,
+        "show_dots": true,
+        "enable_swipe": true,
+        "auto_rotate": false,
+        "change_slides_speed": 2,
+        "auto_rotate_mobile": false,
+        "mobile_slides_speed": 2,
+        "accessibility_info": "Featured promotions"
       }
     },
     "new_launches": {
@@ -182,6 +223,8 @@
         "collection": "all",
         "products_to_show": 8,
         "title": "New launches",
+        "collection_font": "jost_n4",
+        "show_collection_label": true,
         "heading_size": "h1",
         "description": "",
         "show_description": false,
@@ -205,9 +248,7 @@
         "padding_left": 8,
         "padding_right": 8,
         "column_gap": 32,
-        "column_gap_mobile": 16,
-        "collection_font": "jost_n4",
-        "show_collection_label": true
+        "column_gap_mobile": 16
       }
     },
     "promo_banner": {
@@ -231,7 +272,7 @@
         "text": {
           "type": "text",
           "settings": {
-            "text": "<p>Join our loyalty program and collect points on everything you buy \u2014 every 1 point is worth \u20b91 towards your next order.</p>",
+            "text": "<p>Join our loyalty program and collect points on everything you buy — every 1 point is worth ₹1 towards your next order.</p>",
             "text_style": "body"
           }
         },
@@ -318,6 +359,8 @@
         "collection": "all",
         "products_to_show": 8,
         "title": "Bestsellers",
+        "collection_font": "jost_n4",
+        "show_collection_label": true,
         "heading_size": "h1",
         "description": "",
         "show_description": false,
@@ -341,9 +384,7 @@
         "padding_left": 8,
         "padding_right": 8,
         "column_gap": 32,
-        "column_gap_mobile": 16,
-        "collection_font": "jost_n4",
-        "show_collection_label": true
+        "column_gap_mobile": 16
       }
     },
     "benefits": {
@@ -353,7 +394,7 @@
           "type": "column",
           "settings": {
             "title": "Free shipping",
-            "text": "<p>Free shipping on all orders above \u20b91999.</p>",
+            "text": "<p>Free shipping on all orders above ₹1999.</p>",
             "link_label": "",
             "link": ""
           }
@@ -362,7 +403,7 @@
           "type": "column",
           "settings": {
             "title": "Cash on delivery",
-            "text": "<p>Pay the way you like \u2014 COD available across India.</p>",
+            "text": "<p>Pay the way you like — COD available across India.</p>",
             "link_label": "",
             "link": ""
           }
@@ -430,7 +471,7 @@
         "text": {
           "type": "text",
           "settings": {
-            "text": "<p>Every piece begins with the people who make it \u2014 woven, dyed and finished by skilled artisans. We design slow, intentional clothing meant to be loved for years, not seasons.</p>"
+            "text": "<p>Every piece begins with the people who make it — woven, dyed and finished by skilled artisans. We design slow, intentional clothing meant to be loved for years, not seasons.</p>"
           }
         },
         "button": {
@@ -542,6 +583,7 @@
     "hero_slideshow",
     "shop_by_category",
     "featured_collection_tahdRE",
+    "image_link_banner",
     "new_launches",
     "promo_banner",
     "explore_collections",

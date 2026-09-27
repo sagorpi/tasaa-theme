@@ -1,0 +1,206 @@
+{{ 'section-hero-slideshow.css' | asset_url | stylesheet_tag }}
+{{ 'section-image-link-banner.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hero-slideshow.js' | asset_url }}" defer="defer"></script>
+
+<hero-slideshow
+  data-transition="slide"
+  class="hero-slideshow image-link-banner"
+  role="region"
+  aria-roledescription="{{ 'sections.slideshow.carousel' | t }}"
+  aria-label="{{ section.settings.accessibility_info | escape }}"
+  data-autoplay="{{ section.settings.auto_rotate }}"
+  data-autoplay-mobile="{{ section.settings.auto_rotate_mobile }}"
+  data-speed="{{ section.settings.change_slides_speed | times: 1000 }}"
+  data-speed-mobile="{{ section.settings.mobile_slides_speed | times: 1000 }}"
+  data-swipe="{{ section.settings.enable_swipe }}"
+  data-height="adapt_image"
+>
+  <div class="hero-slideshow__stage">
+    <div id="Slider-{{ section.id }}" class="hero-slideshow__track" aria-live="off" aria-atomic="false">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign desktop_image = block.settings.image | default: block.settings.image_tablet | default: block.settings.image_mobile
+          assign mobile_image = block.settings.image_mobile | default: desktop_image
+          assign tablet_image = block.settings.image_tablet | default: desktop_image
+          assign slide_label = block.settings.link_label | strip_html | default: desktop_image.alt
+          if slide_label == blank
+            assign slide_label = 'sections.slideshow.slide' | t | append: ' ' | append: forloop.index
+          endif
+          assign image_sizes = '(min-width: 750px) 84vw, 96vw'
+        -%}
+        <div
+          id="Slide-{{ section.id }}-{{ forloop.index }}"
+          class="hero-slideshow__slide{% if forloop.first %} is-active{% endif %}"
+          role="group"
+          aria-roledescription="{{ 'sections.slideshow.slide' | t }}"
+          aria-label="{{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
+          {% unless forloop.first %}aria-hidden="true" inert{% endunless %}
+          style="--hero-ratio-desktop: {{ desktop_image.aspect_ratio | default: 3.84 }}; --hero-ratio-tablet: {{ tablet_image.aspect_ratio | default: 3.84 }}; --hero-ratio-mobile: {{ mobile_image.aspect_ratio | default: 1.7142857 }}; --hero-focus-desktop: {{ desktop_image.presentation.focal_point | default: '50% 50%' }}; --hero-focus-tablet: {{ tablet_image.presentation.focal_point | default: '50% 50%' }}; --hero-focus-mobile: {{ mobile_image.presentation.focal_point | default: '50% 50%' }}; --hero-overlay: 0;"
+          {{ block.shopify_attributes }}
+        >
+          <div class="hero-slideshow__media">
+            {%- if desktop_image != blank -%}
+              {% render 'slideshow-picture', desktop_image: desktop_image, mobile_image: mobile_image, tablet_image: tablet_image, first_slide: false, image_sizes: image_sizes %}
+            {%- else -%}
+              {%- assign placeholder_slide = forloop.index | modulo: 2 -%}
+              {%- if placeholder_slide == 1 -%}
+                {{ 'hero-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- else -%}
+                {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            {%- endif -%}
+            {%- if block.settings.link != blank -%}
+              <a class="hero-slideshow__slide-link" href="{{ block.settings.link }}" aria-label="{{ slide_label | escape }}" draggable="false"></a>
+            {%- endif -%}
+          </div>
+
+        </div>
+      {%- endfor -%}
+    </div>
+    {%- if section.blocks.size > 1 -%}
+      <div class="hero-slideshow__controls">
+        {%- if section.settings.show_arrows -%}
+          <button type="button" class="hero-slideshow__arrow hero-slideshow__arrow--previous" data-direction="-1" aria-label="{{ 'sections.slideshow.previous_slideshow' | t }}" aria-controls="Slider-{{ section.id }}"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M20 12H4m8-8-8 8 8 8"/></svg></button>
+          <button type="button" class="hero-slideshow__arrow hero-slideshow__arrow--next" data-direction="1" aria-label="{{ 'sections.slideshow.next_slideshow' | t }}" aria-controls="Slider-{{ section.id }}"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M4 12h16m-8-8 8 8-8 8"/></svg></button>
+        {%- endif -%}
+        {%- if section.settings.show_dots -%}
+          <div class="hero-slideshow__pagination hero-slideshow__pagination--dots">
+            {%- for block in section.blocks -%}
+              <button type="button" class="hero-slideshow__dot{% if forloop.first %} is-active{% endif %}" data-slide="{{ forloop.index0 }}" aria-controls="Slide-{{ section.id }}-{{ forloop.index }}" aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}" {% if forloop.first %}aria-current="true"{% endif %}><span aria-hidden="true"></span></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        <button type="button" class="hero-slideshow__pause" data-pause aria-label="{{ 'sections.slideshow.pause_slideshow' | t }}" data-label-pause="{{ 'sections.slideshow.pause_slideshow' | t }}" data-label-play="{{ 'sections.slideshow.play_slideshow' | t }}">
+          <span data-pause-icon aria-hidden="true">Ⅱ</span><span data-play-icon aria-hidden="true" hidden>▶</span>
+        </button>
+      </div>
+    {%- endif -%}
+  </div>
+</hero-slideshow>
+
+{% schema %}
+{
+  "name": "Image link banner",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "A clickable promotional carousel. Recommended artwork: desktop 1920 \u00d7 500 px; mobile 600 \u00d7 350 px. Image height adapts to your artwork."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show slide indicators",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_swipe",
+      "label": "Enable swipe and drag",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "label": "Autoplay on tablet and desktop",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "change_slides_speed",
+      "label": "Tablet and desktop interval",
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "unit": "s",
+      "default": 2
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_rotate_mobile",
+      "label": "Autoplay on mobile",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "mobile_slides_speed",
+      "label": "Mobile interval",
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "unit": "s",
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "accessibility_info",
+      "label": "Accessible carousel description",
+      "default": "Featured promotions"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Image link",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop image",
+          "info": "Recommended: 1920 \u00d7 500 px. Also used on tablet and mobile unless another image is selected."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Mobile image",
+          "info": "Optional. Below 750 px. Recommended: 600 \u00d7 350 px."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_tablet",
+          "label": "Tablet image",
+          "info": "Optional. From 750 to 989 px."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Banner link"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link description",
+          "info": "Describe the destination for screen readers, for example Shop festive sarees."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image link banner",
+      "blocks": [
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

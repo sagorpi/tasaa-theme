@@ -1,6 +1,7 @@
 hero-slideshow {
   display: block;
   position: relative;
+  isolation: isolate;
 }
 
 .hero-slideshow__stage,

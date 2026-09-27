@@ -1,0 +1,27 @@
+.image-link-banner {
+  margin: 24px 2%;
+}
+
+.image-link-banner .hero-slideshow__slide {
+  transition: none;
+}
+
+.image-link-banner .hero-slideshow__arrow {
+  width: 36px;
+  height: 36px;
+}
+
+.image-link-banner .hero-slideshow__arrow svg {
+  width: 20px;
+  height: 20px;
+}
+
+.image-link-banner .hero-slideshow__pagination {
+  bottom: 8px;
+}
+
+@media screen and (min-width: 750px) {
+  .image-link-banner { margin: 32px 8%; }
+  .image-link-banner .hero-slideshow__arrow { width: 48px; height: 48px; }
+  .image-link-banner .hero-slideshow__arrow svg { width: 25.6px; height: 25.6px; }
+}

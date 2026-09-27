@@ -62,13 +62,50 @@
         "show_line_separator": true,
         "color_scheme": "scheme-1",
         "menu_color_scheme": "scheme-1",
-        "enable_country_selector": true,
-        "enable_language_selector": true,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
         "enable_customer_avatar": true,
         "margin_bottom": 0,
-        "padding_top": 20,
-        "padding_bottom": 20
-      }
+        "padding_top": 12,
+        "padding_bottom": 12,
+        "navigation_font": "jost_n4"
+      },
+      "blocks": {
+        "category_1": {
+          "type": "category_link",
+          "settings": {
+            "label": "Saree",
+            "link": "shopify://collections/hydrogen"
+          }
+        },
+        "category_2": {
+          "type": "category_link",
+          "settings": {
+            "label": "Blouse",
+            "link": "shopify://collections/blouse"
+          }
+        },
+        "category_3": {
+          "type": "category_link",
+          "settings": {
+            "label": "Kurta",
+            "link": "shopify://collections/saree-copy-copy"
+          }
+        },
+        "category_4": {
+          "type": "category_link",
+          "settings": {
+            "label": "Dresses",
+            "link": "shopify://collections/saree-copy-copy-1"
+          }
+        }
+      },
+      "block_order": [
+        "category_1",
+        "category_2",
+        "category_3",
+        "category_4"
+      ]
     }
   },
   "order": [
