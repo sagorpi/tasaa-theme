@@ -32,8 +32,7 @@
                         id="HeaderDrawer-{{ link.handle }}"
                         class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
                       >
-                        {% render 'mobile-menu-icon', menu_link: link, blocks: section.blocks %}
-                        {{ link.title | escape }}
+                        {%- render 'menu-item-label', link: link, show_icon: true -%}
                         <span class="svg-wrapper">
                           {{- 'icon-arrow.svg' | inline_asset_content -}}
                         </span>
@@ -51,7 +50,7 @@
                             <span class="svg-wrapper">
                               {{- 'icon-arrow.svg' | inline_asset_content -}}
                             </span>
-                            {{ link.title | escape }}
+                            {%- render 'menu-item-label', link: link, show_icon: true -%}
                           </button>
                           <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
                             {%- for childlink in link.links -%}
@@ -65,7 +64,7 @@
                                       aria-current="page"
                                     {% endif %}
                                   >
-                                    {{ childlink.title | escape }}
+                                    {%- render 'menu-item-label', link: childlink, show_icon: true -%}
                                   </a>
                                 {%- else -%}
                                   <details id="Details-menu-drawer-{{ link.handle }}-{{ childlink.handle }}">
@@ -73,7 +72,7 @@
                                       id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
                                       class="menu-drawer__menu-item link link--text list-menu__item focus-inset"
                                     >
-                                      {{ childlink.title | escape }}
+                                      {%- render 'menu-item-label', link: childlink, show_icon: true -%}
                                       <span class="svg-wrapper">
                                         {{- 'icon-arrow.svg' | inline_asset_content -}}
                                       </span>
@@ -92,7 +91,7 @@
                                         <span class="svg-wrapper">
                                           {{- 'icon-arrow.svg' | inline_asset_content -}}
                                         </span>
-                                        {{ childlink.title | escape }}
+                                        {%- render 'menu-item-label', link: childlink, show_icon: true -%}
                                       </button>
                                       <ul
                                         class="menu-drawer__menu list-menu"
@@ -109,7 +108,7 @@
                                                 aria-current="page"
                                               {% endif %}
                                             >
-                                              {{ grandchildlink.title | escape }}
+                                              {%- render 'menu-item-label', link: grandchildlink, show_icon: true -%}
                                             </a>
                                           </li>
                                         {%- endfor -%}
@@ -132,8 +131,7 @@
                         aria-current="page"
                       {% endif %}
                     >
-                      {% render 'mobile-menu-icon', menu_link: link, blocks: section.blocks %}
-                      {{ link.title | escape }}
+                      {%- render 'menu-item-label', link: link, show_icon: true -%}
                     </a>
                   {%- endif -%}
                 </li>

@@ -246,17 +246,15 @@
 @media (prefers-reduced-motion: reduce) {
   .store-navigation .header__inline-menu > .list-menu > li::before { transition: none; }
 }
-
-.mobile-menu-icon { display: none; }
+/* Optional Iconify images are only displayed in the mobile/tablet drawer. */
+.menu-item-icon { display: none; }
 @media screen and (max-width: 989px) {
-  .store-navigation .mobile-menu-icon {
-    display: inline-flex;
-    flex: 0 0 var(--menu-icon-size, 20px);
-    width: var(--menu-icon-size, 20px);
-    height: var(--menu-icon-size, 20px);
-    margin-right: 12px;
-    align-items: center;
-    justify-content: center;
+  .menu-item-icon:not([hidden]) {
+    display: block;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    margin-inline-end: 12px;
+    object-fit: contain;
   }
-  .store-navigation .mobile-menu-icon img { display: block; width: 100%; height: 100%; object-fit: contain; }
 }

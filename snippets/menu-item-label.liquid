@@ -1,0 +1,34 @@
+{%- comment -%}
+  Menu title with optional trailing [icon:collection:name].
+  Pass show_icon: true only for drawer items. No Iconify library required.
+{%- endcomment -%}
+{%- liquid
+  assign title = link.title
+  assign icon = ''
+  if title contains '[icon:'
+    assign tail = title | split: '[icon:' | last
+    if tail contains ']'
+      assign raw_icon = tail | split: ']' | first
+      assign token = '[icon:' | append: raw_icon | append: ']'
+      assign title = title | remove: token | strip
+      assign icon = raw_icon | strip
+    endif
+  endif
+  assign parts = icon | split: ':'
+  assign valid_icon = false
+  if show_icon and parts.size == 2 and parts.first != blank and parts.last != blank
+    assign valid_icon = true
+    assign allowed = 'abcdefghijklmnopqrstuvwxyz0123456789-:'
+    assign characters = icon | split: ''
+    for character in characters
+      unless allowed contains character
+        assign valid_icon = false
+        break
+      endunless
+    endfor
+  endif
+-%}
+{%- if valid_icon -%}
+  <img class="menu-item-icon" src="https://api.iconify.design/{{ parts.first }}/{{ parts.last }}.svg?color=%23252525" width="20" height="20" alt="" aria-hidden="true" loading="lazy" decoding="async" onerror="this.hidden = true">
+{%- endif -%}
+{{- title | escape -}}

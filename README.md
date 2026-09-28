@@ -97,3 +97,14 @@ Ensure that you follow the list of [theme store requirements](https://shopify.de
 ## License
 
 Copyright (c) 2021-present Shopify Inc. See [LICENSE](/LICENSE.md) for further details.
+
+## Mobile menu icons
+
+In Shopify **Content → Menus**, append an Iconify name to an item label:
+`Sarees [icon:mdi:hanger]`. Use one icon token per label. This works for all
+three menu levels. Mobile/tablet drawers display the 20px icon; desktop and
+footer menus display only the clean label. Remove the token for a text-only item.
+
+Icons load as lazy SVG images from Iconify's public API, without a library or app.
+Invalid names and failed images leave the label/link usable. Icon sets retain
+their individual licenses. No separate theme-editor icon blocks are needed.
