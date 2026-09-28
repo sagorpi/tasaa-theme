@@ -8,12 +8,13 @@
 <nav class="header__inline-menu">
   <ul class="list-menu list-menu--inline" role="list">
     {%- for link in section.settings.menu.links -%}
-      <li>
+      <li data-title="{{ link.title | escape }}">
         {%- if link.links != blank -%}
           <header-menu>
             <details id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu">
               <summary
                 id="HeaderMenu-{{ link.handle }}"
+                data-menu-url="{{ link.url }}"
                 class="header__menu-item list-menu__item link focus-inset"
               >
                 <span

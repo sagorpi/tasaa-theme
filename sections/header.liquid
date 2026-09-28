@@ -80,6 +80,8 @@
 
 {%- style -%}
   {{ section.settings.navigation_font | font_face: font_display: 'swap' }}
+  {%- assign navigation_font_semibold = section.settings.navigation_font | font_modify: 'weight', '600' -%}
+  {{ navigation_font_semibold | font_face: font_display: 'swap' }}
   .store-navigation { --navigation-font: {{ section.settings.navigation_font.family }}, {{ section.settings.navigation_font.fallback_families }}; }
   .header {
     padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
@@ -307,7 +309,7 @@
       </a>
     </div>
   </header>
-  {%- if section.blocks.size > 0 -%}
+  {%- if request.page_type == 'index' and section.blocks.size > 0 -%}
     <nav class="store-navigation__categories" aria-label="Shop by category">
       {%- for block in section.blocks -%}
         {%- if block.type == 'category_link' and block.settings.link != blank -%}
@@ -483,7 +485,7 @@
 {
   "name": "t:sections.header.name",
   "class": "section-header",
-  "max_blocks": 12,
+  "max_blocks": 32,
   "settings": [
     {
       "type": "font_picker",
@@ -669,6 +671,16 @@
     }
   ],
   "blocks": [
+    {
+      "type": "mobile_menu_icon",
+      "name": "Mobile menu icon",
+      "limit": 20,
+      "settings": [
+        { "type": "text", "id": "menu_label", "label": "Menu item label", "info": "Match a main menu label, such as Saree or Women. Capitalization does not matter." },
+        { "type": "image_picker", "id": "image", "label": "Icon image", "info": "Use a square image with a transparent background for best results." },
+        { "type": "range", "id": "size", "label": "Icon size", "min": 16, "max": 32, "step": 2, "unit": "px", "default": 20 }
+      ]
+    },
     {
       "type": "@app"
     },

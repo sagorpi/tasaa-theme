@@ -567,6 +567,64 @@ class HeaderDrawer extends MenuDrawer {
     super();
   }
 
+  onSummaryClick(event) {
+    const details = event.currentTarget.parentNode;
+    if (this.closest('.store-navigation') && details === this.mainDetailsToggle && details.open && !details.classList.contains('menu-opening')) {
+      event.preventDefault();
+      this.openMenuDrawer(event.currentTarget);
+      return;
+    }
+    if (!this.closest('.store-navigation') || details === this.mainDetailsToggle) {
+      super.onSummaryClick(event);
+      return;
+    }
+    event.preventDefault();
+    this.animateAccordion(details, !(this.accordions?.get(details)?.expanded ?? details.open));
+  }
+
+  animateAccordion(details, expanded) {
+    this.accordions ||= new Map();
+    const previous = this.accordions.get(details);
+    const fromHeight = details.getBoundingClientRect().height;
+    previous?.forEach(animation => animation.cancel());
+    const summary = details.querySelector('summary');
+    const content = summary.nextElementSibling;
+    details.open = true;
+    summary.setAttribute('aria-expanded', String(expanded));
+    details.style.overflow = 'hidden';
+    const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 250;
+    const animations = [
+      details.animate({ height: [`${fromHeight}px`, `${expanded ? details.scrollHeight : summary.offsetHeight}px`] },
+        { duration, easing: 'ease', fill: 'both' }),
+      content.animate(expanded ? { opacity: [0, 1], transform: ['translateY(4px)', 'none'] } : { opacity: [1, 0] },
+        { duration: duration ? 150 : 0, delay: expanded && duration ? 150 : 0, fill: 'both' }),
+    ];
+    animations.expanded = expanded;
+    this.accordions.set(details, animations);
+    Promise.all(animations.map(animation => animation.finished)).then(() => {
+      if (this.accordions.get(details) !== animations) return;
+      details.open = expanded;
+      animations.forEach(animation => animation.cancel());
+      details.style.overflow = '';
+      this.accordions.delete(details);
+      // Refresh the drawer's focus boundary after links are revealed or hidden.
+      trapFocus(this.querySelector('.menu-drawer'), this.contains(document.activeElement) ? document.activeElement : summary);
+    }).catch(() => {});
+  }
+
+  closeSubmenu(details) {
+    if (!this.closest('.store-navigation')) return super.closeSubmenu(details);
+    this.animateAccordion(details, false);
+  }
+
+  onCloseButtonClick(event) {
+    if (event.currentTarget.hasAttribute('data-store-drawer-close')) {
+      this.closeMenuDrawer(event, this.mainDetailsToggle.querySelector('summary'));
+      return;
+    }
+    super.onCloseButtonClick(event);
+  }
+
   openMenuDrawer(summaryElement) {
     this.closeVersion = (this.closeVersion || 0) + 1;
     this.header = this.header || document.querySelector('.section-header');
@@ -581,6 +639,9 @@ class HeaderDrawer extends MenuDrawer {
 
     setTimeout(() => {
       this.mainDetailsToggle.classList.add('menu-opening');
+      if (this.closest('.store-navigation')) {
+        trapFocus(this.querySelector('.menu-drawer'), this.querySelector('[data-store-drawer-close]'));
+      }
     });
 
     summaryElement.setAttribute('aria-expanded', true);
@@ -591,6 +652,12 @@ class HeaderDrawer extends MenuDrawer {
 
   closeMenuDrawer(event, elementToFocus) {
     if (!elementToFocus) return;
+    this.accordions?.forEach((animations, details) => {
+      animations.forEach(animation => animation.cancel());
+      details.style.overflow = '';
+    });
+    this.accordions?.clear();
+    this.mainDetailsToggle.querySelectorAll('details > summary').forEach(summary => summary.setAttribute('aria-expanded', 'false'));
     super.closeMenuDrawer(event, elementToFocus);
     this.header.classList.remove('menu-open');
     window.removeEventListener('resize', this.onResize);

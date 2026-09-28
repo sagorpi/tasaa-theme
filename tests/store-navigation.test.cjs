@@ -15,10 +15,10 @@ function setup(reduced = false) {
   };
   const items = [{ animate }, { animate }];
   const content = { animate, querySelectorAll: () => items };
-  const summary = { ...target(), nextElementSibling: content, setAttribute() {}, focus() {} };
-  const details = { open: false, querySelector: () => summary };
-  const menu = { ...target(), querySelector: () => details, contains: x => x === summary };
-  const header = { querySelectorAll: selector => selector.includes('header-menu') ? [menu] : [] };
+  const summary = { ...target(), nextElementSibling: content, dataset: {}, setAttribute() {}, focus() {} };
+  const details = { ...target(), open: false, querySelector: () => summary, contains: x => x === summary, closest: () => null };
+  const menu = details;
+  const header = { querySelectorAll: selector => selector.includes('inline-menu') ? [menu] : [] };
   const document = { ...target(), querySelector: () => header };
   vm.runInNewContext(fs.readFileSync('assets/store-navigation.js', 'utf8'), {
     document, AbortController, matchMedia: query => ({ ...target(), matches: query.includes('reduced') ? reduced : true }),
@@ -45,11 +45,21 @@ test('hover uses delayed close and re-entry cancels a pending fade-out', async (
 });
 test('click and Escape close disclosures; reduced motion removes delays', async () => {
   const f = setup(true);
-  f.summary.handlers.click({ preventDefault() {} });
+  f.summary.handlers.click({ preventDefault() {}, stopPropagation() {}, detail: 0 });
   assert.equal(f.details.open, true);
   assert.ok(f.animations.every(a => a.options.duration === 0 && !a.options.delay));
   f.menu.handlers.keydown({ key: 'Escape', stopPropagation() {} });
   f.animations.at(-1).finish();
   await Promise.resolve();
   assert.equal(f.details.open, false);
+});
+
+test('mouse click after hover keeps a placeholder menu open', () => {
+  const f = setup();
+  f.summary.dataset.menuUrl = '#';
+  f.menu.handlers.pointerenter({ pointerType: 'mouse' });
+  const animationCount = f.animations.length;
+  f.summary.handlers.click({ preventDefault() {}, stopPropagation() {}, detail: 1 });
+  assert.equal(f.details.open, true);
+  assert.equal(f.animations.length, animationCount);
 });
