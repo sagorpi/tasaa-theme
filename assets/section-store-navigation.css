@@ -137,6 +137,17 @@
 .store-navigation .menu-drawer__submenu .menu-drawer__menu-item { padding: 8px 0; font-size: 14px; text-transform: none; letter-spacing: 0; }
 .store-navigation .menu-drawer__menu-item:hover,
 .store-navigation .menu-drawer__menu-item:focus { background: transparent; color: #777; }
+@media screen and (max-width: 989px) {
+  /* Only nested menu items retain tap, hover, and focus highlighting. */
+  .store-navigation .menu-drawer__navigation > .menu-drawer__menu > li > .menu-drawer__menu-item,
+  .store-navigation .menu-drawer__navigation > .menu-drawer__menu > li > details > .menu-drawer__menu-item {
+    background: transparent;
+    color: rgb(var(--color-foreground));
+    outline: none;
+    box-shadow: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
 .store-navigation header-drawer > details.menu-opening .menu-drawer__navigation > .menu-drawer__menu > li {
   animation: store-menu-item 150ms ease backwards;
   animation-delay: calc(300ms + var(--menu-item-index, 0) * 100ms);
