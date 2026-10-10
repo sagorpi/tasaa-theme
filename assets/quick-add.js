@@ -21,12 +21,19 @@ if (!customElements.get('quick-add-modal')) {
       }
 
       show(opener) {
+        if (opener.getAttribute('aria-disabled') === 'true') return;
+        if (this.classList.contains('featured-quick-view')) {
+          this.style.setProperty('--featured-font', getComputedStyle(opener).fontFamily);
+        }
         opener.setAttribute('aria-disabled', true);
         opener.classList.add('loading');
         opener.querySelector('.loading__spinner').classList.remove('hidden');
 
         fetch(opener.getAttribute('data-product-url'))
-          .then((response) => response.text())
+          .then((response) => {
+            if (!response.ok) throw new Error('Product could not be loaded');
+            return response.text();
+          })
           .then((responseText) => {
             const responseHTML = new DOMParser().parseFromString(responseText, 'text/html');
             const productElement = responseHTML.querySelector('product-info');
@@ -43,6 +50,7 @@ if (!customElements.get('quick-add-modal')) {
 
             super.show(opener);
           })
+          .catch(() => { window.location.assign(opener.getAttribute('data-product-url')); })
           .finally(() => {
             opener.removeAttribute('aria-disabled');
             opener.classList.remove('loading');
@@ -60,6 +68,26 @@ if (!customElements.get('quick-add-modal')) {
         this.removeGalleryListSemantic(productElement);
         this.updateImageSizes(productElement);
         this.preventVariantURLSwitching(productElement);
+        if (this.classList.contains('featured-quick-view')) this.prepareFeaturedView(productElement);
+      }
+
+      prepareFeaturedView(productElement) {
+        productElement.querySelector('media-gallery')?.classList.remove('product-gallery-navigation');
+        productElement.querySelectorAll('.shopify-payment-button, share-button').forEach((element) => element.remove());
+        const viewer = productElement.querySelector('[id^="GalleryViewer-"]');
+        viewer?.querySelector('.slider-buttons')?.classList.remove('quick-add-hidden', 'small-hide');
+        viewer?.querySelector('.product__media-list')?.classList.add('slider--everywhere');
+        productElement.querySelector('product-form')?.parentElement.classList.add('featured-quick-view__buy');
+        const description = productElement.querySelector('.product__description');
+        if (description) {
+          const details = document.createElement('details');
+          details.className = 'featured-quick-view__details';
+          const summary = document.createElement('summary');
+          summary.textContent = this.dataset.detailsLabel;
+          description.before(details);
+          description.classList.remove('quick-add-hidden');
+          details.append(summary, description);
+        }
       }
 
       preventVariantURLSwitching(productElement) {

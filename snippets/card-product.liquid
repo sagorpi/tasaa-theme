@@ -326,7 +326,7 @@
                 <modal-opener data-modal="#QuickAdd-{{ section_id }}-{{ card_product.id }}">
                   <button
                     id="{{ product_form_id }}-submit"
-                    type="submit"
+                    type="button"
                     name="add"
                     class="quick-add__submit button button--full-width button--secondary{% if horizontal_quick_add %} card--horizontal__quick-add animate-arrow{% endif %}"
                     aria-haspopup="dialog"
@@ -350,7 +350,7 @@
                     {%- render 'loading-spinner' -%}
                   </button>
                 </modal-opener>
-                <quick-add-modal id="QuickAdd-{{ section_id }}-{{ card_product.id }}" class="quick-add-modal{% if featured_card %} featured-quick-view{% endif %}">
+                <quick-add-modal id="QuickAdd-{{ section_id }}-{{ card_product.id }}" class="quick-add-modal{% if featured_card %} featured-quick-view{% endif %}" data-details-label="{{ 'products.product.description' | t | escape }}">
                   <div
                     role="dialog"
                     aria-label="{{ 'products.product.choose_product_options' | t: product_name: card_product.title | escape }}"
@@ -358,6 +358,9 @@
                     class="quick-add-modal__content global-settings-popup"
                     tabindex="-1"
                   >
+                    {%- if featured_card -%}
+                      <div class="featured-quick-view__header">{{ 'products.product.choose_options' | t }}</div>
+                    {%- endif -%}
                     <button
                       id="ModalClose-{{ section_id }}-{{ card_product.id }}"
                       type="button"

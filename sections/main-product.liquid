@@ -1,6 +1,6 @@
 <product-info
   id="MainProduct-{{ section.id }}"
-  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}"
+  class="tasaa-product-page section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}"
   data-section="{{ section.id }}"
   data-product-id="{{ product.id }}"
   data-update-url="true"
@@ -10,7 +10,10 @@
   {% endif %}
 >
   {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+  {{ 'product-gallery-navigation.css' | asset_url | stylesheet_tag }}
   {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
+  {{ 'product-information.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'delivery-estimate.js' | asset_url }}" defer="defer"></script>
   {{ 'component-price.css' | asset_url | stylesheet_tag }}
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
   {{ 'component-rating.css' | asset_url | stylesheet_tag }}
@@ -192,6 +195,10 @@
                       {%- endif -%}
                     {%- endif -%}
                   </p>
+                {%- when 'delivery_estimate' -%}
+                  {% render 'delivery-estimate', product: product, block: block %}
+                {%- when 'product_information' -%}
+                  {% render 'product-information', product: product, block: block %}
                 {%- when 'description' -%}
                   {%- if product.description != blank -%}
                     <div class="product__description rte quick-add-hidden" {{ block.shopify_attributes }}>
@@ -2144,6 +2151,105 @@
           "info": "t:sections.main-product.blocks.icon_with_text.settings.heading.info"
         }
       ]
+    },
+    {
+      "type": "delivery_estimate",
+      "name": "Delivery estimate",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Calendar days, calculated in India time. Product integer metafields custom.delivery_min_days and custom.delivery_max_days override these defaults. This is an estimate, not a carrier promise."
+        },
+        {
+          "type": "checkbox",
+          "id": "enabled",
+          "label": "Show delivery estimate",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "min_days",
+          "label": "Minimum calendar days",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "range",
+          "id": "max_days",
+          "label": "Maximum calendar days",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "default": 7
+        },
+        {
+          "type": "text",
+          "id": "prefix",
+          "label": "Text before dates",
+          "default": "Your order will be delivered between"
+        },
+        {
+          "type": "text",
+          "id": "suffix",
+          "label": "Text after dates",
+          "default": "within India"
+        }
+      ]
+    },
+    {
+      "type": "product_information",
+      "name": "Product information",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Product Details: custom.product_details (rich text). Description: product description. Business details: custom.business_information (metaobject reference with a rich-text content field). Returns override: custom.return_policy_override (page reference). Empty rows are hidden on the storefront."
+        },
+        {
+          "type": "text",
+          "id": "details_heading",
+          "label": "Product Details heading",
+          "default": "Product Details"
+        },
+        {
+          "type": "text",
+          "id": "description_heading",
+          "label": "Description heading",
+          "default": "Description"
+        },
+        {
+          "type": "text",
+          "id": "business_heading",
+          "label": "Importer/Marketer/Packer Details heading",
+          "default": "Importer/Marketer/Packer Details"
+        },
+        {
+          "type": "text",
+          "id": "returns_heading",
+          "label": "Return & Exchange Policy heading",
+          "default": "Return & Exchange Policy"
+        },
+        {
+          "type": "page",
+          "id": "business_page",
+          "label": "Default business information page",
+          "info": "Shared fallback when no product business record is selected."
+        },
+        {
+          "type": "page",
+          "id": "returns_page",
+          "label": "Default Return & Exchange Policy page"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_first",
+          "label": "Open first available accordion initially",
+          "default": false
+        }
+      ]
     }
   ],
   "settings": [
@@ -2228,6 +2334,13 @@
       ],
       "default": "stacked",
       "label": "t:sections.main-product.settings.gallery_layout.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "vertical_thumbnails",
+      "label": "Vertical desktop thumbnails",
+      "info": "Use with Thumbnail carousel layout. Mobile and tablet retain a horizontal thumbnail strip.",
+      "default": true
     },
     {
       "type": "select",

@@ -1,0 +1,48 @@
+{% comment %}One content source for both the product page and fetched quick view.{% endcomment %}
+{%- liquid
+  assign business = product.metafields.custom.business_information.value
+  assign policy = product.metafields.custom.return_policy_override.value | default: block.settings.returns_page
+  assign first_rendered = true
+-%}
+<div class="tasaa-product-information" {{ block.shopify_attributes }}>
+  {%- for index in (1..4) -%}
+    {%- capture content -%}
+      {%- case index -%}
+        {%- when 1 -%}
+          {%- if product.metafields.custom.product_details != blank -%}
+            {{ product.metafields.custom.product_details | metafield_tag }}
+          {%- endif -%}
+        {%- when 2 -%}{{ product.description }}
+        {%- when 3 -%}
+          {%- if business.content != blank -%}
+            {{ business.content | metafield_tag }}
+          {%- else -%}
+            {{ block.settings.business_page.content }}
+          {%- endif -%}
+        {%- when 4 -%}{{ policy.content }}
+      {%- endcase -%}
+    {%- endcapture -%}
+    {%- liquid
+      assign content = content | strip
+      case index
+        when 1
+          assign heading = block.settings.details_heading
+        when 2
+          assign heading = block.settings.description_heading
+        when 3
+          assign heading = block.settings.business_heading
+        when 4
+          assign heading = block.settings.returns_heading
+      endcase
+    -%}
+    {%- if content != blank -%}
+      <details class="tasaa-product-information__item" {% if first_rendered and block.settings.open_first %}open{% endif %}>
+        <summary><span>{{ heading | escape }}</span><i aria-hidden="true"></i></summary>
+        <div class="tasaa-product-information__content rte">{{ content }}</div>
+      </details>
+      {%- assign first_rendered = false -%}
+    {%- elsif request.design_mode -%}
+      <p class="tasaa-product-information__help">{{ heading | escape }}: add content using this block’s authoring instructions to display this row.</p>
+    {%- endif -%}
+  {%- endfor -%}
+</div>

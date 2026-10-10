@@ -1492,3 +1492,44 @@ a.product__text {
     border: none;
   }
 }
+
+/* Give the full product page the reference's generous details column.
+   Quick-view sets data-update-url=false and keeps its own compact proportions. */
+.tasaa-product-page[data-update-url='true'] > product-component > .page-width {
+  max-width: 1356px;
+  padding-inline: 48px;
+}
+@media screen and (min-width: 990px) {
+  .tasaa-product-page[data-update-url='true'] .product:not(.product--no-media) {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+    column-gap: clamp(40px, 5.56vw, 80px);
+    align-items: start;
+  }
+  .tasaa-product-page[data-update-url='true'] .product:not(.product--no-media) > .grid__item {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 0;
+  }
+}
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .tasaa-product-page[data-update-url='true'] > product-component > .page-width { padding-inline: 24px; }
+  .tasaa-product-page[data-update-url='true'] .product__info-wrapper { padding-inline: 24px 0; }
+  .tasaa-product-page[data-update-url='true'] .product--right .product__info-wrapper { padding-inline: 0 24px; }
+}
+@media screen and (max-width: 749px) {
+  .tasaa-product-page[data-update-url='true'] > product-component > .page-width { padding-inline: 16px; }
+  .tasaa-product-page[data-update-url='true'] .product__info-wrapper { padding-inline: 0; }
+}
+
+/* White product canvas, including its padding and inherited control backgrounds. */
+.tasaa-product-page[data-update-url='true'] {
+  --color-background: 255, 255, 255;
+  --gradient-background: #fff;
+  background: #fff;
+}
+.tasaa-product-page[data-update-url='true'] > product-component {
+  display: block;
+  background: #fff;
+}

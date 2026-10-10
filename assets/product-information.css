@@ -1,0 +1,30 @@
+.tasaa-delivery:not([hidden]) { display: flex; align-items: center; gap: 10px; margin: 12px 0 0; padding: 10px 12px; border-radius: 8px; background: #f6f7f6; color: #3f3f3f; }
+.tasaa-delivery__icon { display: grid; place-items: center; flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: #fff; color: #2f6b45; }
+.tasaa-delivery p { margin: 0; font-size: 13px; line-height: 1.45; letter-spacing: normal; }
+.tasaa-delivery strong { color: #1f6b45; font-weight: 600; }
+/* Sutisancha-style information rows; content sources remain independent. */
+.tasaa-product-information { display: flex; flex-direction: column; gap: 0; margin: 24px 0; color: #000; }
+.tasaa-product-information:empty { display: none; }
+.tasaa-product-information__item { border: 0; border-bottom: 1px solid #d9d9d9; border-radius: 0; background: #fff; }
+.tasaa-product-information__item:first-child { border-top: 1px solid #d9d9d9; }
+.tasaa-product-information__item summary { display: block; position: relative; padding: 20px 30px 20px 0; list-style: none; cursor: pointer; color: #000; font-family: var(--font-body-family); font-size: 12px; font-weight: 500; letter-spacing: .01em; line-height: 1.7; text-transform: none; overflow-wrap: anywhere; }
+.tasaa-product-information__item summary::-webkit-details-marker { display: none; }
+.tasaa-product-information__item summary::marker { content: ''; }
+.tasaa-product-information__item summary:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; }
+.tasaa-product-information__item i { position: absolute; top: 50%; right: 0; width: 10px; height: 10px; transform: translateY(-50%); }
+.tasaa-product-information__item i::before, .tasaa-product-information__item i::after { content: ''; position: absolute; left: 50%; top: 50%; background: currentColor; transform: translate(-50%, -50%) rotate(-90deg); transition: transform .25s ease-in-out, opacity .25s ease-in-out; }
+.tasaa-product-information__item i::before { width: 10px; height: 1px; }
+.tasaa-product-information__item i::after { width: 1px; height: 10px; }
+.tasaa-product-information__item[open] i::before { opacity: 0; }
+.tasaa-product-information__item[open] i::before, .tasaa-product-information__item[open] i::after { transform: translate(-50%, -50%) rotate(90deg); }
+.tasaa-product-information__content { margin-top: -4px; padding: 0 20px 20px 0; color: #000; font-size: 13px; line-height: 1.65; letter-spacing: normal; overflow-wrap: anywhere; }
+.tasaa-product-information__content :is(p, ul, ol) { margin: 0; }
+.tasaa-product-information__content :is(p, ul, ol) + * { margin-top: 16px; }
+.tasaa-product-information__content li + li { margin-top: 6px; }
+.tasaa-product-information__content :is(strong, b) { color: inherit; font-weight: 700; }
+.tasaa-product-information__content :is(ul, ol) { padding-left: 20px; }
+.tasaa-product-information__content a { color: inherit; text-underline-offset: 3px; }
+.tasaa-product-information__help { padding: 8px 12px; font-size: 12px; border: 1px dashed #d9d9d9; }
+@media (prefers-reduced-motion: reduce) {
+  .tasaa-product-information__item i::before, .tasaa-product-information__item i::after { transition: none; }
+}

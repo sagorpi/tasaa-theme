@@ -45,9 +45,27 @@
             "show_gift_card_recipient": true
           }
         },
-        "description": {
-          "type": "description",
-          "settings": {}
+        "delivery_estimate": {
+          "type": "delivery_estimate",
+          "settings": {
+            "enabled": true,
+            "min_days": 5,
+            "max_days": 7,
+            "prefix": "Your order will be delivered between",
+            "suffix": "within India"
+          }
+        },
+        "product_information": {
+          "type": "product_information",
+          "settings": {
+            "details_heading": "Product Details",
+            "description_heading": "Description",
+            "business_heading": "Importer/Marketer/Packer Details",
+            "returns_heading": "Return & Exchange Policy",
+            "business_page": "importer-marketer-packer-details-product",
+            "returns_page": "return-exchange-policy-product",
+            "open_first": false
+          }
         },
         "share": {
           "type": "share",
@@ -63,7 +81,8 @@
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
-        "description",
+        "delivery_estimate",
+        "product_information",
         "share"
       ],
       "settings": {
@@ -72,19 +91,24 @@
         "media_size": "large",
         "constrain_to_viewport": true,
         "media_fit": "contain",
-        "gallery_layout": "stacked",
-        "mobile_thumbnails": "hide",
+        "gallery_layout": "thumbnail_slider",
+        "mobile_thumbnails": "show",
         "media_position": "left",
         "image_zoom": "lightbox",
         "hide_variants": true,
         "enable_video_looping": false,
         "padding_top": 36,
-        "padding_bottom": 12
+        "padding_bottom": 12,
+        "vertical_thumbnails": true
       }
     },
     "disclosures": {
       "type": "disclosures",
       "settings": {
+        "heading": "Disclosures",
+        "heading_size": "h2",
+        "open_by_default": false,
+        "color_scheme": "",
         "padding_top": 36,
         "padding_bottom": 0
       }

@@ -108,3 +108,100 @@ footer menus display only the clean label. Remove the token for a text-only item
 Icons load as lazy SVG images from Iconify's public API, without a library or app.
 Invalid names and failed images leave the label/link usable. Icon sets retain
 their individual licenses. No separate theme-editor icon blocks are needed.
+
+## Product information and delivery authoring
+
+The default product template now places **Delivery estimate** and **Product information**
+blocks after Buy buttons. In **Online Store → Themes → Customize/Edit theme → Products →
+Default product → Product information**, edit headings, choose shared Pages and optionally
+open the first available row. Other product templates need these blocks added manually.
+Remove the old standalone Description block if adding Product information to another template.
+Empty rows are hidden for shoppers; editor-only hints explain missing content.
+
+### 1. Product Details (different for each product)
+
+In **Settings → Metafields and metaobjects → Products → Add definition**, create:
+
+- Name: Product Details
+- Namespace and key: `custom.product_details`
+- Type: **Rich text** (one value)
+
+Open **Products → your product → Metafields → Product Details** and enter your labelled
+specifications (for example Fabric, Length, Width, Blouse piece and Wash care). Bold labels
+and lists are supported. Save the product. Do not paste all the specifications into the
+Description if you want the two accordions to stay separate.
+
+### 2. Description (different for each product)
+
+Edit the normal **Description** field at the top of each product's admin page. It renders
+in the Description accordion, independently of Product Details.
+
+### 3. Importer/Marketer/Packer Details (shared with optional product selection)
+
+For one business shared by all products, create a Shopify **Page** with your own importer,
+marketer and packer names, addresses, country of origin and contact information. In the
+Product information block select it under **Default business information page**. There
+is no need to add that Page to your navigation menu.
+
+For products that require different business information:
+
+1. In **Settings → Metafields and metaobjects**, add a metaobject definition named
+   **Business information**, type `business_information`.
+2. Add a **Name** field (`name`, single-line text, used as the display name) and a
+   **Content** field (`content`, rich text). Content can describe different businesses
+   for each role; it is not restricted to one company.
+3. Enable **Storefront access**. If active/draft status is enabled, publish entries as Active.
+4. Under **Content → Metaobjects**, create one entry per reusable set of business details.
+5. Add a Product metafield named **Business information**, key
+   `custom.business_information`, type **Metaobject reference**, one entry, restricted
+   to the Business information definition. Enable storefront access where offered.
+6. Select an entry on each applicable product. Updating one entry updates all products
+   referencing it. Products without a populated entry use the shared Page instead.
+
+### 4. Return & Exchange Policy (shared with optional product override)
+
+Create a Shopify Page containing your own policy. Select it as **Default Return & Exchange
+Policy page** in the Product information block. Editing that Page changes the policy
+wherever it is referenced; changing static template settings affects all products using
+that template, even when you preview a particular product in the editor.
+
+For exceptions, define Product metafield `custom.return_policy_override`, type **Page
+reference** (one value). Select an alternative policy Page on the relevant product.
+Leave it empty to use the block's default Page. No policy wording or company details from
+other stores have been copied into your store.
+
+### 5. Delivery estimate
+
+Select the **Delivery estimate** block in the product template:
+
+- Toggle the message on/off.
+- Set minimum/maximum **calendar days** (default 5–7).
+- Edit text before and after the dates (default destination: within India).
+
+Dates update in **Asia/Kolkata** time on page load and while the page stays open, including
+month/year boundaries. Weekends and holidays count; this is not a postcode/carrier lookup.
+The maximum is never allowed to display earlier than the minimum. With JavaScript disabled
+the estimate stays hidden rather than displaying stale dates.
+
+For a product-specific range, create two Product metafields of type **Integer** (one value):
+`custom.delivery_min_days` and `custom.delivery_max_days`. Set a minimum validation of zero.
+Fill in both on the product, or leave them empty to use the template defaults.
+Confirm your actual fulfilment timings before using the default range on your live store.
+
+These theme changes do not create admin metafield definitions, metaobject entries or Pages;
+complete the setup above to populate the empty accordions. Content uses the same Liquid
+snippet in the full product page and the featured quick-view modal. No app is required.
+
+## Product image gallery
+
+The default product template uses **Thumbnail carousel**, **Show mobile thumbnails**,
+and the new **Vertical desktop thumbnails** setting (Product information section → Media).
+At 990px and wider, portrait thumbnails sit in a scrollable column to the left of the main
+image. Below 990px, they form a horizontally scrollable strip below the main image.
+Selecting a thumbnail updates the main image; the existing touch slider and image zoom
+remain available. The selected thumbnail has a border and supports keyboard focus.
+
+Manage images and their order in **Products → your product → Media**. No separate thumbnail
+uploads are required. Products with only one image do not need a thumbnail strip. For
+other templates, select the same three settings in their main product section. The
+featured quick-view modal retains its compact gallery layout.

@@ -1,0 +1,12 @@
+{%- if block.settings.enabled -%}
+  {%- liquid
+    assign min_days = product.metafields.custom.delivery_min_days.value | default: block.settings.min_days | at_least: 0
+    assign max_days = product.metafields.custom.delivery_max_days.value | default: block.settings.max_days | at_least: min_days
+  -%}
+  <delivery-estimate class="tasaa-delivery" data-min-days="{{ min_days }}" data-max-days="{{ max_days }}" hidden {{ block.shopify_attributes }}>
+    <span class="tasaa-delivery__icon" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="14" r="9"/><path d="M12 5V1m-3 0h6m3 6 2-2m-8 5v5l-4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+    <p>{{ block.settings.prefix | escape }} <strong data-delivery-dates></strong> {{ block.settings.suffix | escape }}.</p>
+  </delivery-estimate>
+{%- endif -%}

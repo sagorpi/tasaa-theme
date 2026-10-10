@@ -45,9 +45,7 @@
 <media-gallery
   id="MediaGallery-{{ section.id }}"
   role="region"
-  {% if section.settings.enable_sticky_info %}
-    class="product__column-sticky"
-  {% endif %}
+  class="{% if section.settings.enable_sticky_info %}product__column-sticky {% endif %}{% if section.settings.vertical_thumbnails and section.settings.gallery_layout == 'thumbnail_slider' %}product-gallery-navigation{% endif %}"
   aria-label="{{ 'products.product.media.gallery_viewer' | t }}"
   data-desktop-layout="{{ section.settings.gallery_layout }}"
 >
@@ -246,7 +244,7 @@
                   widths: '54, 74, 104, 162, 208, 324, 416',
                   id: thumbnail_id,
                   alt: featured_media.alt
-                | escape
+
               }}
             </button>
           </li>
@@ -308,7 +306,7 @@
                     widths: '54, 74, 104, 162, 208, 324, 416',
                     id: thumbnail_id,
                     alt: media.alt
-                  | escape
+
                 }}
               </button>
             </li>
