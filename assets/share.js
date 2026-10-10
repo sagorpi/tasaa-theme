@@ -18,7 +18,9 @@ if (!customElements.get('share-button')) {
           this.mainDetailsToggle.setAttribute('hidden', '');
           this.elements.shareButton.classList.remove('hidden');
           this.elements.shareButton.addEventListener('click', () => {
-            navigator.share({ url: this.urlToShare, title: document.title });
+            navigator.share({ url: this.urlToShare, title: document.title }).catch(() => {
+              // Dismissing the native share sheet requires no page action.
+            });
           });
         } else {
           this.mainDetailsToggle.addEventListener('toggle', this.toggleDetails.bind(this));
@@ -50,6 +52,12 @@ if (!customElements.get('share-button')) {
       updateUrl(url) {
         this.urlToShare = url;
         this.elements.urlInput.value = url;
+        this.querySelectorAll('[data-share-network]').forEach((link) => {
+          const shareUrl = new URL(link.href);
+          const key = link.dataset.shareNetwork === 'facebook' ? 'u' : link.dataset.shareNetwork === 'email' ? 'body' : 'url';
+          shareUrl.searchParams.set(key, url);
+          link.href = shareUrl.toString();
+        });
       }
     }
   );

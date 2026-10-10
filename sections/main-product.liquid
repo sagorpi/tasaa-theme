@@ -88,6 +88,8 @@
             class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
           >
             {%- assign product_form_id = 'product-form-' | append: section.id -%}
+            {%- assign title_share_block = section.blocks | where: 'type', 'share' | first -%}
+            {%- assign title_block = section.blocks | where: 'type', 'title' | first -%}
 
             {%- for block in section.blocks -%}
               {%- case block.type -%}
@@ -101,21 +103,35 @@
                     {{- block.settings.text -}}
                   </p>
                 {%- when 'title' -%}
-                  <div class="product__title" {{ block.shopify_attributes }}>
+                  {%- style -%}
+                    {{ block.settings.title_font | font_face: font_display: 'swap' }}
+                    {%- assign price_font_medium = block.settings.title_font | font_modify: 'weight', '500' -%}
+                    {%- assign price_font_semibold = block.settings.title_font | font_modify: 'weight', '600' -%}
+                    {{ price_font_medium | font_face: font_display: 'swap' }}
+                    {{ price_font_semibold | font_face: font_display: 'swap' }}
+                    #MainProduct-{{ section.id }} { --product-title-font: {{ block.settings.title_font.family }}, {{ block.settings.title_font.fallback_families }}; }
+                  {%- endstyle -%}
+                  <div class="product__title product__title-with-share" {{ block.shopify_attributes }}>
                     <h1>{{ product.title | escape }}</h1>
                     <a href="{{ product.url }}" class="product__title">
                       <h2 class="h1">
                         {{ product.title | escape }}
                       </h2>
                     </a>
+                    {%- if title_share_block != blank -%}
+                      {%- assign share_url = product.selected_variant.url | default: product.url | prepend: request.origin -%}
+                      {% render 'share-button', block: title_share_block, share_link: share_url, icon_only: true %}
+                    {%- endif -%}
                   </div>
+                  {% render 'product-title-badges', product: product %}
                 {%- when 'price' -%}
                   <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
                     {%- render 'price',
                       product: product,
                       use_variant: true,
                       show_badges: true,
-                      price_class: 'price--large'
+                      price_class: 'price--large',
+                      product_detail: true
                     -%}
                   </div>
                   {%- if product.quantity_price_breaks_configured? -%}
@@ -123,11 +139,14 @@
                       <span>{{ 'products.product.volume_pricing.note' | t }}</span>
                     </div>
                   {%- endif -%}
-                  {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
+                  {%- if block.settings.tax_note != blank -%}
+                    <div class="product__mrp-note">{{ block.settings.tax_note | escape }}</div>
+                  {%- endif -%}
+                  {%- if cart.duties_included or shop.shipping_policy.body != blank or cart.taxes_included and block.settings.tax_note == blank -%}
                     <div class="product__tax caption rte">
-                      {%- if cart.duties_included and cart.taxes_included -%}
+                      {%- if cart.duties_included and cart.taxes_included and block.settings.tax_note == blank -%}
                         {{ 'products.product.duties_and_taxes_included' | t }}
-                      {%- elsif cart.taxes_included -%}
+                      {%- elsif cart.taxes_included and block.settings.tax_note == blank -%}
                         {{ 'products.product.taxes_included' | t }}
                       {%- elsif cart.duties_included -%}
                         {{ 'products.product.duties_included' | t }}
@@ -480,7 +499,9 @@
                 {%- when 'share' -%}
                   {% liquid
                     assign share_url = product.selected_variant.url | default: product.url | prepend: request.origin
-                    render 'share-button', block: block, share_link: share_url
+                    unless title_block
+                      render 'share-button', block: block, share_link: share_url
+                    endunless
                   %}
 
                 {%- when 'disclosures' -%}
@@ -804,12 +825,14 @@
     {
       "type": "title",
       "name": "t:sections.main-product.blocks.title.name",
-      "limit": 1
+      "limit": 1,
+      "settings": [{ "type": "font_picker", "id": "title_font", "label": "Title font", "default": "jost_n4" }]
     },
     {
       "type": "price",
       "name": "t:sections.main-product.blocks.price.name",
-      "limit": 1
+      "limit": 1,
+      "settings": [{ "type": "text", "id": "tax_note", "label": "Tax note", "default": "MRP inclusive of all taxes", "info": "Display text only. Configure tax-inclusive pricing in Shopify tax settings." }]
     },
     {
       "type": "sku",
@@ -2206,7 +2229,7 @@
       "settings": [
         {
           "type": "paragraph",
-          "content": "Product Details: custom.product_details (rich text). Description: product description. Business details: custom.business_information (metaobject reference with a rich-text content field). Returns override: custom.return_policy_override (page reference). Empty rows are hidden on the storefront."
+          "content": "Product Details: category/custom specification metafields first, then variant SKU. custom.product_details is the rich-text fallback. Description: product description. Business details: custom.business_information (metaobject reference with a rich-text content field). Returns override: custom.return_policy_override (page reference). Empty rows are hidden on the storefront."
         },
         {
           "type": "text",

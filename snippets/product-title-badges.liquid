@@ -1,0 +1,35 @@
+{% comment %}
+  Product Type is a single Shopify text field; comma-separated entries use the first.
+  Fabric prefers the category metafield, then custom.fabric, using the first list entry.
+{% endcomment %}
+{%- liquid
+  assign type_label = product.type | split: ',' | first | strip
+  assign fabric_label = ''
+  assign fabric_sources = 'shopify,custom' | split: ','
+  for namespace in fabric_sources
+    assign field = product.metafields[namespace].fabric
+    assign entry = field.value
+    if field.type contains 'list.'
+      assign entry = entry | first
+    endif
+    if field.type contains 'metaobject_reference'
+      assign fabric_label = entry.label.value | default: entry.name.value
+    elsif field.type == 'single_line_text_field' or field.type == 'list.single_line_text_field'
+      assign fabric_label = entry
+    endif
+    assign fabric_label = fabric_label | split: ',' | first | strip
+    if fabric_label != blank
+      break
+    endif
+  endfor
+-%}
+{%- if type_label != blank or fabric_label != blank -%}
+  <div class="product__title-badges">
+    {%- if type_label != blank -%}
+      <span class="product__title-badge product__title-badge--type">{{ type_label | escape }}</span>
+    {%- endif -%}
+    {%- if fabric_label != blank -%}
+      <span class="product__title-badge product__title-badge--fabric">{{ fabric_label | escape }}</span>
+    {%- endif -%}
+  </div>
+{%- endif -%}

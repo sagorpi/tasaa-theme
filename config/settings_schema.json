@@ -1451,5 +1451,16 @@
         "default": "scheme-1"
       }
     ]
+  },
+  {
+    "name": "Product details",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "product_details_note",
+        "label": "Default product note",
+        "info": "Shown after SKU in the Product Details accordion on all products using the Product information block. Leave blank to hide."
+      }
+    ]
   }
 ]

@@ -1533,3 +1533,157 @@ a.product__text {
   display: block;
   background: #fff;
 }
+
+/* Product heading and share action. Scope typography to the full product page. */
+.tasaa-product-page[data-update-url='true'] .product__title-with-share {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.tasaa-product-page[data-update-url='true'] .product__title-with-share h1 {
+  font-family: var(--product-title-font, var(--font-body-family));
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: 400;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  flex: 1;
+  min-width: 0;
+}
+.product__title-with-share .share-button--icon {
+  position: relative;
+  flex: 0 0 44px;
+  margin-top: -7px;
+}
+.share-button--icon .share-button__button {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  justify-content: center;
+}
+.share-button--icon .share-button__button .icon-share {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+.share-button--icon .share-button__fallback {
+  left: auto;
+  right: 0;
+  top: 44px;
+  width: min(340px, calc(100vw - 32px));
+  min-width: 0;
+}
+.product__info-container > .product__mrp-note {
+  margin-top: -10px;
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: rgba(var(--color-foreground), .7);
+}
+
+.product__info-container > .product__mrp-note {
+  font-family: var(--product-title-font, var(--font-body-family));
+  font-size: 11px;
+  line-height: 1.4;
+  color: #a89888;
+}
+
+.product__info-container > .product__title-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: -8px;
+  margin-bottom: 16px;
+}
+.product__title-badge {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  padding: 1px 8px;
+  border: 1px solid;
+  border-radius: 999px;
+  font-family: var(--product-title-font, var(--font-body-family));
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16.5px;
+  letter-spacing: .55px;
+  text-transform: uppercase;
+}
+.product__title-badge--type {
+  color: #865b49;
+  background: #fbf4ef;
+  border-color: #ead8cb;
+}
+.product__title-badge--fabric {
+  color: #8fb89c;
+  background: #f7fbf8;
+  border-color: #dceade;
+}
+
+/* Circular product share control, using the Product Type badge palette. */
+.product__title-with-share .share-button--icon {
+  margin-top: -3px;
+  flex-basis: 36px;
+}
+.share-button--icon .share-button__button {
+  width: 36px;
+  height: 36px;
+  min-height: 36px;
+  color: #865b49;
+  background: #fbf4ef;
+  border: 1px solid #ead8cb;
+  border-radius: 50%;
+}
+.share-button--icon .share-button__button .icon-share {
+  width: 16px;
+  height: 16px;
+}
+.share-button--icon .share-button__button:hover,
+.share-button--icon details[open] > summary {
+  background: #f3e7dd;
+  border-color: #865b49;
+}
+.share-button--icon .share-button__button:focus-visible {
+  outline: 2px solid #865b49;
+  outline-offset: 3px;
+}
+.share-button--icon .share-button__fallback {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  padding: 10px 12px;
+  border: 1px solid #ead8cb;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgb(134 91 73 / 8%);
+  color: #865b49;
+}
+.share-button--icon .share-button__fallback::before,
+.share-button--icon .share-button__fallback::after {
+  content: none;
+}
+.share-button__socials {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.share-button__socials a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: #865b49;
+}
+.share-button__socials a:hover {
+  background: #fbf4ef;
+}
+.share-button__socials svg {
+  width: 24px;
+  height: 24px;
+}
+.share-button--icon .share-button__fallback button {
+  color: #865b49;
+}

@@ -1,0 +1,19 @@
+{% comment %}Render supported specification types without exposing reference IDs.{% endcomment %}
+{%- if field != blank -%}
+  {%- case field.type -%}
+    {%- when 'list.metaobject_reference' -%}
+      {%- assign separator = '' -%}
+      {%- for entry in field.value -%}
+        {%- assign label = entry.label.value | default: entry.name.value -%}
+        {%- if label != blank -%}{{ separator }}{{ label | escape }}{%- assign separator = ', ' -%}{%- endif -%}
+      {%- endfor -%}
+    {%- when 'metaobject_reference' -%}
+      {{- field.value.label.value | default: field.value.name.value | escape -}}
+    {%- when 'boolean' -%}
+      {%- if field.value -%}Yes{%- else -%}No{%- endif -%}
+    {%- when 'list.single_line_text_field' -%}
+      {{- field.value | join: ', ' | escape -}}
+    {%- when 'single_line_text_field', 'multi_line_text_field', 'rich_text_field', 'dimension', 'number_integer', 'number_decimal' -%}
+      {{- field | metafield_tag -}}
+  {%- endcase -%}
+{%- endif -%}

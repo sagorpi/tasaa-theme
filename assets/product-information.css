@@ -28,3 +28,16 @@
 @media (prefers-reduced-motion: reduce) {
   .tasaa-product-information__item i::before, .tasaa-product-information__item i::after { transition: none; }
 }
+
+.tasaa-specifications { margin: 0; }
+.tasaa-specification { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 5px; margin: 0 0 6px; }
+.tasaa-specification dt { font-weight: 700; }
+.tasaa-specification dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.tasaa-specification dd > :first-child { margin-top: 0; }
+.tasaa-product-information__content .tasaa-specification-sku { margin-top: 12px; }
+.tasaa-product-information__content .tasaa-specification-sku:first-child { margin-top: 0; }
+.tasaa-product-information__item.hidden + .tasaa-product-information__item { border-top: 1px solid #d9d9d9; }
+
+.tasaa-product-information__content .tasaa-specification-note { margin-top: 12px; }
+.tasaa-product-information__content .tasaa-specification-note:first-child { margin-top: 0; }
+.tasaa-specification-note__content, .tasaa-specification-note__content > p:first-child { display: inline; }

@@ -205,3 +205,49 @@ Manage images and their order in **Products → your product → Media**. No sep
 uploads are required. Products with only one image do not need a thumbnail strip. For
 other templates, select the same three settings in their main product section. The
 featured quick-view modal retains its compact gallery layout.
+
+### Structured Product Details and SKU
+
+Product Details now prefers structured specifications, then shows the selected variant's
+SKU last. Supported rows are rendered in this order; empty values are hidden:
+
+| Label | Category field (preferred) | Custom fallback |
+| --- | --- | --- |
+| Fabric | `shopify.fabric` | `custom.fabric` |
+| Colour | `shopify.color-pattern` | `custom.colour` |
+| Age group | `shopify.age-group` | `custom.age_group` |
+| Target gender | `shopify.target-gender` | `custom.target_gender` |
+| Length | — | `custom.length` |
+| Width | — | `custom.width` |
+| Blouse piece | — | `custom.blouse_piece` |
+| Blouse piece length | — | `custom.blouse_piece_length` |
+| Wash care | `shopify.care-instructions` (if available) | `custom.wash_care` |
+
+Select the appropriate product category and fill its **Category metafields** in the product
+editor. The category determines which standard fields Shopify offers; the theme does not
+create category definitions. Reference-list fields render their readable labels (for
+example Cotton, Linen), never internal IDs.
+
+For custom definitions use Dimension for measurements, True/false for blouse-piece
+inclusion, Rich text for wash care, and Single line text for other simple values. A false
+blouse-piece value displays **No**. Missing fields produce no row. The existing
+`custom.product_details` rich-text value is displayed only if no supported structured
+specifications are populated; it is not appended to structured fields, avoiding duplicate
+specifications. Migrate any essential notes before switching a product to structured data.
+
+Author SKU in **Products → product → variant → Inventory → SKU** (the exact editor grouping
+may vary). It remains Shopify's native SKU, not a custom metafield. SKU updates with variant
+selection and is hidden when blank. If no details or SKU exist, the accordion is hidden.
+Manufacturer/business details, Description and policy sources remain unchanged.
+
+### Shared note after SKU
+
+In **Online Store → Themes → Customize/Edit theme → Theme settings → Product details**,
+fill in **Default product note** and save. This global rich-text setting appears as
+**Note:** after SKU (or after the specifications when SKU is blank) in the Product Details
+accordion. It applies across product templates using the Product information block and
+in their quick views. Leave it empty to hide it. No per-product entry or metafield is needed.
+
+### Product title badges
+
+The title automatically displays Product Type followed by Fabric. Set Type in the product's **Product organization** area. Fabric reads **Category metafields → Fabric** (`shopify.fabric`) first, falling back to `custom.fabric`. Supported fabric values are text, text lists, and category/metaobject references with a label or name. Only the first list entry is displayed; comma-separated text also uses its first entry. Missing values are hidden. These are display badges, not Shopify product Tags. Product Type uses warm terracotta; Fabric uses Suta's pale green styling.

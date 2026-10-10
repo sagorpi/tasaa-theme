@@ -9,9 +9,7 @@
     {%- capture content -%}
       {%- case index -%}
         {%- when 1 -%}
-          {%- if product.metafields.custom.product_details != blank -%}
-            {{ product.metafields.custom.product_details | metafield_tag }}
-          {%- endif -%}
+          {%- render 'product-detail-specifications', product: product -%}
         {%- when 2 -%}{{ product.description }}
         {%- when 3 -%}
           {%- if business.content != blank -%}
@@ -35,12 +33,16 @@
           assign heading = block.settings.returns_heading
       endcase
     -%}
-    {%- if content != blank -%}
-      <details class="tasaa-product-information__item" {% if first_rendered and block.settings.open_first %}open{% endif %}>
+    {%- if content != blank or index == 1 -%}
+      <details
+        {% if index == 1 %}id="ProductDetails-{{ section.id }}"{% endif %}
+        class="tasaa-product-information__item{% if content == blank %} hidden{% endif %}"
+        {% if content != blank and first_rendered and block.settings.open_first %}open{% endif %}
+      >
         <summary><span>{{ heading | escape }}</span><i aria-hidden="true"></i></summary>
         <div class="tasaa-product-information__content rte">{{ content }}</div>
       </details>
-      {%- assign first_rendered = false -%}
+      {%- if content != blank -%}{%- assign first_rendered = false -%}{%- endif -%}
     {%- elsif request.design_mode -%}
       <p class="tasaa-product-information__help">{{ heading | escape }}: add content using this block’s authoring instructions to display this row.</p>
     {%- endif -%}

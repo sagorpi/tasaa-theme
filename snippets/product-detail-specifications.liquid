@@ -1,0 +1,41 @@
+{% comment %}
+  Category metafields take precedence over equivalent custom fields.
+  Rich-text Product Details is a fallback; SKU and the shared note follow.
+{% endcomment %}
+{%- liquid
+  assign specs = 'Fabric|fabric|fabric,Colour|color-pattern|colour,Age group|age-group|age_group,Target gender|target-gender|target_gender,Length||length,Width||width,Blouse piece||blouse_piece,Blouse piece length||blouse_piece_length,Wash care|care-instructions|wash_care' | split: ','
+-%}
+{%- capture rows -%}
+  {%- for spec in specs -%}
+    {%- liquid
+      assign parts = spec | split: '|'
+      assign category_field = product.metafields.shopify[parts[1]]
+      assign custom_field = product.metafields.custom[parts[2]]
+    -%}
+    {%- capture value -%}{%- render 'product-detail-value', field: category_field -%}{%- endcapture -%}
+    {%- assign value = value | strip -%}
+    {%- if value == blank -%}
+      {%- capture value -%}{%- render 'product-detail-value', field: custom_field -%}{%- endcapture -%}
+      {%- assign value = value | strip -%}
+    {%- endif -%}
+    {%- if value != blank -%}
+      <div class="tasaa-specification"><dt>{{ parts[0] | escape }}:</dt><dd>{{ value }}</dd></div>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- assign rows = rows | strip -%}
+{%- if rows != blank -%}
+  <dl class="tasaa-specifications">{{ rows }}</dl>
+{%- elsif product.metafields.custom.product_details != blank -%}
+  {{ product.metafields.custom.product_details | metafield_tag }}
+{%- endif -%}
+{%- if product.selected_or_first_available_variant.sku != blank -%}
+  <p class="tasaa-specification-sku"><strong>SKU:</strong> {{ product.selected_or_first_available_variant.sku | escape }}</p>
+{%- endif -%}
+
+{%- if settings.product_details_note != blank -%}
+  <div class="tasaa-specification-note">
+    <strong>Note:</strong>
+    <div class="tasaa-specification-note__content">{{ settings.product_details_note }}</div>
+  </div>
+{%- endif -%}

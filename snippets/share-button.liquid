@@ -1,6 +1,7 @@
 {% comment %}
   Renders share button.
   Accepts:
+  - icon_only: {Boolean} show an accessible icon without a visible label.
   - block: {Object} passes in the block information.
   - share_link: {String} url to be added to the input the user will get/copy.
 
@@ -10,19 +11,35 @@
     share_link: share_url
   %}
 {% endcomment %}
+{%- assign share_icon = 'icon-share.svg' -%}
+{%- if icon_only -%}{%- assign share_icon = 'icon-product-share.svg' -%}{%- endif -%}
 <script src="{{ 'share.js' | asset_url }}" defer="defer"></script>
 
-<share-button id="Share-{{ section.id }}" class="share-button quick-add-hidden" {{ block.shopify_attributes }}>
-  <button class="share-button__button hidden">
-    <span class="svg-wrapper">{{ 'icon-share.svg' | inline_asset_content }}</span>
-    {{ block.settings.share_label | escape }}
+<share-button id="Share-{{ section.id }}" class="share-button quick-add-hidden{% if icon_only %} share-button--icon{% endif %}" {{ block.shopify_attributes }}>
+  <button type="button" class="share-button__button hidden">
+    <span class="svg-wrapper">{{ share_icon | inline_asset_content }}</span>
+    <span{% if icon_only %} class="visually-hidden"{% endif %}>{{ block.settings.share_label | default: "Share" | escape }}</span>
   </button>
   <details id="Details-{{ block.id }}-{{ section.id }}">
     <summary class="share-button__button">
-      <span class="svg-wrapper">{{ 'icon-share.svg' | inline_asset_content }}</span>
-      {{ block.settings.share_label | escape }}
+      <span class="svg-wrapper">{{ share_icon | inline_asset_content }}</span>
+      <span{% if icon_only %} class="visually-hidden"{% endif %}>{{ block.settings.share_label | default: "Share" | escape }}</span>
     </summary>
     <div class="share-button__fallback motion-reduce">
+      {%- if icon_only -%}
+        {%- assign encoded_url = share_link | url_encode -%}
+        {%- assign encoded_title = product.title | url_encode -%}
+        {%- assign encoded_image = '' -%}
+        {%- if product.featured_image -%}
+          {%- assign encoded_image = product.featured_image | image_url: width: 800 | prepend: 'https:' | url_encode -%}
+        {%- endif -%}
+        <div class="share-button__socials">
+          <a data-share-network="facebook" href="https://www.facebook.com/sharer.php?u={{ encoded_url }}" target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook">{{ 'icon-facebook.svg' | inline_asset_content }}</a>
+          <a data-share-network="twitter" href="https://twitter.com/intent/tweet?url={{ encoded_url }}&amp;text={{ encoded_title }}" target="_blank" rel="noopener noreferrer" aria-label="Share on X">{{ 'icon-twitter.svg' | inline_asset_content }}</a>
+          <a data-share-network="pinterest" href="https://pinterest.com/pin/create/button/?url={{ encoded_url }}&amp;description={{ encoded_title }}&amp;media={{ encoded_image }}" target="_blank" rel="noopener noreferrer" aria-label="Share on Pinterest">{{ 'icon-pinterest.svg' | inline_asset_content }}</a>
+          <a data-share-network="email" href="mailto:?subject={{ encoded_title }}&amp;body={{ encoded_url }}" aria-label="Share by email"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="m3 6 9 7 9-7" stroke="currentColor" stroke-width="1.5"/></svg></a>
+        </div>
+      {%- endif -%}
       <div class="field">
         <span id="ShareMessage-{{ section.id }}" class="share-button__message hidden" role="status"> </span>
         <input

@@ -98,3 +98,56 @@
   margin-top: 0.2rem;
   color: rgba(var(--color-foreground), 0.7);
 }
+
+/* Product-page prices: current price, muted MRP, and a right-aligned discount. */
+.price--product-detail {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  font-family: var(--product-title-font, var(--font-body-family));
+  font-size: 17.6px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: .01em;
+  color: #1c1c1c;
+}
+.price--product-detail .price__container {
+  margin: 0;
+}
+.price--product-detail.price--on-sale .price__sale {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 10.4px;
+}
+.price--product-detail .price-item {
+  margin: 0;
+}
+.price--product-detail .price-item--sale {
+  order: -1;
+  color: #b42318;
+}
+.price--product-detail.price--on-sale .price-item--regular {
+  color: #b7aa9e;
+  font-size: 13.6px;
+  font-weight: 400;
+  letter-spacing: .01em;
+}
+.price--product-detail .badge {
+  padding: 5px 10px;
+  border: 0;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.price--product-detail .price__badge-sale {
+  color: #fff;
+  background: #b42318;
+}
