@@ -92,6 +92,15 @@
     margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
   }
 
+  @media screen and (max-width: 749px) {
+    .section-header.shopify-section-group-header-group {
+      position: relative;
+      top: auto;
+      transform: none;
+      transition: none;
+    }
+  }
+
   @media screen and (min-width: 750px) {
     .section-header {
       margin-bottom: {{ section.settings.margin_bottom }}px;
@@ -320,13 +329,6 @@
   {%- endif -%}
 </{{ header_tag }}>
 
-{%- if settings.cart_type == 'notification' -%}
-  {%- render 'cart-notification',
-    color_scheme: section.settings.color_scheme,
-    desktop_menu_type: section.settings.menu_type_desktop
-  -%}
-{%- endif -%}
-
 {% javascript %}
   class StickyHeader extends HTMLElement {
     constructor() {
@@ -381,6 +383,13 @@
 
     onScroll() {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      // Phone headers stay in document flow in both scroll directions.
+      if (window.matchMedia('(max-width: 749px)').matches) {
+        this.header.classList.remove('shopify-section-header-hidden', 'shopify-section-header-sticky', 'animate', 'scrolled-past-header');
+        this.currentScrollTop = scrollTop;
+        return;
+      }
 
       if (this.predictiveSearch && this.predictiveSearch.isOpen) return;
 

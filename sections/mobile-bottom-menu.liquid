@@ -1,0 +1,106 @@
+{{ 'mobile-bottom-menu.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'mobile-bottom-menu.js' | asset_url }}" defer></script>
+{% if section.settings.enabled %}
+  {% liquid
+    assign arrivals_url = section.settings.new_arrivals.url | default: '/collections/new-arrivals'
+    assign account_url = routes.account_login_url
+    if customer
+      assign account_url = routes.account_url
+    endif
+  %}
+  <mobile-bottom-menu data-search-url="{{ routes.predictive_search_url }}" style="--mobile-menu-bg:{{ section.settings.background }};--mobile-menu-ink:{{ section.settings.foreground }};--mobile-menu-accent:{{ section.settings.accent }};">
+    <nav class="mobile-bottom-menu" aria-label="Mobile shopping navigation">
+      <a href="{{ account_url }}"><span class="mobile-menu-icon">{% render 'mobile-navigation-icon', icon: 'account', image: section.settings.account_icon %}</span><span>{% if customer %}Account{% else %}Login{% endif %}</span></a>
+      <button type="button" data-open="categories" aria-haspopup="dialog" aria-controls="MobileCategories-{{ section.id }}" aria-expanded="false"><span class="mobile-menu-icon">{% render 'mobile-navigation-icon', icon: 'categories', image: section.settings.categories_icon %}</span><span>Categories</span></button>
+      <button type="button" class="mobile-menu-search" data-open="search" aria-haspopup="dialog" aria-controls="MobileSearch-{{ section.id }}" aria-expanded="false"><span class="mobile-menu-icon">{% render 'mobile-navigation-icon', icon: 'search', image: section.settings.search_icon %}</span><span>Search</span></button>
+      <a href="{{ arrivals_url }}"><span class="mobile-menu-icon">{% render 'mobile-navigation-icon', icon: 'new', image: section.settings.arrivals_icon %}</span><span>New Arrivals</span></a>
+      <a href="{{ routes.cart_url }}"><span class="mobile-menu-icon">{% render 'mobile-navigation-icon', icon: 'cart', image: section.settings.cart_icon %}<span class="mobile-menu-count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span></span><span>Cart</span></a>
+    </nav>
+    <dialog id="MobileCategories-{{ section.id }}" class="mobile-menu-dialog mobile-categories" data-panel="categories" aria-label="Shop by category">
+      <div class="mobile-category-sheet">
+        <header>{% render 'mobile-navigation-icon', icon: 'categories' %}<h2 class="visually-hidden">Shop by category</h2><button type="button" data-close aria-label="Close categories">{% render 'mobile-navigation-icon', icon: 'close' %}</button></header>
+        <div class="mobile-category-grid">
+          {% for block in section.blocks %}
+            {% liquid
+              assign category = block.settings.collection
+              assign label = block.settings.label | default: category.title
+              assign target = block.settings.link | default: category.url | default: routes.all_products_collection_url
+              assign tile_image = block.settings.image
+              if tile_image == blank and block.settings.sample_image == blank
+                assign tile_image = category.image | default: category.products.first.featured_image
+              endif
+            %}
+            <a href="{{ target }}" {{ block.shopify_attributes }} aria-label="{{ label | escape }}">
+              {% if tile_image != blank %}
+                {{ tile_image | image_url: width: 480 | image_tag: widths: '160, 320, 480', sizes: '(max-width: 749px) 30vw, 22vw', loading: 'lazy', alt: label }}
+              {% elsif block.settings.sample_image != blank %}
+                <img src="{{ block.settings.sample_image | escape }}" width="800" height="900" loading="lazy" alt="{{ label | escape }}">
+              {% else %}
+                {{ 'collection-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {% endif %}
+              {% unless block.settings.image_has_label %}<span>{{ label | escape }}</span>{% endunless %}
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    </dialog>
+    <dialog id="MobileSearch-{{ section.id }}" class="mobile-menu-dialog mobile-search" data-panel="search" aria-label="Search products">
+      <header>
+        <button type="button" data-close aria-label="Close search">{% render 'mobile-navigation-icon', icon: 'back' %}</button>
+        <form action="{{ routes.search_url }}" method="get" role="search">
+          <label class="visually-hidden" for="MobileSearchInput-{{ section.id }}">Search products</label>
+          <input id="MobileSearchInput-{{ section.id }}" name="q" type="search" placeholder="Search for Sarees" autocomplete="off" autocapitalize="off" spellcheck="false" aria-controls="MobileSearchResults-{{ section.id }}">
+          <input type="hidden" name="options[prefix]" value="last">
+          <button type="reset" aria-label="Clear search">{% render 'mobile-navigation-icon', icon: 'close' %}</button>
+          <button type="submit" aria-label="Submit search">{% render 'mobile-navigation-icon', icon: 'search' %}</button>
+        </form>
+      </header>
+      <p class="mobile-search-status" role="status" data-search-status></p>
+      <div id="MobileSearchResults-{{ section.id }}" class="mobile-search-results" data-search-results></div>
+      <div class="mobile-search-empty" data-search-empty><h2>POPULAR CATEGORIES</h2>{% for block in section.blocks %}<a href="{{ block.settings.link | default: block.settings.collection.url | default: routes.all_products_collection_url }}">{{ block.settings.label | default: block.settings.collection.title | escape }}</a>{% endfor %}</div>
+    </dialog>
+    {% if request.page_type == 'product' and section.settings.floating_cart %}
+      <button type="button" class="mobile-floating-cart" data-floating-cart aria-label="{{ 'products.product.add_to_cart' | t }}" hidden>
+        <span data-floating-label>{% if section.settings.floating_style == 'icon_text' %}ADD TO{% else %}{{ 'products.product.add_to_cart' | t }}{% endif %}</span>
+        {% if section.settings.floating_style == 'icon_text' %}{% render 'mobile-navigation-icon', icon: 'cart-plus' %}{% endif %}
+      </button>
+      <p class="visually-hidden" data-cart-status role="status"></p>
+    {% endif %}
+  </mobile-bottom-menu>
+{% endif %}
+{% schema %}
+{
+  "name": "Mobile bottom menu",
+  "limit": 1,
+  "enabled_on": {"groups": ["footer"]},
+  "settings": [
+    {"type":"checkbox","id":"enabled","label":"Show mobile bottom menu","default":true},
+    {"type":"paragraph","content":"Visible below 990px. Categories open a sheet; Search opens live suggestions. Cart and account use Shopify's standard pages."},
+    {"type":"collection","id":"new_arrivals","label":"New Arrivals collection"},
+    {"type":"header","content":"Icons"},
+    {"type":"paragraph","content":"Optional: upload SVG or PNG icons. Leave empty to use the lightweight built-in icons."},
+    {"type":"image_picker","id":"account_icon","label":"Login / account icon"},
+    {"type":"image_picker","id":"categories_icon","label":"Categories icon"},
+    {"type":"image_picker","id":"search_icon","label":"Search icon"},
+    {"type":"image_picker","id":"arrivals_icon","label":"New Arrivals icon"},
+    {"type":"image_picker","id":"cart_icon","label":"Cart icon"},
+    {"type":"header","content":"Colors"},
+    {"type":"color","id":"background","label":"Background","default":"#fffaf6"},
+    {"type":"color","id":"foreground","label":"Text and icons","default":"#4e3830"},
+    {"type":"color","id":"accent","label":"Category header divider","default":"#c4a06a"},
+    {"type":"header","content":"Floating product button"},
+    {"type":"checkbox","id":"floating_cart","label":"Show circular Add to Cart on mobile product pages","default":true},
+    {"type":"select","id":"floating_style","label":"Button content","options":[{"value":"icon_text","label":"Icon and text"},{"value":"text","label":"Text only"}],"default":"icon_text"}
+  ],
+  "blocks":[{"type":"category","name":"Category tile","settings":[
+    {"type":"text","id":"label","label":"Label","default":"Category"},
+    {"type":"collection","id":"collection","label":"Collection"},
+    {"type":"url","id":"link","label":"Custom link (optional)"},
+    {"type":"image_picker","id":"image","label":"Image"},
+    {"type":"url","id":"sample_image","label":"Sample image URL (optional)"},
+    {"type":"checkbox","id":"image_has_label","label":"Image already contains its label","default":false}
+  ]}],
+  "max_blocks":24,
+  "presets":[{"name":"Mobile bottom menu","blocks":[{"type":"category","settings":{"label":"Saree","collection":"saree"}},{"type":"category","settings":{"label":"Blouse","collection":"blouse"}}]}]
+}
+{% endschema %}

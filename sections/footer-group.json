@@ -27,9 +27,63 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "mobile_bottom_menu": {
+      "type": "mobile-bottom-menu",
+      "settings": {
+        "enabled": true,
+        "new_arrivals": "new-arrivals",
+        "floating_cart": true,
+        "floating_style": "icon_text"
+      },
+      "blocks": {
+        "category_1": {
+          "type": "category",
+          "settings": {
+            "label": "Saree",
+            "collection": "hydrogen",
+            "sample_image": "https://suta.in/cdn/shop/files/saree_cd785a89-2958-4b1b-b361-c305def0c55c.jpg?width=480",
+            "image_has_label": true
+          }
+        },
+        "category_2": {
+          "type": "category",
+          "settings": {
+            "label": "Blouse",
+            "collection": "blouse",
+            "sample_image": "https://suta.in/cdn/shop/files/Blouse_4750a664-486a-4d5c-9b06-a36c4d98fd22.jpg?width=480",
+            "image_has_label": true
+          }
+        },
+        "category_3": {
+          "type": "category",
+          "settings": {
+            "label": "Kurta",
+            "collection": "saree-copy-copy",
+            "sample_image": "https://suta.in/cdn/shop/files/Women_Kurta_74d76def-6899-4c7c-8563-2fe451b68b77.jpg?width=480",
+            "image_has_label": true
+          }
+        },
+        "category_4": {
+          "type": "category",
+          "settings": {
+            "label": "Dresses",
+            "collection": "saree-copy-copy-1",
+            "sample_image": "https://suta.in/cdn/shop/files/Dress_66f97d5f-49be-4718-9de6-56bba1f692be.jpg?width=480",
+            "image_has_label": true
+          }
+        }
+      },
+      "block_order": [
+        "category_1",
+        "category_2",
+        "category_3",
+        "category_4"
+      ]
     }
   },
   "order": [
-    "footer"
+    "footer",
+    "mobile_bottom_menu"
   ]
 }

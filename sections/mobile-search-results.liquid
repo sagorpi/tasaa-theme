@@ -1,0 +1,23 @@
+{% if predictive_search.performed %}
+  {% if predictive_search.resources.queries.size > 0 or predictive_search.resources.collections.size > 0 %}
+    <div class="mobile-search-suggestions"><h2>SEARCH SUGGESTIONS</h2>
+      {% for suggestion in predictive_search.resources.queries %}<a href="{{ suggestion.url }}">{{ suggestion.text | escape }}</a>{% endfor %}
+      {% for collection in predictive_search.resources.collections %}<a href="{{ collection.url }}">{{ collection.title | escape }}</a>{% endfor %}
+    </div>
+  {% endif %}
+  <div class="mobile-search-result-heading"><h2>SEARCH RESULTS</h2><a href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}&options%5Bprefix%5D=last">VIEW ALL</a></div>
+  <div class="mobile-search-products">
+    {% for product in predictive_search.resources.products %}
+      <a href="{{ product.url }}" class="mobile-search-product">
+        <div class="mobile-search-product-image">
+          {% if product.featured_image %}{{ product.featured_image | image_url: width: 440 | image_tag: loading: 'lazy', widths: '220, 440', sizes: '45vw' }}{% endif %}
+          {% if product.compare_at_price > product.price %}<span class="mobile-search-sale">{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}% OFF</span>{% endif %}
+        </div>
+        <span class="mobile-search-product-title">{{ product.title | escape }}</span>
+        {% if product.type != blank %}<span class="mobile-search-type">{{ product.type | escape }}</span>{% endif %}
+        <span>{{ product.price | money | replace: 'Rs.', '₹' }} {% if product.compare_at_price > product.price %}<s>{{ product.compare_at_price | money | replace: 'Rs.', '₹' }}</s>{% endif %}</span>
+      </a>
+    {% else %}<p>No products found. Try another search.</p>{% endfor %}
+  </div>
+{% endif %}
+{% schema %}{"name":"Mobile search results","settings":[]}{% endschema %}

@@ -5,3 +5,34 @@
 .related-products__heading {
   margin: 0 0 3rem;
 }
+.related-products.featured-collection .collection__title {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+.related-products.featured-collection { background: #fff; }
+
+.related-products-section {
+  --color-background: 255, 255, 255;
+  --gradient-background: #fff;
+  background: #fff;
+}
+
+/* Match the homepage's full-width Featured Collection and 3:4 cards. */
+.related-products.featured-collection {
+  width: 100%;
+  max-width: none;
+  padding-inline: 8%;
+}
+.related-products.featured-collection .product-grid.tasaa-product-carousel__track {
+  --carousel-columns: var(--related-columns);
+  --carousel-gap: 32px;
+}
+@media screen and (max-width: 749px) {
+  .related-products.featured-collection { padding-inline: 2%; }
+  .related-products.featured-collection .product-grid.tasaa-product-carousel__track {
+    --carousel-columns: var(--carousel-mobile, 2);
+    --carousel-gap: 16px;
+  }
+}

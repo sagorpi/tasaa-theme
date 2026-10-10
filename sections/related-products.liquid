@@ -1,3 +1,6 @@
+{{ 'section-featured-collection.css' | asset_url | stylesheet_tag }}
+{{ 'product-carousel.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-carousel.js' | asset_url }}" defer="defer"></script>
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {{ 'section-related-products.css' | asset_url | stylesheet_tag }}
@@ -7,6 +10,14 @@
 {%- endif -%}
 
 {%- style -%}
+  {{ section.settings.collection_font | font_face: font_display: 'swap' }}
+  #shopify-section-{{ section.id }} .related-products {
+    --featured-font: {{ section.settings.collection_font.family }}, {{ section.settings.collection_font.fallback_families }};
+    --carousel-columns: {{ section.settings.columns_desktop }};
+    --related-columns: {{ section.settings.columns_desktop }};
+    --carousel-mobile: {{ section.settings.columns_mobile }};
+  }
+
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
@@ -20,19 +31,20 @@
   }
 {%- endstyle -%}
 
-<div class="color-{{ section.settings.color_scheme }} gradient">
+<div class="related-products-section color-{{ section.settings.color_scheme }} gradient">
   <product-recommendations
-    class="related-products page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+    class="related-products featured-collection page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
     data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.products_to_show }}"
     data-section-id="{{ section.id }}"
     data-product-id="{{ product.id }}"
   >
     {% if recommendations.performed and recommendations.products_count > 0 %}
-      <h2 class="related-products__heading inline-richtext {{ section.settings.heading_size }}">
-        {{ section.settings.heading }}
-      </h2>
-      <ul
-        class="grid product-grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down"
+      <div class="collection__title"><h2 class="title related-products__heading inline-richtext {{ section.settings.heading_size }}">
+        <span>{{ section.settings.heading }}</span>
+      </h2></div>
+      <tasaa-product-carousel>
+      <ul id="RelatedProducts-{{ section.id }}" data-carousel-track tabindex="0" aria-label="{{ section.settings.heading | strip_html | escape }}"
+        class="product-grid tasaa-product-carousel__track"
         role="list"
       >
         {% assign skip_card_product_styles = false %}
@@ -46,12 +58,16 @@
               show_vendor: section.settings.show_vendor,
               show_rating: section.settings.show_rating,
               skip_styles: skip_card_product_styles,
-              product_view_context: 'recommendation'
+              product_view_context: 'recommendation',
+              featured_card: true
             %}
           </li>
           {%- assign skip_card_product_styles = true -%}
         {% endfor %}
       </ul>
+      {% assign related_track_id = 'RelatedProducts-' | append: section.id %}
+      {% render 'product-carousel-arrows', track_id: related_track_id %}
+      </tasaa-product-carousel>
     {% endif %}
   </product-recommendations>
   {% if section.settings.image_shape == 'arch' %}
@@ -65,6 +81,7 @@
   "tag": "section",
   "class": "section",
   "settings": [
+    { "type": "font_picker", "id": "collection_font", "label": "Collection font", "default": "jost_n4" },
     {
       "type": "paragraph",
       "content": "t:sections.related-products.settings.paragraph__1.content"

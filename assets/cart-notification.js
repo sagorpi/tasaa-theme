@@ -1,112 +1,78 @@
 class CartNotification extends HTMLElement {
   constructor() {
     super();
-
-    this.notification = document.getElementById('cart-notification');
-    this.header = document.querySelector('sticky-header');
-    this.onBodyClick = this.handleBodyClick.bind(this);
-
-    this.notification.addEventListener('keyup', (evt) => evt.code === 'Escape' && this.close());
-    this.querySelectorAll('button[type="button"]').forEach((closeButton) =>
-      closeButton.addEventListener('click', this.close.bind(this))
-    );
+    this.notification = this.querySelector('#cart-notification');
+    this.announcement = this.querySelector('[data-cart-announcement]');
+    this.notification.querySelector('button').addEventListener('click', () => this.close());
+    this.notification.addEventListener('keydown', event => {
+      if (event.key === 'Escape') this.close();
+    });
+    this.notification.addEventListener('pointerenter', () => this.pause());
+    this.notification.addEventListener('pointerleave', () => this.resume());
+    this.notification.addEventListener('focusin', () => this.pause());
+    this.notification.addEventListener('focusout', () => queueMicrotask(() => this.resume()));
   }
 
   open() {
-    this.notification.classList.add('animate', 'active');
-
-    this.notification.addEventListener(
-      'transitionend',
-      () => {
-        this.notification.focus();
-        trapFocus(this.notification);
-      },
-      { once: true }
-    );
-
-    document.body.addEventListener('click', this.onBodyClick);
-
-    this.dispatchCartViewEvent();
+    clearTimeout(this.timer);
+    this.started = null;
+    // Restart the countdown for successive additions, without stealing focus.
+    this.notification.classList.remove('active');
+    this.notification.getBoundingClientRect();
+    this.notification.inert = false;
+    this.notification.setAttribute('aria-hidden', 'false');
+    this.notification.classList.add('active');
+    this.announcement.textContent = '';
+    clearTimeout(this.announcementTimer);
+    this.announcementTimer = setTimeout(() => { this.announcement.textContent = 'Added to cart!'; }, 50);
+    this.remaining = 3000;
+    this.resume();
   }
 
-  // The notification's outer element is server-rendered once at page load, so
-  // its `cart` Liquid object reflects the pre-add state. The morphed children
-  // (inserted from the /cart/add.js sections response in renderContents) are
-  // post-add, but they don't expose the full cart shape we need for the event
-  // payload. So we keep an explicit /cart.json fetch on open. Migrating to the
-  // factory + filter would require re-rendering the notification element
-  // itself in sections, which is out of scope for this PR.
-  async dispatchCartViewEvent() {
-    const { CartViewEvent } = window.StandardEvents || {};
-    if (!CartViewEvent) return;
+  pause() {
+    if (!this.started) return;
+    this.remaining = Math.max(0, this.remaining - (performance.now() - this.started));
+    this.started = null;
+    clearTimeout(this.timer);
+  }
 
-    try {
-      const response = await fetch(`${routes.cart_url}.json`);
-      const cart = await response.json();
-      if (!cart?.currency) return;
-
-      this.dispatchEvent(
-        new CartViewEvent({
-          context: 'dialog',
-          cart: CartViewEvent.createCartFromAjaxResponse(cart),
-        })
-      );
-    } catch (e) {
-      // cart:view is informational; swallow fetch errors
-    }
+  resume() {
+    if (!this.notification.classList.contains('active') || this.notification.matches(':hover, :focus-within')) return;
+    clearTimeout(this.timer);
+    this.started = performance.now();
+    this.timer = setTimeout(() => this.close(), this.remaining);
   }
 
   close() {
+    clearTimeout(this.timer);
+    clearTimeout(this.announcementTimer);
+    this.started = null;
+    if (this.notification.contains(document.activeElement)) this.activeElement?.focus({ preventScroll: true });
     this.notification.classList.remove('active');
-    document.body.removeEventListener('click', this.onBodyClick);
+    this.notification.inert = true;
+    this.notification.setAttribute('aria-hidden', 'true');
+  }
 
-    removeTrapFocus(this.activeElement);
+  disconnectedCallback() {
+    clearTimeout(this.timer);
+    clearTimeout(this.announcementTimer);
   }
 
   renderContents(parsedState) {
-    this.cartItemKey = parsedState.key;
-    this.getSectionsToRender().forEach((section) => {
-      document.getElementById(section.id).innerHTML = this.getSectionInnerHTML(
-        parsedState.sections[section.id],
-        section.selector
-      );
+    this.getSectionsToRender().forEach(section => {
+      const target = document.getElementById(section.id);
+      const content = new DOMParser().parseFromString(parsedState.sections[section.id], 'text/html').querySelector('.shopify-section');
+      if (target && content) target.innerHTML = content.innerHTML;
     });
-
-    if (this.header) this.header.reveal();
     this.open();
   }
 
   getSectionsToRender() {
-    return [
-      {
-        id: 'cart-notification-product',
-        selector: `[id="cart-notification-product-${this.cartItemKey}"]`,
-      },
-      {
-        id: 'cart-notification-button',
-      },
-      {
-        id: 'cart-icon-bubble',
-      },
-    ];
-  }
-
-  getSectionInnerHTML(html, selector = '.shopify-section') {
-    return new DOMParser().parseFromString(html, 'text/html').querySelector(selector).innerHTML;
-  }
-
-  handleBodyClick(evt) {
-    const target = evt.target;
-    if (target !== this.notification && !target.closest('cart-notification')) {
-      const disclosure = target.closest('details-disclosure, header-menu');
-      this.activeElement = disclosure ? disclosure.querySelector('summary') : null;
-      this.close();
-    }
+    return [{ id: 'cart-icon-bubble' }];
   }
 
   setActiveElement(element) {
     this.activeElement = element;
   }
 }
-
 customElements.define('cart-notification', CartNotification);

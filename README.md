@@ -251,3 +251,25 @@ in their quick views. Leave it empty to hide it. No per-product entry or metafie
 ### Product title badges
 
 The title automatically displays Product Type followed by Fabric. Set Type in the product's **Product organization** area. Fabric reads **Category metafields → Fabric** (`shopify.fabric`) first, falling back to `custom.fabric`. Supported fabric values are text, text lists, and category/metaobject references with a label or name. Only the first list entry is displayed; comma-separated text also uses its first entry. Missing values are hidden. These are display badges, not Shopify product Tags. Product Type uses warm terracotta; Fabric uses Suta's pale green styling.
+
+### Similar Products accordion and Related Products carousel
+
+- In the theme editor, select **Products → Default product → Product information → Product information** (the block). Enable **Show Similar Products**, edit its heading, select **Default similar products**, and choose whether it opens by default. The row appears before Product Details and hides when its list is empty.
+- For a separate selection per product: **Settings → Custom data → Products → Add definition**. Name it **Similar products**, use namespace/key **custom.similar_products**, and select **Product reference → List of products**. In each product's metafields, select and order the products to show. This overrides the shared fallback. The current product is excluded.
+- **Related Products** remains Shopify's automatic related recommendations. In the theme editor's **Related products** section, author the heading, number of products (up to 10), desktop/mobile columns, font and card settings. Its arrows appear only when products overflow the visible row. Shopify Search & Discovery can be used to curate the related recommendations independently of the Similar Products list.
+
+### Short product description
+
+Create **Settings → Custom data → Products → Add definition → Short description**, namespace/key **custom.short_description**, type **Single line text**. Author the value in each product's metafields. The theme displays it below the Product Type/Fabric badges and above the price, in Suta-style 14px medium Jost. Empty or whitespace-only values render nothing. The existing product Description editor continues to supply the full Description accordion independently.
+
+### Mobile bottom menu
+
+Open **Online Store → Themes → Edit theme → Footer → Mobile bottom menu**. The menu appears below 990px and includes Shopify Login/Account, Categories, live Search, New Arrivals and a direct Cart link.
+
+- **Icons:** upload replacement images under Icons; leave blank for the lightweight inline SVG defaults (no icon library or app). Use a white Search icon for the dark circle. Built-in SVG paths are in `snippets/mobile-navigation-icon.liquid`.
+- **Categories:** add/reorder Category tile blocks, select a collection or custom link, and upload its image. Uploaded images override the sample image URL. Clear the sample URL to use the collection image automatically. Disable **Image already contains its label** when your image has no embedded text. The initial Suta images are replaceable samples.
+- **New Arrivals:** choose the destination collection. Manage its products under **Products → Collections → New Arrivals**; the starter collection contains three existing products sorted newest first.
+- **Colors:** edit Background, Text and icons, and Category header divider.
+- **Floating product button:** enable/disable the circular Add to Cart and choose Icon and text or Text only. It appears on mobile/tablet product pages, submits the existing product form, and follows variant availability and loading states.
+
+Search uses Shopify predictive search, with normal search submission as a fallback. Dialogs support Escape, focus restoration and reduced motion. The desktop navigation remains unchanged.

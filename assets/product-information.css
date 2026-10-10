@@ -41,3 +41,55 @@
 .tasaa-product-information__content .tasaa-specification-note { margin-top: 12px; }
 .tasaa-product-information__content .tasaa-specification-note:first-child { margin-top: 0; }
 .tasaa-specification-note__content, .tasaa-specification-note__content > p:first-child { display: inline; }
+
+/* Similar Products has a tinted heading and a white product area. */
+.tasaa-product-information__item.tasaa-similar-products,
+.tasaa-similar-products .featured-collection { background: #fff; }
+
+/* Suta's compact, horizontally scrolling Similar Products accordion. */
+.tasaa-product-information__item.tasaa-similar-products { border: 1px solid #efe6dc; border-radius: 8px; overflow: hidden; }
+.tasaa-similar-products > summary {
+  background: #fbf4ef; border-radius: 8px;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 10px 12px; font-family: var(--product-title-font, var(--font-body-family));
+  font-size: 12px; font-weight: 600; line-height: 19.8px;
+  letter-spacing: .48px; text-transform: uppercase; color: #5c4a3a;
+}
+.tasaa-similar-products__chevron { flex-shrink: 0; transform: rotate(180deg); transition: transform .2s ease; }
+.tasaa-similar-products[open] .tasaa-similar-products__chevron { transform: rotate(0); }
+.tasaa-similar-products__content { padding: 10px 12px 12px; border-top: 1px solid #efe6dc; }
+.tasaa-product-information .tasaa-similar-products .product-grid.tasaa-product-carousel__track { grid-auto-columns: 40%; gap: 12px; padding-bottom: 8px; scrollbar-width: thin; scrollbar-color: #b5b5b5 #ededed; }
+.tasaa-similar-products .card > .card__content .card__information { padding: 4px 6px 0; }
+.tasaa-similar-products .card__heading { line-height: 1.7; }
+.tasaa-similar-products .card-information > .price { font-size: 10.8px; line-height: 1.7; letter-spacing: 1px; color: #000; }
+@media (max-width: 699px) {
+  .tasaa-product-information .tasaa-similar-products .product-grid.tasaa-product-carousel__track { grid-auto-columns: 66.6667%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tasaa-similar-products__chevron { transition: none; }
+}
+
+/* Override the shared carousel's hidden scrollbar only for Similar Products. */
+.tasaa-similar-products .tasaa-product-carousel__track::-webkit-scrollbar { display: block; height: 6px; }
+.tasaa-similar-products .tasaa-product-carousel__track::-webkit-scrollbar-track { background: #ededed; border-radius: 3px; }
+.tasaa-similar-products .tasaa-product-carousel__track::-webkit-scrollbar-thumb { background: #b5b5b5; border-radius: 3px; }
+
+.tasaa-similar-products[open] > summary { border-radius: 7px 7px 0 0; }
+
+.tasaa-similar-products__card { position: relative; }
+.tasaa-similar-products__discount {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  padding: 4px 8px;
+  background: #b42318;
+  color: #fff;
+  font-family: var(--product-title-font, var(--font-body-family));
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: .06em;
+  pointer-events: none;
+}
+.tasaa-similar-products__card:not([data-sold-out]) .card__badge { display: none; }

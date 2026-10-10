@@ -1687,3 +1687,56 @@ a.product__text {
 .share-button--icon .share-button__fallback button {
   color: #865b49;
 }
+
+/* Product-page purchase actions share a row; quantity rules remain in the form. */
+.tasaa-product-page[data-update-url='true'] .product-form__quantity {
+  display: none;
+}
+.tasaa-product-page[data-update-url='true'] .product-form__buttons {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  max-width: none;
+}
+.tasaa-product-page[data-update-url='true'] .product-form__buttons:has(.shopify-payment-button) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.tasaa-product-page[data-update-url='true'] .product-form__submit {
+  margin: 0;
+  min-width: 0;
+  min-height: 48px;
+  padding-inline: 12px;
+}
+.tasaa-product-page[data-update-url='true'] .shopify-payment-button {
+  min-width: 0;
+  margin: 0;
+}
+.tasaa-product-page[data-update-url='true'] .shopify-payment-button__button {
+  min-height: 48px;
+  padding-inline: 12px;
+}
+.tasaa-product-page[data-update-url='true'] shopify-accelerated-checkout {
+  --shopify-accelerated-checkout-button-block-size: 48px;
+}
+
+/* Independently authored product subtitle, between the title badges and price. */
+.product__info-container > .product__short-description {
+  margin: 12px 0;
+  font-family: var(--product-title-font, var(--font-body-family));
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: .14px;
+  text-transform: none;
+  color: #6b5a48;
+  overflow-wrap: anywhere;
+}
+
+.tasaa-product-page .product__purchase-divider {
+  margin: 20px 0;
+  border: 0;
+  border-top: 1px solid #ddd;
+  height: 0;
+  background: none;
+}

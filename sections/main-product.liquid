@@ -1,3 +1,7 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'section-featured-collection.css' | asset_url | stylesheet_tag }}
+{{ 'product-carousel.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-carousel.js' | asset_url }}" defer="defer"></script>
 <product-info
   id="MainProduct-{{ section.id }}"
   class="tasaa-product-page section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}"
@@ -124,6 +128,10 @@
                     {%- endif -%}
                   </div>
                   {% render 'product-title-badges', product: product %}
+                  {%- assign short_description = product.metafields.custom.short_description.value | strip -%}
+                  {%- if short_description != blank -%}
+                    <h2 class="product__short-description">{{ short_description | escape }}</h2>
+                  {%- endif -%}
                 {%- when 'price' -%}
                   <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
                     {%- render 'price',
@@ -520,6 +528,7 @@
                     product_form_id: product_form_id
                   %}
                 {%- when 'buy_buttons' -%}
+                  <hr class="product__purchase-divider">
                   {%- render 'buy-buttons',
                     block: block,
                     product: product,
@@ -2227,6 +2236,10 @@
       "name": "Product information",
       "limit": 1,
       "settings": [
+        { "type": "checkbox", "id": "show_similar_products", "label": "Show Similar Products", "default": true },
+        { "type": "text", "id": "similar_heading", "label": "Similar Products heading", "default": "Similar Products" },
+        { "type": "checkbox", "id": "similar_open", "label": "Expand Similar Products by default", "default": true },
+        { "type": "product_list", "id": "similar_products", "label": "Default similar products", "limit": 10, "info": "For a different list per product, create custom.similar_products as a list of product references. The current product is excluded." },
         {
           "type": "paragraph",
           "content": "Product Details: category/custom specification metafields first, then variant SKU. custom.product_details is the rich-text fallback. Description: product description. Business details: custom.business_information (metaobject reference with a rich-text content field). Returns override: custom.return_policy_override (page reference). Empty rows are hidden on the storefront."

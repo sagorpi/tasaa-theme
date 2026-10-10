@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="theme-color" content="">
     <link rel="canonical" href="{{ canonical_url }}">
 
@@ -331,6 +331,11 @@
     {%- endif -%}
 
     {% sections 'header-group' %}
+
+    {%- if settings.cart_type == 'notification' -%}
+      {% comment %}Keep the toast outside the header's stacking context and scroll transforms.{% endcomment %}
+      {%- render 'cart-notification' -%}
+    {%- endif -%}
 
     <main
       id="MainContent"

@@ -5,6 +5,7 @@
   assign first_rendered = true
 -%}
 <div class="tasaa-product-information" {{ block.shopify_attributes }}>
+  {% render 'product-similar-accordion', product: product, block: block %}
   {%- for index in (1..4) -%}
     {%- capture content -%}
       {%- case index -%}

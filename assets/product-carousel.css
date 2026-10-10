@@ -1,0 +1,22 @@
+tasaa-product-carousel { display: block; position: relative; min-width: 0; }
+.featured-collection .product-grid.tasaa-product-carousel__track {
+  display: grid; grid-auto-flow: column; grid-template-columns: none;
+  grid-auto-columns: calc((100% - (var(--carousel-columns, 4) - 1) * var(--carousel-gap, 24px)) / var(--carousel-columns, 4));
+  gap: var(--carousel-gap, 24px); overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; margin: 0; padding: 0; list-style: none;
+}
+.tasaa-product-carousel__track::-webkit-scrollbar { display: none; }
+.tasaa-product-carousel__track > li { scroll-snap-align: start; }
+.tasaa-product-carousel__controls { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+.tasaa-product-carousel__controls[hidden] { display: none; }
+.tasaa-product-carousel__controls button {
+  display: grid; place-items: center; width: 44px; height: 44px; border: 0;
+  border-radius: 50%; background: #fff; color: #1c1c1c; cursor: pointer;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 10%);
+}
+.tasaa-product-carousel__controls button:disabled { opacity: .35; cursor: default; }
+.tasaa-product-carousel__controls button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.tasaa-product-carousel__controls svg { height: 18px; }
+@media (max-width: 989px) {
+  .featured-collection .product-grid.tasaa-product-carousel__track { --carousel-columns: var(--carousel-mobile, 2); --carousel-gap: 12px; }
+}
