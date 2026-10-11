@@ -1,0 +1,34 @@
+{%- if settings.product_benefits_enabled -%}
+  {%- capture benefits -%}
+    {%- for i in (1..4) -%}
+      {%- liquid
+        assign prefix = 'product_benefit_' | append: i | append: '_'
+        assign enabled_key = prefix | append: 'enabled'
+        assign label_key = prefix | append: 'label'
+        assign icon_key = prefix | append: 'icon'
+        assign image_key = prefix | append: 'image'
+        assign link_key = prefix | append: 'link'
+        assign label = settings[label_key]
+        assign custom_icon = settings[image_key]
+        assign link = settings[link_key]
+      -%}
+      {%- if settings[enabled_key] and label != blank -%}
+        <li class="product-benefits__item">
+          {%- if link != blank -%}<a class="product-benefits__content" href="{{ link | escape }}">{%- else -%}<span class="product-benefits__content">{%- endif -%}
+            <span class="product-benefits__icon" aria-hidden="true">
+              {%- if custom_icon != blank -%}
+                {{ custom_icon | image_url: width: 96 | image_tag: loading: 'lazy', widths: '48, 96', sizes: '18px', alt: '' }}
+              {%- else -%}
+                {% render 'product-benefit-icon', icon: settings[icon_key] %}
+              {%- endif -%}
+            </span>
+            <span>{{ label | escape }}</span>
+          {%- if link != blank -%}</a>{%- else -%}</span>{%- endif -%}
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- if benefits != blank -%}
+    <ul class="product-benefits" role="list">{{ benefits }}</ul>
+  {%- endif -%}
+{%- endif -%}

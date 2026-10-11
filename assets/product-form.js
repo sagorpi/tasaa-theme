@@ -1,3 +1,36 @@
+// Preserve the original product fields while adding priced variants as nested cart lines.
+function prepareProductAddonData(formData, selectedAddons, groupId) {
+  if (!selectedAddons.length) return formData;
+  const parentId = formData.get('id');
+  const quantity = Math.max(1, parseInt(formData.get('quantity'), 10) || 1);
+  if (selectedAddons.some((addon) => !addon.id || String(addon.id) === String(parentId))) {
+    throw new Error('This add-on is not available for the selected product. Please uncheck it and try again.');
+  }
+  const result = new FormData();
+  for (const [key, value] of formData.entries()) {
+    if (key === 'id' || key === 'quantity' || key === 'selling_plan' || key.startsWith('properties[')) {
+      const itemKey = key.startsWith('properties[')
+        ? `items[0][properties]${key.slice('properties'.length)}`
+        : `items[0][${key}]`;
+      result.append(itemKey, value);
+    } else {
+      result.append(key, value);
+    }
+  }
+  result.set('items[0][quantity]', quantity);
+  // Distinguish separate customisations of the same saree in the cart.
+  result.set('items[0][properties][_addon_group]', groupId);
+  selectedAddons.forEach((addon, index) => {
+    const prefix = `items[${index + 1}]`;
+    result.append(`${prefix}[id]`, addon.id);
+    result.append(`${prefix}[quantity]`, quantity);
+    result.append(`${prefix}[parent_id]`, parentId);
+    result.append(`${prefix}[properties][Service]`, addon.label);
+    result.append(`${prefix}[properties][_addon_group]`, groupId);
+  });
+  return result;
+}
+
 if (!customElements.get('product-form')) {
   customElements.define(
     'product-form',
@@ -19,10 +52,14 @@ if (!customElements.get('product-form')) {
 
       onSubmitHandler(evt) {
         evt.preventDefault();
-        if (this.submitButton.getAttribute('aria-disabled') === 'true') return;
+        if (this.submitButton.disabled || this.submitButton.getAttribute('aria-disabled') === 'true') return;
+        const checkout = evt.submitter?.hasAttribute('data-addon-checkout');
+        const checkoutButton = this.querySelector('[data-addon-checkout]');
+        this.error = false;
 
         this.handleErrorMessage();
 
+        if (checkoutButton) checkoutButton.disabled = true;
         this.submitButton.setAttribute('aria-disabled', true);
         this.submitButton.classList.add('loading');
         this.querySelector('.loading__spinner').classList.remove('hidden');
@@ -40,7 +77,18 @@ if (!customElements.get('product-form')) {
           formData.append('sections_url', window.location.pathname);
           this.cart.setActiveElement(document.activeElement);
         }
-        config.body = formData;
+        try {
+          const addons = Array.from(this.form.querySelectorAll('[data-addon-variant]:checked:not(:disabled)'))
+            .map((input) => ({ id: input.dataset.addonVariant, label: input.dataset.addonLabel }));
+          config.body = prepareProductAddonData(formData, addons, window.crypto.randomUUID());
+        } catch (error) {
+          this.handleErrorMessage(error.message);
+          this.submitButton.removeAttribute('aria-disabled');
+          this.submitButton.classList.remove('loading');
+          this.querySelector('.loading__spinner').classList.add('hidden');
+          if (checkoutButton) checkoutButton.disabled = this.submitButton.disabled;
+          return;
+        }
 
         const variantId = formData.get('id');
         const quantity = parseInt(formData.get('quantity')) || 1;
@@ -50,6 +98,7 @@ if (!customElements.get('product-form')) {
           .then((response) => response.json())
           .then((response) => {
             if (response.status) {
+              this.error = true;
               publish(PUB_SUB_EVENTS.cartError, {
                 source: 'product-form',
                 productVariantId: variantId,
@@ -66,6 +115,10 @@ if (!customElements.get('product-form')) {
               this.submitButtonText.classList.add('hidden');
               soldOutMessage.classList.remove('hidden');
               this.error = true;
+              return;
+            } else if (checkout) {
+              this.resolveCartLinesUpdate(linesUpdateDeferred);
+              window.location.assign(`${window.Shopify?.routes?.root || '/'}checkout`);
               return;
             } else if (!this.cart) {
               this.resolveCartLinesUpdate(linesUpdateDeferred);
@@ -92,7 +145,7 @@ if (!customElements.get('product-form')) {
                 () => {
                   setTimeout(() => {
                     CartPerformance.measure("add:paint-updated-sections", () => {
-                      this.cart.renderContents(response);
+                      this.cart.renderContents(response.items ? { ...response, key: response.items[0].key, id: response.items[0].id } : response);
                     });
                   });
                 },
@@ -101,19 +154,21 @@ if (!customElements.get('product-form')) {
               quickAddModal.hide(true);
             } else {
               CartPerformance.measure("add:paint-updated-sections", () => {
-                this.cart.renderContents(response);
+                this.cart.renderContents(response.items ? { ...response, key: response.items[0].key, id: response.items[0].id } : response);
               });
             }
           })
           .catch((e) => {
             console.error(e);
+            this.handleErrorMessage('Unable to confirm the cart update. Please check your cart before trying again.');
             this.dispatchCartErrorEvent(e.message || 'Network error', 'SERVICE_UNAVAILABLE');
             linesUpdateDeferred?.reject(e);
           })
           .finally(() => {
             this.submitButton.classList.remove('loading');
             if (this.cart && this.cart.classList.contains('is-empty')) this.cart.classList.remove('is-empty');
-            if (!this.error) this.submitButton.removeAttribute('aria-disabled');
+            this.submitButton.removeAttribute('aria-disabled');
+            if (checkoutButton) checkoutButton.disabled = this.submitButton.disabled;
             this.querySelector('.loading__spinner').classList.add('hidden');
 
             CartPerformance.measureFromEvent("add:user-action", evt);
@@ -136,6 +191,8 @@ if (!customElements.get('product-form')) {
       }
 
       toggleSubmitButton(disable = true, text) {
+        const checkoutButton = this.querySelector('[data-addon-checkout]');
+        if (checkoutButton) checkoutButton.disabled = disable;
         if (disable) {
           this.submitButton.setAttribute('disabled', 'disabled');
           if (text) this.submitButtonText.textContent = text;

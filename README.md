@@ -273,3 +273,53 @@ Open **Online Store → Themes → Edit theme → Footer → Mobile bottom menu*
 - **Floating product button:** enable/disable the circular Add to Cart and choose Icon and text or Text only. It appears on mobile/tablet product pages, submits the existing product form, and follows variant availability and loading states.
 
 Search uses Shopify predictive search, with normal search submission as a fallback. Dialogs support Escape, focus restoration and reduced motion. The desktop navigation remains unchanged.
+
+### Shared product benefits
+
+Open **Online Store → Themes → Edit theme → Theme settings (gear icon) → Product benefits**. These settings apply to every product page using the main product section, including alternate product templates. They are not product metafields.
+
+- Toggle the entire row, or each of its four benefits.
+- Edit each label, choose one of the four built-in icons, or upload a custom icon image.
+- Optionally add a destination link. Leave it blank to display informational text without a link.
+- For WhatsApp Assistance, enter `https://wa.me/` followed by the business number including country code, without spaces or `+`. No phone number is configured by default.
+
+The row appears immediately below the purchase buttons. It uses one compact row of four benefits on all devices, with icons above the labels on mobile/tablet. The payment shield uses the SVG from the merchant-supplied Garden Vareli product reference; the remaining icons are inline SVGs. No app, JavaScript library, or third-party icon request is needed.
+
+### Product add-on checkboxes (Saree / Blouse)
+
+Manage these in **Shopify Admin → Content → Metaobjects**, not Theme settings.
+
+**Product addon** entries describe one reusable option:
+
+| Field | What to enter |
+| --- | --- |
+| Label | Customer-facing name, unique within a group (for example Gift wrap). |
+| Kind | `free` for an optional free service, `paid` for a priced variant, or `included` for a service already provided. |
+| Description | Not displayed on the storefront. Only the option label and price (or included-service notice) are shown. |
+| Variant | Required for `paid`: select the exact purchasable product variant. Leave blank for the other kinds. Price comes from this variant. |
+
+For a paid service, first create a Shopify product such as Gift wrap, set its actual price and shipping/inventory settings, and make it available to the Online Store. Then choose its variant in the add-on entry. An accessory needing a size or colour needs an entry pointing to that exact variant. Subscription-only variants are not supported. Do not use a parent product's own variant as its add-on.
+
+Gift Wrap (₹50) and Gift Box (₹200) are configured in tasaa-dev and linked to both groups. Change their prices in **Products → Gift Wrap / Gift Box → Price**; the checkbox reads the variant price automatically. Both use Type `Add-on` and status **Unlisted**, so they remain purchasable through the add-on while staying out of normal search and collection listings. Inventory is not tracked; enable tracking and enter actual stock if packaging supply is limited. Gift Wrap is a non-shipping service; Gift Box is a physical product.
+
+An `included` entry renders a pale green checked notice, for example **This saree comes with FREE Fall and Edging**, instead of an optional checkbox. Enter only `Fall and Edging` as its Label; the theme supplies the sentence and uses “blouse” for Blouse products. No extra price or variant is needed. Put included entries first in the group's Options list. Use a separate group assigned through the product's Addon group metafield when the service applies to only some products. Only keep the entry Active for products where the service is actually included.
+
+**Product addon group** entries contain a Name and ordered list of Options. The Heading field is not displayed on the storefront. Up to 20 options are displayed. Publish both the group and its referenced options as **Active** when ready. Draft entries do not render.
+
+- **Saree**: edit the group whose handle is `saree`. Products with Type `Saree`, `Sarees`, or `Saree with blouse piece` use it automatically (case-insensitive).
+- **Blouse**: edit the group whose handle is `blouse`. Products with Type `Blouse` or `Blouses` use it automatically.
+- Keep those two handles unchanged. The Type field is under **Products → your product → Product organization**; it is not Shopify's Category field.
+- For an exception, create another group and select it under **Products → your product → Metafields → Addon group** (`custom.addon_group`). For a matching petticoat, point an option to the correct colour/size variant and use a group containing that entry.
+- To suppress every add-on on one product, set **Disable addons** (`custom.disable_addons`) to true. Clearing the group override returns to the product-type default.
+- To reorder checkboxes, reorder Options in the group. Editing a shared option updates every group using it.
+
+All optional checkboxes start unchecked. Free and included services are recorded as product line-item properties. Paid options are actual nested cart items, added in the same request as the parent, with one add-on per unit of the parent at the time of adding. Shopify removes nested add-ons when the parent is removed. Cart quantity edits remain Shopify's standard behaviour; child quantities can be edited independently. Unavailable or unconfigured paid options are disabled.
+
+Normal Add to cart and the floating button submit the same form. When options are present, Buy it now uses the normal checkout after adding the main item plus selected options; the existing cart is retained. Products without options retain Shopify's accelerated checkout. Gift cards are excluded. Service descriptions do not automatically enforce shipping delays, return restrictions or COD eligibility—only author services supported by your fulfilment and payment setup.
+
+Definitions used by the theme (for another store):
+
+- `product_addon`: required single-line `label`; required choice-list single-line `kind` (`free`, `paid`, `included`); optional multi-line `description`; optional product-variant reference `variant`.
+- `product_addon_group`: required single-line `name`; optional single-line `heading`; list of `product_addon` references `options`.
+- Product metafields: `custom.addon_group` (single reference to `product_addon_group`), `custom.disable_addons` (true/false). Assign to all products, without category constraints.
+- Enable storefront access and active/draft status for both metaobject definitions.

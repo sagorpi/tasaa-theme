@@ -73,7 +73,7 @@ if (!customElements.get('quick-add-modal')) {
 
       prepareFeaturedView(productElement) {
         productElement.querySelector('media-gallery')?.classList.remove('product-gallery-navigation');
-        productElement.querySelectorAll('.shopify-payment-button, share-button').forEach((element) => element.remove());
+        productElement.querySelectorAll('.shopify-payment-button, [data-addon-checkout], share-button').forEach((element) => element.remove());
         const viewer = productElement.querySelector('[id^="GalleryViewer-"]');
         viewer?.querySelector('.slider-buttons')?.classList.remove('quick-add-hidden', 'small-hide');
         viewer?.querySelector('.product__media-list')?.classList.add('slider--everywhere');

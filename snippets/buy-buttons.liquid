@@ -24,6 +24,12 @@
       endif
     -%}
 
+    {%- capture product_addons -%}
+      {%- unless product.gift_card? -%}
+        {% render 'product-addons', product: product, product_form_id: product_form_id %}
+      {%- endunless -%}
+    {%- endcapture -%}
+
     <product-form
       class="product-form"
       data-hide-errors="{{ gift_card_recipient_feature_active }}"
@@ -60,6 +66,8 @@
           {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
         {%- endif -%}
 
+        {{ product_addons }}
+
         <div class="product-form__buttons">
           {%- liquid
             assign check_against_inventory = true
@@ -94,7 +102,14 @@
             {%- render 'loading-spinner' -%}
           </button>
           {%- if show_dynamic_checkout -%}
-            {{ form | payment_button }}
+            {%- if product_addons != blank -%}
+              <button type="submit" class="product-addon-checkout button button--primary" data-addon-checkout
+                {% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout or product.selected_or_first_available_variant == null %}disabled{% endif %}>
+                Buy it now
+              </button>
+            {%- else -%}
+              {{ form | payment_button }}
+            {%- endif -%}
           {%- endif -%}
         </div>
       {%- endform -%}

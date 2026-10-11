@@ -1,0 +1,74 @@
+{%- comment -%}
+  Shared options: product_addon_group metaobjects, selected by custom.addon_group.
+  Blank overrides fall back to the product-type handle (saree / blouse).
+  Paid options reference an exact variant; prices are never authored separately.
+{%- endcomment -%}
+{%- liquid
+  assign addon_group = product.metafields.custom.addon_group.value
+  assign product_type = product.type | strip | downcase
+  assign included_product_name = 'product'
+  if product_type == 'saree' or product_type == 'sarees' or product_type == 'saree with blouse piece'
+    assign included_product_name = 'saree'
+  elsif product_type == 'blouse' or product_type == 'blouses'
+    assign included_product_name = 'blouse'
+  endif
+  if addon_group == blank
+    if product_type == 'saree' or product_type == 'sarees' or product_type == 'saree with blouse piece'
+      assign addon_group = shop.metaobjects.product_addon_group.saree
+    elsif product_type == 'blouse' or product_type == 'blouses'
+      assign addon_group = shop.metaobjects.product_addon_group.blouse
+    endif
+  endif
+-%}
+{%- if product.metafields.custom.disable_addons.value != true and addon_group != blank -%}
+  {%- capture addon_rows -%}
+    {%- for addon in addon_group.options.value limit: 20 -%}
+      {%- liquid
+        assign kind = addon.kind.value
+        assign addon_variant = addon.variant.value
+        assign unavailable = false
+        if kind == 'paid'
+          if addon_variant == blank or addon_variant.available == false or addon_variant.product.requires_selling_plan
+            assign unavailable = true
+          endif
+        endif
+      -%}
+      {%- if addon.label.value != blank -%}
+        {%- if kind == 'paid' or kind == 'free' or kind == 'included' -%}
+          <div class="product-addons__option{% if kind == 'included' %} product-addons__option--included{% endif %}{% if unavailable %} product-addons__option--unavailable{% endif %}">
+            {%- if kind == 'included' -%}
+              <div class="product-addons__included" role="note">
+                <svg aria-hidden="true" width="16" height="16" viewBox="0 0 18 18" fill="none">
+                  <circle cx="9" cy="9" r="9" fill="currentColor"/>
+                  <path d="M5.5 9 7.5 11 12.5 6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <p>This {{ included_product_name }} comes with <strong>FREE</strong> {{ addon.label.value | escape }}</p>
+              </div>
+              <input type="hidden" name="properties[{{ addon.label.value | escape }}]" value="Included">
+            {%- else -%}
+              <label class="product-addons__label" for="Addon-{{ product_form_id }}-{{ forloop.index }}">
+                <input type="checkbox" id="Addon-{{ product_form_id }}-{{ forloop.index }}"
+                  {% if kind == 'free' %}name="properties[{{ addon.label.value | escape }}]" value="Yes"{% endif %}
+                  {% if kind == 'paid' %}data-addon-variant="{{ addon_variant.id }}" data-addon-label="{{ addon.label.value | escape }}"{% endif %}
+                  {% if unavailable %}disabled{% endif %}
+                >
+                <span class="product-addons__title">{{ addon.label.value | escape }}</span>
+                <span class="product-addons__price">
+                  {%- if unavailable -%}Unavailable
+                  {%- elsif kind == 'paid' -%}{{ addon_variant.price | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs ', '₹ ' }}
+                  {%- else -%}Free{%- endif -%}
+                </span>
+              </label>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- if addon_rows != blank -%}
+    {{ 'product-addons.css' | asset_url | stylesheet_tag }}
+    <fieldset class="product-addons" data-product-addons aria-label="Product options">
+      <div class="product-addons__options">{{ addon_rows }}</div>
+    </fieldset>
+  {%- endif -%}
+{%- endif -%}

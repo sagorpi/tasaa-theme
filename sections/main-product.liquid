@@ -17,6 +17,9 @@
   {{ 'product-gallery-navigation.css' | asset_url | stylesheet_tag }}
   {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
   {{ 'product-information.css' | asset_url | stylesheet_tag }}
+  {% if settings.product_benefits_enabled %}
+    {{ 'product-benefits.css' | asset_url | stylesheet_tag }}
+  {% endif %}
   <script src="{{ 'delivery-estimate.js' | asset_url }}" defer="defer"></script>
   {{ 'component-price.css' | asset_url | stylesheet_tag }}
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
@@ -536,6 +539,7 @@
                     section_id: section.id,
                     show_pickup_availability: true
                   -%}
+                  {% render 'product-benefits' %}
                 {%- when 'rating' -%}
                   {%- if product.metafields.reviews.rating.value != blank -%}
                     <div class="rating-wrapper">

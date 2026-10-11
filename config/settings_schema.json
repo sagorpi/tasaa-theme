@@ -1462,5 +1462,228 @@
         "info": "Shown after SKU in the Product Details accordion on all products using the Product information block. Leave blank to hide."
       }
     ]
+  },
+  {
+    "name": "Product benefits",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Shared across all product pages. Displayed below the purchase buttons. No product metafields are needed."
+      },
+      {
+        "type": "checkbox",
+        "id": "product_benefits_enabled",
+        "label": "Show product benefits",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Benefit 1"
+      },
+      {
+        "type": "checkbox",
+        "id": "product_benefit_1_enabled",
+        "label": "Show benefit",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "product_benefit_1_label",
+        "label": "Label",
+        "default": "Secure Payments"
+      },
+      {
+        "type": "select",
+        "id": "product_benefit_1_icon",
+        "label": "Icon",
+        "options": [
+          {
+            "value": "secure",
+            "label": "Secure payment shield"
+          },
+          {
+            "value": "cash",
+            "label": "Cash / banknote"
+          },
+          {
+            "value": "whatsapp",
+            "label": "WhatsApp"
+          },
+          {
+            "value": "heart",
+            "label": "Heart"
+          }
+        ],
+        "default": "secure"
+      },
+      {
+        "type": "image_picker",
+        "id": "product_benefit_1_image",
+        "label": "Custom icon",
+        "info": "Optional. Replaces the selected icon."
+      },
+      {
+        "type": "url",
+        "id": "product_benefit_1_link",
+        "label": "Optional link",
+        "info": "For WhatsApp, use https://wa.me/ followed by your country code and number, without spaces or +."
+      },
+      {
+        "type": "header",
+        "content": "Benefit 2"
+      },
+      {
+        "type": "checkbox",
+        "id": "product_benefit_2_enabled",
+        "label": "Show benefit",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "product_benefit_2_label",
+        "label": "Label",
+        "default": "Cash on Delivery"
+      },
+      {
+        "type": "select",
+        "id": "product_benefit_2_icon",
+        "label": "Icon",
+        "options": [
+          {
+            "value": "secure",
+            "label": "Secure payment shield"
+          },
+          {
+            "value": "cash",
+            "label": "Cash / banknote"
+          },
+          {
+            "value": "whatsapp",
+            "label": "WhatsApp"
+          },
+          {
+            "value": "heart",
+            "label": "Heart"
+          }
+        ],
+        "default": "cash"
+      },
+      {
+        "type": "image_picker",
+        "id": "product_benefit_2_image",
+        "label": "Custom icon",
+        "info": "Optional. Replaces the selected icon."
+      },
+      {
+        "type": "url",
+        "id": "product_benefit_2_link",
+        "label": "Optional link",
+        "info": "For WhatsApp, use https://wa.me/ followed by your country code and number, without spaces or +."
+      },
+      {
+        "type": "header",
+        "content": "Benefit 3"
+      },
+      {
+        "type": "checkbox",
+        "id": "product_benefit_3_enabled",
+        "label": "Show benefit",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "product_benefit_3_label",
+        "label": "Label",
+        "default": "WhatsApp Assistance"
+      },
+      {
+        "type": "select",
+        "id": "product_benefit_3_icon",
+        "label": "Icon",
+        "options": [
+          {
+            "value": "secure",
+            "label": "Secure payment shield"
+          },
+          {
+            "value": "cash",
+            "label": "Cash / banknote"
+          },
+          {
+            "value": "whatsapp",
+            "label": "WhatsApp"
+          },
+          {
+            "value": "heart",
+            "label": "Heart"
+          }
+        ],
+        "default": "whatsapp"
+      },
+      {
+        "type": "image_picker",
+        "id": "product_benefit_3_image",
+        "label": "Custom icon",
+        "info": "Optional. Replaces the selected icon."
+      },
+      {
+        "type": "url",
+        "id": "product_benefit_3_link",
+        "label": "Optional link",
+        "info": "For WhatsApp, use https://wa.me/ followed by your country code and number, without spaces or +."
+      },
+      {
+        "type": "header",
+        "content": "Benefit 4"
+      },
+      {
+        "type": "checkbox",
+        "id": "product_benefit_4_enabled",
+        "label": "Show benefit",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "product_benefit_4_label",
+        "label": "Label",
+        "default": "Packed With Love"
+      },
+      {
+        "type": "select",
+        "id": "product_benefit_4_icon",
+        "label": "Icon",
+        "options": [
+          {
+            "value": "secure",
+            "label": "Secure payment shield"
+          },
+          {
+            "value": "cash",
+            "label": "Cash / banknote"
+          },
+          {
+            "value": "whatsapp",
+            "label": "WhatsApp"
+          },
+          {
+            "value": "heart",
+            "label": "Heart"
+          }
+        ],
+        "default": "heart"
+      },
+      {
+        "type": "image_picker",
+        "id": "product_benefit_4_image",
+        "label": "Custom icon",
+        "info": "Optional. Replaces the selected icon."
+      },
+      {
+        "type": "url",
+        "id": "product_benefit_4_link",
+        "label": "Optional link",
+        "info": "For WhatsApp, use https://wa.me/ followed by your country code and number, without spaces or +."
+      }
+    ]
   }
 ]
