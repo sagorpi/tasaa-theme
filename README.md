@@ -323,3 +323,17 @@ Definitions used by the theme (for another store):
 - `product_addon_group`: required single-line `name`; optional single-line `heading`; list of `product_addon` references `options`.
 - Product metafields: `custom.addon_group` (single reference to `product_addon_group`), `custom.disable_addons` (true/false). Assign to all products, without category constraints.
 - Enable storefront access and active/draft status for both metaobject definitions.
+
+### Collection filters and sorting
+
+The default collection uses **Sidebar with mobile panels** under **Theme editor → Collections → Default collection → Product grid → Filter layout**. Desktop shows collapsible filters and a sort dropdown; mobile/tablet (below 990px) uses a right-hand filter drawer and a bottom sort sheet. Filters update Shopify results without a full reload, preserve sorting and support Clear all, removable selections, price ranges and browser Back/Forward. Existing horizontal, vertical and drawer layouts remain selectable.
+
+Available filter groups and values come from Shopify **Search & Discovery → Filters**. Enable Product type, Fabric, Colour or other supported metafields there; the theme does not invent filter values. Sort choices come from Shopify's collection sort options. Suta's custom **Discount: High to Low** option is not available through Shopify's native collection sorting, so it is not shown. It would need an app or a separate indexed catalog service for correct sorting across every page.
+
+**Automatic product loading:** Enabled by default in **Collections → Default collection → Product grid → Automatically load more products**. The next batch loads when the customer approaches the bottom of the grid, on desktop, tablet and mobile. **Products per page** controls batch size. Filtering or sorting starts a fresh result set; subsequent batches retain those selections. The loader stops at the final page, announces loading/results to screen readers and offers a manual retry on failure. The Load more link also works without JavaScript. Disable the setting to restore numbered pagination. No app is required.
+
+### Collection grid views
+The Sidebar with mobile panels layout includes 2-, 3- and 4-column buttons at the left of the desktop toolbar. Each page starts at 4 columns. Changing the view is instant and stays selected while filtering, sorting and automatically loading more products. Phones and smaller tablets keep the configured mobile layout; the desktop controls appear from 990px. No app or external icon library is required.
+
+### Discount sorting
+Collection Sort by offers Featured, Price: Low to High, Price: High to Low, Discount: High to Low, Date old to new, and Date new to old. Discount sorting computes percentage savings from Price and Compare-at price across every page of the filtered collection. It loads matching card markup before sorting, then reveals cards in normal scroll batches. This option can take longer on large collections; normal Shopify sorts retain server pagination. The discount_sort=1 URL flag preserves the custom order across refreshes and browser navigation. No app is required.

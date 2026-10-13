@@ -1,0 +1,90 @@
+{%- assign current_sort = collection.sort_by | default: collection.default_sort_by -%}
+<collection-filters data-section="{{ section.id }}" data-url="{{ collection.url }}">
+  <div class="cf-toolbar">
+    <div class="cf-grid-views" role="group" aria-label="Products per row">
+      {%- for columns in (2..4) -%}
+        {%- assign icon_width = columns | times: 6.5 | plus: 13 -%}
+        <button type="button" class="cf-grid-view" data-columns="{{ columns }}" aria-label="Show {{ columns }} products per row" aria-pressed="{% if columns == 4 %}true{% else %}false{% endif %}" title="{{ columns }} products per row">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {{ icon_width }} 20" width="{{ icon_width }}" height="20" fill="none" aria-hidden="true" focusable="false">
+            <path d="M1 6.8h4.5M1 13.3h4.5M{{ icon_width | minus: 5.5 }} 6.8h4.5M{{ icon_width | minus: 5.5 }} 13.3h4.5" />
+            {%- for column in (0..columns) -%}
+              {%- assign x = column | times: 6.5 | plus: 6.5 -%}
+              <path d="M{{ x }} 1.7v4.6M{{ x }} 13.7v4.6" />
+              {%- unless forloop.last -%}<rect x="{{ x }}" y="6.8" width="6.5" height="6.5" />{%- endunless -%}
+            {%- endfor -%}
+          </svg>
+          <span aria-hidden="true">{{ columns }}</span>
+        </button>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.enable_filtering -%}
+      <button type="button" class="cf-filter-toggle" data-open="filters" aria-controls="CollectionFiltersPanel" aria-expanded="false">Filter</button>
+    {%- endif -%}
+    <p class="cf-count" role="status" data-count>Showing {{ collection.products_count }} products</p>
+    {%- if section.settings.enable_sorting -%}
+      <button type="button" class="cf-sort-toggle" data-open="sort" aria-controls="CollectionSortPanel" aria-expanded="false">Sort by <span class="cf-chevron" aria-hidden="true"></span></button>
+      <div id="CollectionSortPanel" class="cf-sort-panel" data-panel="sort" aria-label="Sort by" tabindex="-1">
+        <div class="cf-panel-heading"><span>Sort by</span><button type="button" data-close aria-label="Close sort options">×</button></div>
+        <form class="cf-sort-form">
+          {%- for option in collection.sort_options -%}
+            {%- unless option.value == 'manual' or option.value == 'price-ascending' or option.value == 'price-descending' or option.value == 'created-ascending' or option.value == 'created-descending' -%}{%- continue -%}{%- endunless -%}
+            <label class="cf-sort-option">
+              <input type="radio" name="sort_by" value="{{ option.value | escape }}" {% if option.value == current_sort %}checked{% endif %}>
+              <span>{{ option.name | replace: 'Price, low to high', 'Price: Low to High' | replace: 'Price, high to low', 'Price: High to Low' | escape }}</span>
+            </label>
+            {%- if option.value == 'price-descending' -%}
+              <label class="cf-sort-option">
+                <input type="radio" name="sort_by" value="discount-descending">
+                <span>Discount: High to Low</span>
+              </label>
+            {%- endif -%}
+          {%- endfor -%}
+        </form>
+      </div>
+    {%- endif -%}
+  </div>
+  <button type="button" class="cf-backdrop" data-close aria-label="Close panel" tabindex="-1"></button>
+  {%- if section.settings.enable_filtering -%}
+    <div id="CollectionFiltersPanel" class="cf-filter-panel" data-panel="filters" aria-label="Filters" tabindex="-1">
+      <div class="cf-panel-heading"><span>Filters</span><button type="button" data-close aria-label="Close filters">×</button></div>
+      <form class="cf-filter-form" action="{{ collection.url }}" method="get">
+        <input type="hidden" name="sort_by" value="{{ current_sort | escape }}">
+        <div data-filter-body>
+          {%- for filter in collection.filters -%}
+            <details class="cf-group" id="CollectionFilter-{{ forloop.index }}">
+              <summary>
+                <span class="cf-group-label">{{ filter.label | escape }}</span>
+                {%- if filter.active_values.size > 0 or filter.min_value.value or filter.max_value.value -%}
+                  <a class="cf-clear-group" href="{{ filter.url_to_remove }}" data-remove aria-label="Clear {{ filter.label | escape }} filter">Clear</a>
+                {%- endif -%}
+                <span class="cf-chevron" aria-hidden="true"></span>
+              </summary>
+              <div class="cf-values">
+                {%- case filter.type -%}
+                  {%- when 'boolean', 'list' -%}
+                    {%- for value in filter.values -%}
+                      <label class="cf-check{% if value.count == 0 and value.active == false %} cf-disabled{% endif %}">
+                        <input id="CollectionFilter-{{ forloop.parentloop.index }}-{{ forloop.index }}" type="checkbox" name="{{ value.param_name }}" value="{{ value.value | escape }}" {% if value.active %}checked{% endif %} {% if value.count == 0 and value.active == false %}disabled{% endif %}>
+                        {%- if value.swatch.color -%}<span class="cf-swatch" style="background: {{ value.swatch.color }}" aria-hidden="true"></span>{%- endif -%}
+                        <span>{{ value.label | escape }} ({{ value.count }})</span>
+                      </label>
+                    {%- endfor -%}
+                  {%- when 'price_range' -%}
+                    <div class="cf-price">
+                      <label>From ({{ cart.currency.symbol }})<input id="CollectionPriceMin" type="number" inputmode="decimal" step="0.01" min="0" max="{{ filter.range_max | divided_by: 100.0 }}" name="{{ filter.min_value.param_name }}" placeholder="0" {% if filter.min_value.value %}value="{{ filter.min_value.value | divided_by: 100.0 }}"{% endif %}></label>
+                      <label>To ({{ cart.currency.symbol }})<input id="CollectionPriceMax" type="number" inputmode="decimal" step="0.01" min="0" max="{{ filter.range_max | divided_by: 100.0 }}" name="{{ filter.max_value.param_name }}" placeholder="{{ filter.range_max | divided_by: 100.0 }}" {% if filter.max_value.value %}value="{{ filter.max_value.value | divided_by: 100.0 }}"{% endif %}></label>
+                    </div>
+                {%- endcase -%}
+              </div>
+            </details>
+          {%- else -%}
+            <p class="cf-empty">No filters available for this collection.</p>
+          {%- endfor -%}
+        </div>
+        <div class="cf-footer"><button type="button" data-clear>Clear all</button><button type="submit">View results</button></div>
+      </form>
+    </div>
+  {%- endif -%}
+  <p class="cf-sort-status visually-hidden" role="status" aria-live="polite"></p>
+  <p class="cf-error" role="alert" hidden>Couldn’t update products. <button type="button" data-retry>Try again</button></p>
+</collection-filters>

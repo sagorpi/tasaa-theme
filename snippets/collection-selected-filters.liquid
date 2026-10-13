@@ -1,0 +1,18 @@
+          {%- capture selected_filters -%}
+            {%- for filter in collection.filters -%}
+              {%- for value in filter.active_values -%}
+                <a href="{{ value.url_to_remove }}" data-remove aria-label="Remove {{ filter.label | escape }}: {{ value.label | escape }}">{{ value.label | escape }} <span aria-hidden="true">✕</span></a>
+              {%- endfor -%}
+              {%- if filter.type == 'price_range' -%}
+                {%- if filter.min_value.value or filter.max_value.value -%}
+                  <a href="{{ filter.url_to_remove }}" data-remove aria-label="Remove price filter">{{ cart.currency.symbol }}{{ filter.min_value.value | default: 0 | money_without_currency }} – {{ cart.currency.symbol }}{{ filter.max_value.value | default: filter.range_max | money_without_currency }} <span aria-hidden="true">✕</span></a>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endcapture -%}
+{%- if selected_filters contains 'data-remove' -%}
+  <div class="cf-active" aria-label="Selected filters">
+    <div class="cf-active-tags">{{ selected_filters }}</div>
+    <button type="button" class="cf-reset-all" data-clear>Reset All</button>
+  </div>
+{%- endif -%}

@@ -1,3 +1,9 @@
+.product-listing-section {
+  --color-background: 255, 255, 255;
+  --gradient-background: #fff;
+  background: #fff;
+}
+
 @media screen and (max-width: 749px) {
   .collection .grid__item:only-child {
     flex: 0 0 100%;
@@ -96,4 +102,67 @@
 
 .collection__view-all a:not(.link) {
   margin-top: 1rem;
+}
+
+collection-load-more {
+  display: block;
+  text-align: center;
+  padding: 30px 0 12px;
+}
+collection-load-more .button { font-size: 12px; min-height: 42px; }
+collection-load-more [role='status'] { color: #666; font-size: 12px; margin: 10px 0 0; }
+collection-load-more [aria-disabled='true'] { opacity: .6; pointer-events: none; }
+
+/* Collection card labels and prices follow the compact storefront treatment. */
+.product-listing-section .collection-card__type {
+  display: table;
+  max-width: 100%;
+  margin: 4px 0;
+  padding: 0 6px;
+  border: 1px solid #0005;
+  border-radius: 3px;
+  color: #000b;
+  font-family: var(--collection-card-label-font, var(--font-body-family));
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: .7px;
+}
+.product-listing-section .card-information > .price {
+  margin-top: 4px;
+  font-family: var(--collection-card-label-font, var(--font-body-family));
+  font-size: 10.8px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 1px;
+  color: #000;
+}
+.product-listing-section .price--on-sale .price__sale { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
+.product-listing-section .price--on-sale .price-item--sale { order: -1; color: #000; }
+.product-listing-section .price--on-sale .price-item--regular { color: #f00; font-size: 11.2px; font-weight: 400; text-decoration: line-through; }
+.product-listing-section .price .price-item { margin: 0; }
+
+.product-listing-section .card__badge:has(.collection-card__discount) {
+  grid-row: auto;
+  grid-column: auto;
+  align-self: start;
+  line-height: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0 !important;
+  z-index: 2;
+}
+.product-listing-section .collection-card__discount {
+  padding: 1.6px 8px;
+  border: 0;
+  border-radius: 0;
+  background: rgba(215, 3, 2, .8);
+  color: #fff;
+  font-family: var(--collection-card-label-font, var(--font-body-family));
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 1.98px;
+  text-transform: uppercase;
 }

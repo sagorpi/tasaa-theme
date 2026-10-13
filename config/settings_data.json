@@ -152,7 +152,7 @@
         "type": "shopify://apps/whatmore-shoppable-videos/blocks/app-embed/20db8a72-315a-4364-8885-64219ee48303",
         "disabled": false,
         "settings": {
-          "minimized_video_position": "right",
+          "minimized_video_position": "left",
           "horizontal-padding": 5,
           "vertical-padding": 150,
           "app-size": 50,

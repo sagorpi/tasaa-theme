@@ -1,6 +1,18 @@
 {{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{% if section.settings.auto_load_products %}
+  <script src="{{ 'collection-load-more.js' | asset_url }}" defer></script>
+{% endif %}
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
+{%- style -%}
+  {{ section.settings.card_label_font | font_face: font_display: 'swap' }}
+  #shopify-section-{{ section.id }} { --collection-card-label-font: {{ section.settings.card_label_font.family }}, {{ section.settings.card_label_font.fallback_families }}; }
+{%- endstyle -%}
+{% if section.settings.filter_type == 'suta' %}
+  {{ 'collection-filters.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'collection-discount-sort.js' | asset_url }}" defer></script>
+  <script src="{{ 'collection-filters.js' | asset_url }}" defer></script>
+{% endif %}
 
 {% if section.settings.image_shape == 'blob' %}
   {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
@@ -40,7 +52,7 @@
   view-event-payload="{{ collection | standard_event_data: 'view' | escape }}"
   data-collection-id="{{ collection.id }}"
 >
-  <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
+  <div class="product-listing-section section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
     {%- paginate collection.products by section.settings.products_per_page -%}
       {% comment %} Sort is the first tabbable element when filter type is vertical {% endcomment %}
       {%- if section.settings.enable_sorting and section.settings.filter_type == 'vertical' -%}
@@ -101,16 +113,21 @@
         </facet-filters-form>
       {%- endif -%}
 
-      <div class="{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
-        {{ 'component-facets.css' | asset_url | stylesheet_tag }}
-        <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
-        {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+      <div class="{% if section.settings.filter_type == 'suta' %}tasaa-collection-layout page-width{% elsif section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
+        {% unless section.settings.filter_type == 'suta' %}
+          {{ 'component-facets.css' | asset_url | stylesheet_tag }}
+          <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+        {% endunless %}
+        {%- if section.settings.enable_filtering or section.settings.enable_sorting or section.settings.filter_type == 'suta' -%}
           <aside
-            aria-labelledby="verticalTitle"
+            aria-label="Filter and sort products"
             class="facets-wrapper{% unless section.settings.enable_filtering %} facets-wrapper--no-filters{% endunless %}{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
             id="main-collection-filters"
             data-id="{{ section.id }}"
           >
+            {% if section.settings.filter_type == 'suta' %}
+              {% render 'collection-filters', collection: collection, section: section %}
+            {% else %}
             {% render 'facets',
               results: collection,
               enable_filtering: section.settings.enable_filtering,
@@ -118,16 +135,22 @@
               filter_type: section.settings.filter_type,
               paginate: paginate
             %}
+            {% endif %}
           </aside>
         {%- endif -%}
 
         <div
           class="product-grid-container{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
           id="ProductGridContainer"
+          data-next-page="{{ paginate.next.url }}"
+          data-page-size="{{ section.settings.products_per_page }}"
           {% if settings.animations_reveal_on_scroll %}
             data-cascade
           {% endif %}
         >
+          {%- if section.settings.filter_type == 'suta' and section.settings.enable_filtering -%}
+            {% render 'collection-selected-filters', collection: collection %}
+          {%- endif -%}
           {%- if collection.products.size == 0 -%}
             <div class="collection collection--empty page-width" id="product-grid" data-id="{{ section.id }}">
               <div class="loading-overlay gradient"></div>
@@ -163,6 +186,7 @@
                     {%- assign lazy_load = true -%}
                   {%- endif -%}
                   <li
+                    data-discount="{% if product.compare_at_price > product.price %}{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price }}{% else %}0{% endif %}"
                     class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                     {% if settings.animations_reveal_on_scroll %}
                       data-cascade
@@ -187,7 +211,14 @@
                 {%- endfor -%}
               </ul>
 
-              {%- if paginate.pages > 1 -%}
+              {%- if section.settings.auto_load_products -%}
+                <collection-load-more data-section="{{ section.id }}">
+                  {%- if paginate.next -%}
+                    <a href="{{ paginate.next.url }}" class="button button--secondary">Load more products</a>
+                  {%- endif -%}
+                  <p role="status" aria-live="polite"></p>
+                </collection-load-more>
+              {%- elsif paginate.pages > 1 -%}
                 {% render 'pagination', paginate: paginate, anchor: '' %}
               {%- endif -%}
             </div>
@@ -206,6 +237,19 @@
   "name": "t:sections.main-collection-product-grid.name",
   "class": "section",
   "settings": [
+    {
+      "type": "font_picker",
+      "id": "card_label_font",
+      "label": "Product price and type font",
+      "default": "jost_n4"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_load_products",
+      "default": true,
+      "label": "Automatically load more products",
+      "info": "Load the next batch as customers scroll. Turn off to use page numbers."
+    },
     {
       "type": "range",
       "id": "products_per_page",
@@ -365,6 +409,7 @@
       "type": "select",
       "id": "filter_type",
       "options": [
+        {"value": "suta", "label": "Sidebar with mobile panels"},
         {
           "value": "horizontal",
           "label": "t:sections.main-collection-product-grid.settings.filter_type.options__1.label"
