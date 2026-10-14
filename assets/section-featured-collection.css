@@ -545,3 +545,79 @@
     transition: none !important;
   }
 }
+
+/* Focused quick view: a desktop thumbnail gallery and compact mobile sheet. */
+.featured-quick-view .product { align-items: start; }
+.featured-quick-view [id^='GalleryViewer-'] { position: relative; min-width: 0; }
+.featured-quick-view .product__column-sticky { position: static; }
+.featured-quick-view .product-form__buttons { display: block; }
+.featured-quick-view .product-form__submit { width: 100%; }
+.featured-quick-view .product__info-container .tasaa-product-information { margin-top: 10px; }
+@media (min-width: 700px) {
+  .featured-quick-view .product-gallery-navigation:has(.thumbnail-slider) { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 12px; align-items: start; }
+  .featured-quick-view .product-gallery-navigation > [id^='GalleryViewer-'] { grid-column: 2; grid-row: 1; }
+  .featured-quick-view .product-gallery-navigation > .thumbnail-slider { display: block; grid-column: 1; grid-row: 1; margin: 0; min-width: 0; }
+  .featured-quick-view .thumbnail-slider .thumbnail-list.slider { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 2px; max-height: min(450px, 65dvh); overflow: auto; scroll-snap-type: y proximity; }
+  .featured-quick-view .thumbnail-slider .thumbnail-list .thumbnail-list__item.slider__slide { width: 100%; flex: 0 0 auto; }
+  .featured-quick-view .thumbnail-slider > .slider-button { display: none !important; }
+  .featured-quick-view .thumbnail-list::after { display: none; }
+  .featured-quick-view .product__media-list .product-media-container { max-height: 65dvh; }
+}
+@media (max-width: 699px) {
+  .featured-quick-view .quick-add-modal__content { max-height: 83dvh; }
+  .featured-quick-view .quick-add-modal__content-info { padding: 20px; }
+  .featured-quick-view .product-gallery-navigation { display: block; }
+  .featured-quick-view .product-gallery-navigation > .thumbnail-slider { display: none; }
+  .featured-quick-view .product-media-container { max-width: min(255px, calc((83dvh - 70px) * .75)); }
+  .featured-quick-view .product__media-wrapper { margin-bottom: 20px; }
+  .featured-quick-view [id^='GalleryViewer-'] > .slider-buttons { position: absolute; inset: 0 -10px; justify-content: space-between; pointer-events: none; }
+  .featured-quick-view [id^='GalleryViewer-'] > .slider-buttons .slider-button { pointer-events: auto; width: 30px; height: 44px; align-self: center; color: #333; }
+  .featured-quick-view [id^='GalleryViewer-'] .slider-counter { display: none; }
+  .featured-quick-view .product__info-container > * { margin-block: 6px; }
+  .featured-quick-view .product__title h2 { font-size: 18px; line-height: 1.4; letter-spacing: .18em; }
+  .featured-quick-view .product__short-description { display: none; }
+  .featured-quick-view__buy { order: initial; position: static; padding-bottom: 0; }
+  .featured-quick-view__buy .product-form { margin: 8px 0 0; }
+  .featured-quick-view .product__info-container .tasaa-product-information { margin-top: 4px; }
+}
+.featured-quick-view .featured-quick-view__buy .product-form { margin: 8px 0 0 !important; }
+.featured-quick-view .featured-quick-view__buy .product-form__submit { margin-bottom: 0; }
+@media (max-width: 699px) {
+  .featured-quick-view .product__info-container > .product__title-badges { order: -1; margin: 0 0 4px; }
+  .featured-quick-view .product__info-container > .product__title { margin: 4px 0; }
+  .featured-quick-view .product__info-container > .product__purchase-divider { margin: 10px 0; }
+  .featured-quick-view .product__info-container > .product__mrp-note { margin: 0 0 2px; }
+  .featured-quick-view .product__info-container > .featured-quick-view__buy { margin: 0; }
+  .featured-quick-view .product__info-container > .tasaa-product-information { margin: 8px 0 0; }
+}
+
+/* Reserve room for the purchase action and collapsed details on shorter phones. */
+@media (max-width: 699px) {
+  .featured-quick-view .quick-add-modal__content-info { padding: 12px 20px max(12px, env(safe-area-inset-bottom)); }
+  .featured-quick-view__header { padding-block: 12px; }
+  .featured-quick-view .product-media-container { max-width: min(220px, calc(max(130px, 83dvh - 370px) * .75)); }
+  .featured-quick-view .product__media-wrapper { margin-bottom: 10px; }
+  .featured-quick-view .product__info-container > * { margin-block: 4px; }
+  .featured-quick-view .product__info-container > .product__purchase-divider { margin: 6px 0; }
+  .featured-quick-view .product__info-container > .tasaa-product-information { margin: 6px 0 0; }
+  .featured-quick-view .featured-quick-view__buy .product-form { margin-top: 4px !important; }
+  .featured-quick-view .product__view-details { font-size: 13px; line-height: 1.5; }
+}
+
+.featured-quick-view .tasaa-product-information__item,
+.featured-quick-view .tasaa-product-information__item > summary,
+.featured-quick-view .tasaa-product-information__content {
+  background: #fdfbf8;
+}
+
+/* Give featured and similar-product photos a real product-page link. */
+.featured-collection .featured-card__photo-link {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+}
+.featured-collection .featured-card__photo-link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -3px;
+}

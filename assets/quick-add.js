@@ -68,26 +68,31 @@ if (!customElements.get('quick-add-modal')) {
         this.removeGalleryListSemantic(productElement);
         this.updateImageSizes(productElement);
         this.preventVariantURLSwitching(productElement);
+        this.simplifyQuickView(productElement);
         if (this.classList.contains('featured-quick-view')) this.prepareFeaturedView(productElement);
       }
 
+      simplifyQuickView(productElement) {
+        productElement.querySelectorAll(
+          '[data-product-addons], .product-form__quantity, delivery-estimate, .tasaa-similar-products, ' +
+          '.product__accordion, .product__description, .product-benefits, .tasaa-product-information__help'
+        ).forEach(element => element.remove());
+        productElement.querySelectorAll('.tasaa-product-information__item').forEach(element => {
+          if (!element.id.startsWith('ProductDetails-')) element.remove();
+          else element.removeAttribute('open');
+        });
+      }
+
       prepareFeaturedView(productElement) {
-        productElement.querySelector('media-gallery')?.classList.remove('product-gallery-navigation');
-        productElement.querySelectorAll('.shopify-payment-button, [data-addon-checkout], share-button').forEach((element) => element.remove());
+        const gallery = productElement.querySelector('media-gallery');
+        gallery?.classList.add('product-gallery-navigation');
+        productElement.querySelectorAll('.shopify-payment-button, [data-addon-checkout], share-button').forEach(element => element.remove());
         const viewer = productElement.querySelector('[id^="GalleryViewer-"]');
         viewer?.querySelector('.slider-buttons')?.classList.remove('quick-add-hidden', 'small-hide');
         viewer?.querySelector('.product__media-list')?.classList.add('slider--everywhere');
+        const thumbnails = productElement.querySelector('[id^="GalleryThumbnails-"]');
+        thumbnails?.classList.remove('quick-add-hidden', 'small-hide', 'medium-hide', 'large-up-hide');
         productElement.querySelector('product-form')?.parentElement.classList.add('featured-quick-view__buy');
-        const description = productElement.querySelector('.product__description');
-        if (description) {
-          const details = document.createElement('details');
-          details.className = 'featured-quick-view__details';
-          const summary = document.createElement('summary');
-          summary.textContent = this.dataset.detailsLabel;
-          description.before(details);
-          description.classList.remove('quick-add-hidden');
-          details.append(summary, description);
-        }
       }
 
       preventVariantURLSwitching(productElement) {

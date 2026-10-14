@@ -1,0 +1,13 @@
+.tasaa-breadcrumbs { padding: 13.6px 48px 8.8px; background: #fff; font-family: var(--breadcrumb-font, var(--font-body-family)); }
+.tasaa-breadcrumbs ol { display: flex; flex-wrap: wrap; align-items: center; row-gap: 4px; margin: 0; padding: 0; list-style: none; }
+.tasaa-breadcrumbs li { display: inline-flex; align-items: baseline; min-width: 0; max-width: 100%; font-size: 11px; font-weight: 400; line-height: 1.7; letter-spacing: 1.54px; text-transform: uppercase; }
+.tasaa-breadcrumbs li:not(:last-child)::after { content: ''; flex-shrink: 0; width: 4px; height: 4px; margin: 0 11px 1px 9px; border-top: 1px solid #3d2a2466; border-right: 1px solid #3d2a2466; transform: rotate(45deg); }
+.tasaa-breadcrumbs a { color: #3d2a2480; text-decoration: none; overflow-wrap: anywhere; }
+.tasaa-breadcrumbs a:hover { color: #3d2a24; text-decoration: underline; text-underline-offset: 3px; }
+.tasaa-breadcrumbs a:focus-visible { outline: 2px solid #3d2a24; outline-offset: 3px; }
+.tasaa-breadcrumbs [aria-current] { color: #3d2a24; overflow-wrap: anywhere; }
+@media (max-width: 749px) {
+  .tasaa-breadcrumbs { padding: 11.2px 20px 7.2px; }
+  .tasaa-breadcrumbs li { font-size: 10px; letter-spacing: 1.4px; }
+  .tasaa-breadcrumbs li:not(:last-child)::after { margin-right: 8.8px; margin-left: 6.4px; }
+}

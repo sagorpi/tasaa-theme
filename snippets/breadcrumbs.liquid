@@ -1,0 +1,30 @@
+{%- liquid
+  assign current_title = page_title
+  case request.page_type
+    when 'product'
+      assign current_title = product.title
+    when 'collection'
+      assign current_title = collection.title
+    when 'page'
+      assign current_title = page.title
+    when 'blog'
+      assign current_title = blog.title
+    when 'article'
+      assign current_title = article.title
+    when 'cart'
+      assign current_title = 'templates.cart.cart' | t
+    when 'search'
+      assign current_title = 'general.search.search' | t
+  endcase
+-%}
+<nav class="tasaa-breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="{{ routes.root_url }}">{{ 'general.breadcrumbs.home' | t }}</a></li>
+    {%- if request.page_type == 'product' and collection != blank -%}
+      <li><a href="{{ collection.url }}">{{ collection.title | escape }}</a></li>
+    {%- elsif request.page_type == 'article' -%}
+      <li><a href="{{ blog.url }}">{{ blog.title | escape }}</a></li>
+    {%- endif -%}
+    <li><span aria-current="page">{{ current_title | escape }}</span></li>
+  </ol>
+</nav>

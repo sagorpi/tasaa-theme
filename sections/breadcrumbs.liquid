@@ -1,0 +1,25 @@
+{%- liquid
+  assign show_breadcrumbs = false
+  case request.page_type
+    when 'product', 'collection', 'list-collections', 'page', 'blog', 'article', 'search', 'cart'
+      assign show_breadcrumbs = section.settings.enabled
+  endcase
+-%}
+{%- if show_breadcrumbs -%}
+  {{ 'component-breadcrumbs.css' | asset_url | stylesheet_tag }}
+  {%- style -%}
+    {{ section.settings.font | font_face: font_display: 'swap' }}
+    #shopify-section-{{ section.id }} { --breadcrumb-font: {{ section.settings.font.family }}, {{ section.settings.font.fallback_families }}; }
+  {%- endstyle -%}
+  {% render 'breadcrumbs' %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Breadcrumbs",
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Show breadcrumbs", "default": true },
+    { "type": "font_picker", "id": "font", "label": "Font", "default": "jost_n4" }
+  ]
+}
+{% endschema %}
