@@ -152,7 +152,7 @@
 :is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-reviews-preview__header { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 20px; }
 :is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-reviews-preview__heading { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: 0; }
 :is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-reviews-preview__summary { margin: 6px 0 0; font-size: 14px; }
-:is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-reviews-preview__write { background: #fff; border: 1px solid #d6d6d6; border-radius: 10px; padding: 10px 16px; color: #303030; }
+:is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-reviews-preview__write { margin-inline-start: auto; flex-shrink: 0; white-space: nowrap; background: #fac319; border: 1px solid #fac319; border-radius: 10px; padding: 10px 16px; color: #000; }
 :is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-review-gallery { display: grid; grid-template-columns: 1.6fr repeat(var(--review-gallery-columns, 2), minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 8px; height: 500px; width: 100%; margin-bottom: 24px; }
 :is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-review-gallery__tile { position: relative; padding: 0; border: 0; border-radius: 10px; overflow: hidden; background: #f4f4f4; min-width: 0; }
 :is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-review-gallery__tile:first-child { grid-row: span 2; }

@@ -16,9 +16,11 @@
     return el;
   };
   function mount(root) {
-    if (mounted.has(root)) return;
+    if (mounted.has(root) || root.closest('[data-sample-review-form]')) return;
     mounted.add(root);
     const photoLabel = root.hasAttribute('data-sample-reviews') ? 'Sample catalogue photo' : 'Customer photo';
+    const sampleForm = root.hasAttribute('data-sample-reviews') ? root.parentElement.querySelector('[data-sample-review-form]') : null;
+    const findWriteButton = () => (sampleForm || root).querySelector('[data-testid="write-review-button"], .jdgm-write-rev-link');
     root.querySelector('[data-sample-review-sort]')?.addEventListener('change', event => {
       const list = root.querySelector('.jdgm-review-list');
       const cards = [...list.children];
@@ -36,12 +38,6 @@
     let timer;
     const tabletGallery = matchMedia('(min-width: 750px)');
     const desktopGallery = matchMedia('(min-width: 990px)');
-    const expand = () => {
-      root.classList.add('tasaa-reviews--all');
-      back.hidden = false;
-      back.focus({ preventScroll: true });
-      root.scrollIntoView({ block: 'start' });
-    };
     const render = () => {
       const widget = root.querySelector('.jm-review-widget');
       const source = [...root.querySelectorAll('.jm-review-item')];
@@ -64,7 +60,8 @@
       const heading = text(widget, '.jm-review-widget-minimal-header__title') || 'Customer Reviews';
       const summary = [...widget.querySelectorAll('.jm-average-rating-display p')].map(el => el.textContent.trim()).filter(Boolean).join(' · ');
       const galleryLimit = desktopGallery.matches ? 9 : tabletGallery.matches ? 7 : 5;
-      const nextSignature = JSON.stringify({ reviews, photos, heading, summary, galleryLimit });
+      const canWrite = Boolean(findWriteButton());
+      const nextSignature = JSON.stringify({ reviews, photos, heading, summary, galleryLimit, canWrite });
       if (nextSignature === signature && preview?.isConnected) return;
       signature = nextSignature;
       preview?.remove();
@@ -75,8 +72,15 @@
       intro.append(make('h2', 'tasaa-reviews-preview__heading', heading));
       if (summary) intro.append(make('p', 'tasaa-reviews-preview__summary', summary.replace(/\s+/g, ' ')));
       header.append(intro);
-      const write = widget.querySelector('[data-testid="write-review-button"]');
-      if (write) header.append(button('Write a review', 'tasaa-reviews-preview__write', () => { expand(); write.click(); }));
+      if (canWrite) {
+        const write = button('Write a review', 'tasaa-reviews-preview__write', () => {
+          const nativeButton = findWriteButton();
+          if (!nativeButton) return;
+          // Judge.me opens its own modal; keep the highlights behind it intact.
+          nativeButton.click();
+        });
+        header.append(write);
+      }
       preview.append(header);
       if (photos.length) {
         const gallery = make('div', 'tasaa-review-gallery');
@@ -161,6 +165,10 @@
       clearTimeout(timer);
       timer = setTimeout(render, 100);
     }).observe(root, { childList: true, subtree: true, characterData: true });
+    if (sampleForm) new MutationObserver(() => {
+      clearTimeout(timer);
+      timer = setTimeout(render, 100);
+    }).observe(sampleForm, { childList: true, subtree: true });
     const resizeGallery = () => {
       if (root.isConnected) render();
       else {

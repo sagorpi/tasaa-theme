@@ -2,6 +2,9 @@
   {%- for block in section.blocks -%}
     {%- if section.settings.show_sample_reviews and shop.permanent_domain == 'tasaa-dev.myshopify.com' and product.handle == 'beet-and-turnip' and block.id contains 'judge_me_reviews_review_widget' -%}
       {% render 'sample-product-reviews', product: product %}
+      <div data-sample-review-form hidden>
+        {% render block %}
+      </div>
     {%- else -%}
       {% render block %}
     {%- endif -%}
