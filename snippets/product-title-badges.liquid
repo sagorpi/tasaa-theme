@@ -23,7 +23,10 @@
     endif
   endfor
 -%}
-{%- if type_label != blank or fabric_label != blank -%}
+{%- capture rating_badge -%}
+  {%- unless separate_rating > 0 -%}{% render 'product-rating', product: product %}{%- endunless -%}
+{%- endcapture -%}
+{%- if type_label != blank or fabric_label != blank or rating_badge != blank -%}
   <div class="product__title-badges">
     {%- if type_label != blank -%}
       <span class="product__title-badge product__title-badge--type">{{ type_label | escape }}</span>
@@ -31,5 +34,6 @@
     {%- if fabric_label != blank -%}
       <span class="product__title-badge product__title-badge--fabric">{{ fabric_label | escape }}</span>
     {%- endif -%}
+    {{ rating_badge }}
   </div>
 {%- endif -%}

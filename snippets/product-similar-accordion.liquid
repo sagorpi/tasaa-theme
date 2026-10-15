@@ -21,7 +21,7 @@
                   {%- assign discount_percent = item.compare_at_price | minus: item.price | times: 100.0 | divided_by: item.compare_at_price | round -%}
                   <span class="tasaa-similar-products__discount">{{ discount_percent }}% OFF</span>
                 {%- endif -%}
-                {% render 'card-product', card_product: item, media_aspect_ratio: 'portrait', featured_card: true, show_secondary_image: true, skip_styles: true, section_id: track_id %}
+                {% render 'card-product', card_product: item, media_aspect_ratio: 'portrait', featured_card: true, show_rating: true, show_secondary_image: true, skip_styles: true, section_id: track_id %}
               </li>
             {%- endunless -%}
           {%- endfor -%}

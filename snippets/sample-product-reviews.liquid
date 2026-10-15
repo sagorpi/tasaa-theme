@@ -1,0 +1,55 @@
+{% comment %}Development samples only. These are never submitted to Judge.me.{% endcomment %}
+<div id="tasaa-sample-reviews" data-sample-reviews>
+  <p class="tasaa-sample-reviews-notice">Sample reviews for design testing — catalogue photos, not customer feedback. Turn off “Show sample reviews” in this Apps section to restore genuine reviews.</p>
+  <div class="jm-review-widget">
+    <div class="jm-review-widget__header">
+      <h2 class="jm-review-widget-minimal-header__title">Customer Reviews — Samples</h2>
+      <div class="jm-average-rating-display"><p>3.0</p><p>20 sample reviews</p></div>
+    </div>
+    <label class="tasaa-sample-reviews-sort">
+      Sort sample reviews
+      <select data-sample-review-sort>
+        <option value="recent">Most recent</option>
+        <option value="highest">Highest rating</option>
+        <option value="lowest">Lowest rating</option>
+      </select>
+    </label>
+    <div class="jdgm-review-list">
+      {%- for number in (1..20) -%}
+        {%- liquid
+          assign rating_offset = forloop.index0 | modulo: 5
+          assign sample_rating = 5 | minus: rating_offset
+          assign age = forloop.index0 | times: 86400
+          assign sample_date = 'now' | date: '%s' | minus: age | date: '%d %b %Y'
+          assign sample_image = product.featured_image
+          if product.images.size > 0
+            assign image_index = forloop.index0 | modulo: product.images.size
+            assign sample_image = product.images[image_index]
+          endif
+        -%}
+        <article class="jm-review-item" data-sample-order="{{ number }}" data-sample-rating="{{ sample_rating }}">
+          <div class="jm-star-rating" role="img" aria-label="{{ sample_rating }} out of 5 stars">{{ sample_rating }} <span aria-hidden="true">★</span></div>
+          {% unless number == 7 or number == 14 %}<h3 class="jm-review-content__title">Sample review {{ number }}</h3>{% endunless %}
+          <div class="jm-review-content__body">
+            {%- case rating_offset -%}
+              {%- when 0 -%}<p>Sample review — a short comment to check the compact card layout.</p>
+              {%- when 1 -%}<p>Sample review — this medium-length text checks how a few lines wrap on a phone and how much space remains above the reviewer name.</p>
+              {%- when 2 -%}<p>Sample review — this longer comment is for testing text truncation and the expanded review view. Swipe through the cards, open the full list, and compare spacing on mobile, tablet and desktop. The attached catalogue image is a sample photo. This entry is fabricated for design testing and does not describe a real customer experience.</p>
+              {%- when 3 -%}<p>Sample review — first paragraph for layout testing.</p><p>Second paragraph checks spacing in the full review list.</p>
+              {%- else -%}<p>Sample review — open the photo gallery and check the next/previous controls and image counter.</p>
+            {%- endcase -%}
+          </div>
+          <div class="jm-reviewer-info__details">
+            <div class="jm-cluster"><span class="jm-reviewer-info__name">Sample Reviewer {{ number }}</span></div>
+            <div class="jm-cluster"><span class="jm-text">{{ sample_date }}</span></div>
+          </div>
+          {%- if sample_image -%}
+            <div class="jm-media-thumbnail-list__thumbnail">
+              {{ sample_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: 'Sample catalogue photo — not a customer photo' }}
+            </div>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>

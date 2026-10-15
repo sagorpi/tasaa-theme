@@ -1,0 +1,19 @@
+{% comment %}Shared review summary. No synthetic ratings or counts for unrated products.{% endcomment %}
+{%- liquid
+  assign review_rating = product.metafields.reviews.rating.value
+  assign review_count = product.metafields.reviews.rating_count.value | default: 0 | plus: 0
+  assign rating_max = review_rating.scale_max | default: 5 | plus: 0
+  assign score = review_rating.rating | plus: 0
+  assign precision = 2
+  if card
+    assign precision = 1
+  endif
+-%}
+{%- if score > 0 and rating_max > 0 and review_count > 0 -%}
+  {%- assign score = score | times: 5.0 | divided_by: rating_max | at_most: 5 | round: precision -%}
+  <span class="tasaa-rating{% if card %} tasaa-rating--card{% endif %}" role="img" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: score, rating_max: 5 | escape }}, {{ review_count }} {{ 'accessibility.total_reviews' | t | escape }}">
+    <span aria-hidden="true">{{ score }}</span>
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="13" height="13"><path fill="currentColor" d="m12 1.5 3.25 6.59 7.27 1.06-5.26 5.12 1.24 7.24L12 18.09l-6.5 3.42 1.24-7.24L1.48 9.15l7.27-1.06Z"/></svg>
+    <span class="tasaa-rating__count" aria-hidden="true">{% if card %}({% endif %}{{ review_count }}{% if card %}){% endif %}</span>
+  </span>
+{%- endif -%}

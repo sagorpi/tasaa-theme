@@ -1,6 +1,10 @@
 <div class="{% if section.settings.include_margins %}page-width{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
   {%- for block in section.blocks -%}
-    {% render block %}
+    {%- if section.settings.show_sample_reviews and shop.permanent_domain == 'tasaa-dev.myshopify.com' and product.handle == 'beet-and-turnip' and block.id contains 'judge_me_reviews_review_widget' -%}
+      {% render 'sample-product-reviews', product: product %}
+    {%- else -%}
+      {% render block %}
+    {%- endif -%}
   {%- endfor -%}
 </div>
 
@@ -15,6 +19,13 @@
       "id": "include_margins",
       "default": true,
       "label": "t:sections.apps.settings.include_margins.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sample_reviews",
+      "default": false,
+      "label": "Show sample reviews",
+      "info": "Shows 20 labelled samples only on Beet And Turnip in Tasaa Dev. Turn off to restore genuine Judge.me reviews."
     }
   ],
   "blocks": [

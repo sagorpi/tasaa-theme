@@ -1597,6 +1597,10 @@ a.product__text {
   margin-top: -8px;
   margin-bottom: 16px;
 }
+.tasaa-product-page .product__title-badges > .tasaa-rating {
+  margin-inline-start: auto;
+}
+
 .product__title-badge {
   max-width: 100%;
   overflow-wrap: anywhere;
