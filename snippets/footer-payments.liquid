@@ -1,0 +1,36 @@
+{% comment %}Footer payment badges. Accepts section. Custom art replaces the generated badges.{% endcomment %}
+{%- if section.settings.payment_enable -%}
+  {%- liquid
+    assign payment_types = shop.enabled_payment_types
+    if section.settings.payment_types != blank
+      assign payment_types = section.settings.payment_types | remove: ' ' | split: ',' | uniq
+    endif
+  -%}
+  {%- if payment_types.size > 0 or section.settings.show_upi or section.settings.payment_image != blank -%}
+    <div class="footer__payment">
+      {%- if section.settings.payment_heading != blank -%}
+        <h2 class="footer-block__heading">{{ section.settings.payment_heading | escape }}</h2>
+      {%- endif -%}
+      <span class="visually-hidden">{{ 'sections.footer.payment' | t }}</span>
+      {%- if section.settings.payment_image != blank -%}
+        {%- assign payment_alt = section.settings.payment_image.alt | default: section.settings.payment_heading -%}
+        {{ section.settings.payment_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '200, 400, 600', sizes: '(min-width: 990px) 240px, 100vw', alt: payment_alt, class: 'footer__payment-image' }}
+      {%- else -%}
+        <ul class="list list-payment" role="list">
+          {%- for type in payment_types -%}
+            {%- if type == 'upi' -%}{%- continue -%}{%- endif -%}
+            <li class="list-payment__item">
+              {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+            </li>
+          {%- endfor -%}
+          {%- if section.settings.show_upi -%}
+            <li class="list-payment__item">
+              <span class="visually-hidden">UPI</span>
+              {{ 'icon-upi.svg' | inline_asset_content }}
+            </li>
+          {%- endif -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+{%- endif -%}

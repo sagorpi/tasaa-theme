@@ -1,4 +1,8 @@
 {
+  "footer_editorial": {
+    "shop_all": "Shop all",
+    "collections": "Collections"
+  },
   "general": {
     "breadcrumbs": { "home": "Home" },
     "password_page": {

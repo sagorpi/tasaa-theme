@@ -2,6 +2,234 @@
   border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
 }
 
+/* About spans two tracks, followed by three menus and a separate extras column. */
+.footer--editorial {
+  color: var(--footer-text-color, rgb(var(--color-foreground)));
+  font-size: 1.3rem;
+  line-height: 1.65;
+  letter-spacing: normal;
+}
+
+.footer--editorial .footer__editorial-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 3.2rem;
+}
+
+.footer--editorial .footer-block {
+  min-width: 0;
+  margin: 0;
+  max-width: none;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.footer--editorial .footer-block__heading {
+  margin: 0 0 1.6rem;
+  color: var(--footer-heading-color, var(--footer-text-color, rgb(var(--color-foreground))));
+  font-family: var(--font-body-family);
+  font-style: var(--font-body-style);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.09rem;
+  text-transform: uppercase;
+}
+
+.footer--editorial .footer-block__details-content {
+  margin: 0;
+}
+
+.footer--editorial .footer-block__details-content > li {
+  display: block;
+  margin: 0;
+}
+
+.footer--editorial .footer-block__details-content .list-menu__item--link {
+  display: inline-block;
+  padding: 0.5rem 0;
+  font-size: inherit;
+  line-height: 1.5;
+}
+
+.footer--editorial a,
+.footer--editorial .footer-block__details-content .list-menu__item--link {
+  color: var(--footer-link-color, var(--footer-text-color, rgb(var(--color-foreground))));
+}
+
+.footer--editorial a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+}
+
+.footer--editorial .footer__list-social.list-social {
+  justify-content: flex-start;
+  gap: 0.8rem;
+  margin-top: 2rem;
+}
+
+.footer--editorial .list-social__link {
+  width: 4.4rem;
+  height: 4.4rem;
+  padding: 1.1rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
+.footer--editorial .footer__payment,
+.footer--editorial .footer-block__newsletter {
+  margin-top: 2.8rem;
+  text-align: left;
+}
+
+.footer--editorial .footer-block--extras > :first-child {
+  margin-top: 0;
+}
+
+.footer--editorial .list-payment {
+  justify-content: flex-start;
+  gap: 0.6rem;
+  padding: 0;
+}
+
+.footer--editorial .list-payment__item {
+  padding: 0;
+}
+
+.footer--editorial .list-payment__item svg {
+  display: block;
+  width: auto;
+  height: 2.4rem;
+}
+
+.footer--editorial .footer__payment-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.footer--editorial .footer__newsletter,
+.footer--editorial .newsletter-form__field-wrapper {
+  max-width: none;
+  margin: 0;
+}
+
+.footer--editorial .footer__newsletter .field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.footer--editorial .footer__newsletter .field::before,
+.footer--editorial .footer__newsletter .field::after {
+  content: none;
+}
+
+.footer--editorial .footer__newsletter .field__input {
+  width: 100%;
+  min-width: 0;
+  min-height: 4.4rem;
+  margin: 0;
+  padding: 1.2rem;
+  border: 1px solid currentColor;
+  border-radius: 0;
+  background: transparent;
+  color: var(--footer-text-color, rgb(var(--color-foreground)));
+  font-size: 1.3rem;
+}
+
+.footer--editorial .footer__newsletter .field__input::placeholder {
+  opacity: 1;
+  color: inherit;
+}
+
+.footer--editorial .footer__newsletter .field__label {
+  /* Keep an accessible label while using a compact, non-floating input. */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.footer--editorial .footer__newsletter .newsletter-form__button,
+.footer--editorial .footer__newsletter .newsletter-form__button:not(:focus-visible):not(.focused) {
+  position: static;
+  width: 100%;
+  min-height: 4.4rem;
+  height: auto;
+  padding: 1rem;
+  background: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
+  font: inherit;
+  font-size: 1.1rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+}
+
+.footer--editorial .newsletter-form__message {
+  color: var(--footer-text-color, rgb(var(--color-foreground)));
+  font-size: 1.3rem;
+}
+
+.footer--editorial .footer__follow-on-shop {
+  margin-top: 2.4rem;
+}
+
+.footer--editorial .footer__localization h2,
+.footer--editorial .localization-form__select {
+  color: var(--footer-text-color, rgb(var(--color-foreground)));
+}
+
+@media screen and (max-width: 749px) {
+  .footer--editorial .footer__newsletter .field__input {
+    font-size: 1.6rem;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .footer--editorial .footer__editorial-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 3.2rem 2.4rem;
+  }
+
+  .footer--editorial .footer-block--wide {
+    grid-column: 1 / -1;
+  }
+
+  .footer--editorial .footer-block--extras {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: 36rem;
+  }
+}
+
+@media screen and (min-width: 1100px) {
+  .footer--editorial .footer__editorial-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    column-gap: 3.2rem;
+  }
+
+  .footer--editorial .footer-block--wide {
+    grid-column: span 2;
+    padding-right: 3.2rem;
+  }
+
+  .footer--editorial .footer__editorial-grid--with-extras {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(20rem, 1.3fr);
+    column-gap: 2.4rem;
+  }
+
+  .footer--editorial .footer-block--extras {
+    grid-column: auto;
+    max-width: none;
+  }
+}
+
 .footer:not(.color-scheme-1) {
   border-top: none;
 }

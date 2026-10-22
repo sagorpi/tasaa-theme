@@ -13,35 +13,78 @@
   "sections": {
     "footer": {
       "type": "footer",
+      "blocks": {
+        "about_us": {
+          "type": "text",
+          "settings": {
+            "heading": "About us",
+            "subtext": "<p>Tasaa brings together sarees, thoughtful details and a love for everyday elegance. Discover pieces to make your own, from quiet everyday moments to celebrations worth remembering.</p>",
+            "wide": true,
+            "show_social": true
+          }
+        },
+        "links_1": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Shop",
+            "menu": "main-menu",
+            "default_links": "shop"
+          }
+        },
+        "links_2": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Customer service",
+            "menu": "",
+            "default_links": "customer"
+          }
+        },
+        "links_3": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Useful links",
+            "menu": "footer",
+            "default_links": "policies"
+          }
+        }
+      },
+      "block_order": [
+        "about_us",
+        "links_1",
+        "links_2",
+        "links_3"
+      ],
       "settings": {
+        "footer_font": "jost_n4",
         "color_scheme": "scheme-1",
+        "heading_color": "",
+        "text_color": "",
+        "link_color": "",
         "newsletter_enable": true,
-        "newsletter_heading": "Subscribe to our emails",
+        "newsletter_heading": "Newsletter",
         "enable_follow_on_shop": true,
         "show_social": true,
-        "enable_country_selector": true,
+        "enable_country_selector": false,
         "enable_language_selector": true,
         "payment_enable": true,
+        "payment_heading": "We accept",
+        "payment_types": "visa, master, american_express, rupay",
+        "show_upi": true,
         "show_policy": true,
-        "margin_top": 0,
+        "margin_top": 24,
         "padding_top": 36,
         "padding_bottom": 36
       }
     },
     "mobile_bottom_menu": {
       "type": "mobile-bottom-menu",
-      "settings": {
-        "enabled": true,
-        "new_arrivals": "new-arrivals",
-        "floating_cart": true,
-        "floating_style": "icon_text"
-      },
       "blocks": {
         "category_1": {
           "type": "category",
           "settings": {
             "label": "Saree",
             "collection": "hydrogen",
+            "link": "",
             "sample_image": "https://suta.in/cdn/shop/files/saree_cd785a89-2958-4b1b-b361-c305def0c55c.jpg?width=480",
             "image_has_label": true
           }
@@ -51,6 +94,7 @@
           "settings": {
             "label": "Blouse",
             "collection": "blouse",
+            "link": "",
             "sample_image": "https://suta.in/cdn/shop/files/Blouse_4750a664-486a-4d5c-9b06-a36c4d98fd22.jpg?width=480",
             "image_has_label": true
           }
@@ -60,6 +104,7 @@
           "settings": {
             "label": "Kurta",
             "collection": "saree-copy-copy",
+            "link": "",
             "sample_image": "https://suta.in/cdn/shop/files/Women_Kurta_74d76def-6899-4c7c-8563-2fe451b68b77.jpg?width=480",
             "image_has_label": true
           }
@@ -69,6 +114,7 @@
           "settings": {
             "label": "Dresses",
             "collection": "saree-copy-copy-1",
+            "link": "",
             "sample_image": "https://suta.in/cdn/shop/files/Dress_66f97d5f-49be-4718-9de6-56bba1f692be.jpg?width=480",
             "image_has_label": true
           }
@@ -79,7 +125,16 @@
         "category_2",
         "category_3",
         "category_4"
-      ]
+      ],
+      "settings": {
+        "enabled": true,
+        "new_arrivals": "new-arrivals",
+        "background": "#fffaf6",
+        "foreground": "#4e3830",
+        "accent": "#c4a06a",
+        "floating_cart": true,
+        "floating_style": "icon_text"
+      }
     }
   },
   "order": [

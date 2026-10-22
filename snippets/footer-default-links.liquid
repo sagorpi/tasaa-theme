@@ -1,0 +1,31 @@
+{% comment %}Optional starter links. A selected navigation menu always takes precedence.{% endcomment %}
+{%- unless group == blank or group == 'none' -%}
+  <ul class="footer-block__details-content list-unstyled">
+    {%- case group -%}
+      {%- when 'shop' -%}
+        <li><a class="link link--text list-menu__item list-menu__item--link" href="{{ routes.all_products_collection_url }}">{{ 'footer_editorial.shop_all' | t }}</a></li>
+        <li><a class="link link--text list-menu__item list-menu__item--link" href="{{ routes.collections_url }}">{{ 'footer_editorial.collections' | t }}</a></li>
+        <li><a class="link link--text list-menu__item list-menu__item--link" href="{{ routes.search_url }}">{{ 'general.search.search' | t }}</a></li>
+      {%- when 'customer' -%}
+        {%- if shop.customer_accounts_enabled -%}
+          <li><a class="link link--text list-menu__item list-menu__item--link" href="{{ routes.account_url }}">{{ 'customer.account.title' | t }}</a></li>
+        {%- endif -%}
+        {%- if pages['contact'] != blank -%}
+          <li><a class="link link--text list-menu__item list-menu__item--link" href="{{ pages['contact'].url }}">{{ pages['contact'].title | escape }}</a></li>
+        {%- endif -%}
+        {%- if shop.shipping_policy != blank -%}
+          <li><a class="link link--text list-menu__item list-menu__item--link" href="{{ shop.shipping_policy.url }}">{{ shop.shipping_policy.title | escape }}</a></li>
+        {%- endif -%}
+        {%- if shop.refund_policy != blank -%}
+          <li><a class="link link--text list-menu__item list-menu__item--link" href="{{ shop.refund_policy.url }}">{{ shop.refund_policy.title | escape }}</a></li>
+        {%- endif -%}
+        <li><a class="link link--text list-menu__item list-menu__item--link" href="{{ routes.search_url }}">{{ 'general.search.search' | t }}</a></li>
+      {%- when 'policies' -%}
+        {%- for policy in shop.policies -%}
+          {%- if policy != blank -%}
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="{{ policy.url }}">{{ policy.title | escape }}</a></li>
+          {%- endif -%}
+        {%- endfor -%}
+    {%- endcase -%}
+  </ul>
+{%- endunless -%}
