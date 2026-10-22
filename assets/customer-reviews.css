@@ -268,6 +268,7 @@
 .tasaa-reviews-modal__panel { position: relative; box-sizing: border-box; max-width: 860px; padding: 24px; margin: 0 auto; background: #fff; }
 .tasaa-reviews-modal button, .tasaa-reviews-modal select { font: inherit; cursor: pointer; }
 .tasaa-reviews-modal__close { position: absolute; top: -46px; right: -4px; width: 40px; height: 44px; padding: 0; border: 0; background: transparent; color: #fff; font-size: 36px !important; line-height: 1 !important; }
+.tasaa-reviews-modal__heading, .tasaa-reviews-modal__back-mobile, .tasaa-reviews-modal__sort-buttons { display: none; }
 .tasaa-reviews-modal__toolbar { border-top: 1px solid #e5e5e5; padding: 16px 0; }
 .tasaa-reviews-modal__sort { width: auto; max-width: 100%; padding: 0 8px 0 0; border: 0; border-radius: 0; background: #fff; color: #111; font-size: 14px !important; }
 .tasaa-reviews-modal__review { padding: 16px 0; border-top: 1px solid #e5e5e5; overflow-wrap: anywhere; }
@@ -298,9 +299,22 @@
 .tasaa-reviews-modal__notice { margin: 0 0 16px; padding: 10px 12px; color: #58481d; background: #fff9e6; font-size: 13px; }
 .tasaa-reviews-modal :focus-visible { outline: 2px solid #999; outline-offset: 4px; }
 @media (max-width: 749px) {
-  .tasaa-reviews-modal { padding: max(48px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom)); font-size: 14px; }
-  .tasaa-reviews-modal__panel { padding: 20px 16px; }
-  .tasaa-reviews-modal__close { width: 44px; height: 44px; right: -4px; }
+  .tasaa-reviews-modal { padding: 0; font-size: 14px; background: #fff; overflow: hidden; }
+  .tasaa-reviews-modal__panel { display: flex; flex-direction: column; width: 100%; height: 100%; max-width: none; padding: 0; overflow: hidden; }
+  .tasaa-reviews-modal__header { display: flex; align-items: center; gap: 8px; flex-shrink: 0; padding: env(safe-area-inset-top) 12px 0; min-height: 56px; box-sizing: content-box; background: #fff; border-bottom: 1px solid #eee; }
+  .tasaa-reviews-modal__heading { display: block; margin: 0; color: #222; font: 600 18px/1.4 var(--font-body-family); letter-spacing: 0; }
+  .tasaa-reviews-modal__close { position: static; flex-shrink: 0; width: 44px; height: 44px; color: #222; font-size: 28px !important; -webkit-tap-highlight-color: transparent; }
+  .tasaa-reviews-modal__back-mobile { display: inline; }
+  .tasaa-reviews-modal__close-desktop { display: none; }
+  .tasaa-reviews-modal--pointer-open .tasaa-reviews-modal__close:focus { outline: none; box-shadow: none; }
+  .tasaa-reviews-modal__content { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding: 0 16px max(24px, env(safe-area-inset-bottom)); }
+  .tasaa-reviews-modal__notice { margin-top: 16px; }
+  .tasaa-reviews-modal__sort { display: none; }
+  .tasaa-reviews-modal__sort-buttons { display: flex; align-items: center; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+  .tasaa-reviews-modal__sort-buttons::-webkit-scrollbar { display: none; }
+  .tasaa-reviews-modal__sort-button { flex-shrink: 0; border: 1px solid #ddd; border-radius: 22px; padding: 8px 14px; min-height: 40px; background: #fff; color: #333; font-size: 13px !important; font-weight: 600 !important; line-height: 1.4; white-space: nowrap; }
+  .tasaa-reviews-modal__sort-button[aria-pressed="true"] { background: #fff9df; border-color: #d7aa12; color: #222; }
+  .tasaa-reviews-modal__sort-button:disabled { opacity: .6; cursor: wait; }
   .tasaa-reviews-modal__title { font-size: 14px; }
   .tasaa-reviews-modal__body { font-size: 14px; }
   .tasaa-reviews-modal__date { font-size: 11px; white-space: nowrap; }
@@ -309,7 +323,7 @@
   .tasaa-reviews-modal__photos button { width: 88px; height: 88px; }
   .tasaa-reviews-modal__more { min-height: 44px; }
   .tasaa-reviews-modal__sort { min-height: 44px; }
-  .tasaa-reviews-modal__toolbar { padding: 6px 0; }
+  .tasaa-reviews-modal__toolbar { flex-shrink: 0; border-top: 0; border-bottom: 1px solid #e5e5e5; padding: 10px 16px; background: #fff; }
   .tasaa-reviews-modal__read-more { min-height: 44px; }
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -317,4 +331,10 @@
   .tasaa-reviews-modal[open] .tasaa-reviews-modal__panel { animation: tasaa-reviews-slide-in 180ms ease-out; }
   @keyframes tasaa-reviews-fade-in { from { opacity: 0; } to { opacity: 1; } }
   @keyframes tasaa-reviews-slide-in { from { transform: translateY(12px); } to { transform: translateY(0); } }
+}
+
+/* A touch-opened dialog must not draw a keyboard ring around its auto-focused back button. */
+@media (max-width: 749px), (pointer: coarse) {
+  .tasaa-review-lightbox__close { -webkit-tap-highlight-color: transparent; }
+  .tasaa-review-lightbox--pointer-open .tasaa-review-lightbox__close:focus { outline: none; box-shadow: none; }
 }

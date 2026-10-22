@@ -88,7 +88,7 @@
         gallery.dataset.count = visiblePhotos;
         gallery.style.setProperty('--review-gallery-columns', Math.max(1, Math.ceil((visiblePhotos - 1) / 2)));
         photos.slice(0, visiblePhotos).forEach((photo, index) => {
-          const tile = button('', 'tasaa-review-gallery__tile', () => openGallery(photos, index, tile, photoLabel));
+          const tile = button('', 'tasaa-review-gallery__tile', event => openGallery(photos, index, tile, photoLabel, undefined, event));
           tile.setAttribute('aria-label', `View ${photoLabel.toLowerCase()} ${index + 1} of ${photos.length}`);
           const img = make('img', '');
           img.src = photo.thumb;
@@ -142,8 +142,8 @@
         controls.children[1].setAttribute('aria-label', 'Next reviews');
         preview.append(controls);
       }
-      const show = button('Show all reviews', 'tasaa-reviews-show-all', () => {
-        openReviewModal(root, show, photoLabel);
+      const show = button('Show all reviews', 'tasaa-reviews-show-all', event => {
+        openReviewModal(root, show, photoLabel, event);
       });
       show.setAttribute('aria-haspopup', 'dialog');
       const chevron = make('span', '', '›');
@@ -235,20 +235,30 @@
     });
   }
 
-  function openReviewModal(root, opener, photoLabel) {
+  function openReviewModal(root, opener, photoLabel, openingEvent) {
     if (document.querySelector('.tasaa-reviews-modal[open]')) return;
     const dialog = make('dialog', 'tasaa-reviews-modal');
     dialog.setAttribute('aria-label', root.hasAttribute('data-sample-reviews') ? 'Sample customer reviews' : 'Customer reviews');
     const panel = make('div', 'tasaa-reviews-modal__panel');
-    const close = button('×', 'tasaa-reviews-modal__close', () => dialog.close());
+    const header = make('header', 'tasaa-reviews-modal__header');
+    const close = button('', 'tasaa-reviews-modal__close', () => dialog.close());
+    close.append(make('span', 'tasaa-reviews-modal__close-desktop', '×'), make('span', 'tasaa-reviews-modal__back-mobile', '←'));
     close.setAttribute('aria-label', 'Close reviews');
     close.autofocus = true;
-    panel.append(close);
+    if (openingEvent?.detail > 0) {
+      dialog.classList.add('tasaa-reviews-modal--pointer-open');
+      close.addEventListener('blur', () => dialog.classList.remove('tasaa-reviews-modal--pointer-open'), { once: true });
+      dialog.addEventListener('keydown', () => dialog.classList.remove('tasaa-reviews-modal--pointer-open'), { once: true });
+    }
+    header.append(close, make('h2', 'tasaa-reviews-modal__heading', 'Ratings & Reviews'));
+    panel.append(header);
+    const content = make('div', 'tasaa-reviews-modal__content');
     if (root.hasAttribute('data-sample-reviews')) {
-      panel.append(make('p', 'tasaa-reviews-modal__notice', 'Sample reviews for design testing — catalogue photos, not customer feedback.'));
+      content.append(make('p', 'tasaa-reviews-modal__notice', 'Sample reviews for design testing — catalogue photos, not customer feedback.'));
     }
     const nativeSort = root.querySelector('[data-sample-review-sort], .jm-sort-filter__select');
     const sort = (readModalReviews(root).length > 1 || nextReviewPage(root)) ? nativeSort?.cloneNode(true) : null;
+    const sortButtons = [];
     if (sort) {
       sort.removeAttribute('id');
       sort.removeAttribute('data-sample-review-sort');
@@ -256,7 +266,22 @@
       sort.setAttribute('aria-label', 'Sort reviews');
       sort.value = nativeSort.value;
       const toolbar = make('div', 'tasaa-reviews-modal__toolbar');
-      toolbar.append(sort);
+      const choices = make('div', 'tasaa-reviews-modal__sort-buttons');
+      choices.setAttribute('role', 'group');
+      choices.setAttribute('aria-label', 'Sort and filter reviews');
+      [...sort.options].forEach(option => {
+        if (option.disabled || option.hidden) return;
+        const choice = button(option.textContent.trim(), 'tasaa-reviews-modal__sort-button', () => {
+          if (sort.disabled || sort.value === option.value) return;
+          sort.value = option.value;
+          sort.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+        choice.dataset.value = option.value;
+        choice.setAttribute('aria-pressed', String(option.value === sort.value));
+        choices.append(choice);
+        sortButtons.push(choice);
+      });
+      toolbar.append(sort, choices);
       panel.append(toolbar);
     }
     const list = make('div', 'tasaa-reviews-modal__list');
@@ -267,7 +292,8 @@
     spinner.setAttribute('role', 'status');
     spinner.setAttribute('aria-label', 'Loading reviews');
     spinner.hidden = true;
-    panel.append(list, status, more, spinner);
+    content.append(list, status, more, spinner);
+    panel.append(content);
     dialog.append(panel);
     const controller = new AbortController();
     const saved = modalReviewCache.get(root);
@@ -320,7 +346,7 @@
       if (review.photos.length) {
         const media = make('div', 'tasaa-reviews-modal__photos');
         review.photos.forEach((photo, index) => {
-          const tile = button('', '', () => openGallery(review.photos, index, tile, photoLabel, review));
+          const tile = button('', '', event => openGallery(review.photos, index, tile, photoLabel, review, event));
           tile.setAttribute('aria-label', `View ${photoLabel.toLowerCase()} ${index + 1} from ${review.name || 'review'}`);
           const img = make('img', '');
           img.src = photo.thumb;
@@ -346,6 +372,7 @@
       spinner.hidden = !value;
       if (value) status.textContent = '';
       if (sort) sort.disabled = value;
+      sortButtons.forEach(choice => { choice.disabled = value; });
       list.setAttribute('aria-busy', String(value));
     };
     const loadBatch = async () => {
@@ -366,6 +393,8 @@
       } finally { setBusy(false); }
     };
     sort?.addEventListener('change', async () => {
+      sortButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice.dataset.value === sort.value)));
+      content.scrollTop = 0;
       setBusy(true);
       try {
         await waitForReviewChange(root, () => {
@@ -398,11 +427,18 @@
     else showBatch();
   }
 
-  function openGallery(photos, start, opener, photoLabel, owner) {
+  function openGallery(photos, start, opener, photoLabel, owner, openingEvent) {
     const dialog = make('dialog', 'tasaa-review-lightbox');
     dialog.setAttribute('aria-label', `${photoLabel}s and review details`);
     const close = button('←', 'tasaa-review-lightbox__close', () => dialog.close());
     close.setAttribute('aria-label', 'Close photo gallery');
+    // Native dialogs focus their first button, including after a touchscreen tap.
+    // Suppress only that initial pointer focus; keyboard navigation keeps its ring.
+    if (openingEvent?.detail > 0) {
+      dialog.classList.add('tasaa-review-lightbox--pointer-open');
+      close.addEventListener('blur', () => dialog.classList.remove('tasaa-review-lightbox--pointer-open'), { once: true });
+      dialog.addEventListener('keydown', () => dialog.classList.remove('tasaa-review-lightbox--pointer-open'), { once: true });
+    }
     const stage = make('div', 'tasaa-review-lightbox__stage');
     const img = make('img', 'tasaa-review-lightbox__image');
     stage.append(img);
