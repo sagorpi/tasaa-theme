@@ -36,3 +36,16 @@
     --carousel-gap: 16px;
   }
 }
+
+/* Align product-page recommendations with the main product's content edges. */
+.related-products-section--product .related-products.featured-collection {
+  max-width: 1356px;
+  margin-inline: auto;
+  padding-inline: 48px;
+}
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .related-products-section--product .related-products.featured-collection { padding-inline: 24px; }
+}
+@media screen and (max-width: 749px) {
+  .related-products-section--product .related-products.featured-collection { padding-inline: 16px; }
+}

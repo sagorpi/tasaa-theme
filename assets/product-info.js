@@ -15,6 +15,18 @@ if (!customElements.get('product-info')) {
         super();
 
         this.quantityInput = this.querySelector('.quantity__input');
+
+        // Touch/pointer activation should not leave a keyboard ring on accordions.
+        const accordionSummary = '.tasaa-product-information__item > summary, .product__accordion > details > summary';
+        this.addEventListener('pointerdown', (event) => {
+          if (this.dataset.updateUrl !== 'true') return;
+          event.target.closest(accordionSummary)?.classList.add('product-accordion--pointer-focus');
+        });
+        const restoreAccordionFocus = (event) => {
+          event.target.closest(accordionSummary)?.classList.remove('product-accordion--pointer-focus');
+        };
+        this.addEventListener('keydown', restoreAccordionFocus);
+        this.addEventListener('focusout', restoreAccordionFocus);
       }
 
       connectedCallback() {

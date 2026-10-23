@@ -9,6 +9,19 @@
     return el;
   };
   const text = (el, selector) => el.querySelector(selector)?.textContent.trim() || '';
+  const reviewDateValue = value => {
+    // Judge.me's displayed Indian dates are day/month/year; avoid US date parsing.
+    const numeric = value?.trim().match(/^(\d{1,2})[/.](\d{1,2})[/.](\d{4})$/);
+    const timestamp = numeric
+      ? Date.UTC(Number(numeric[3]), Number(numeric[2]) - 1, Number(numeric[1]))
+      : Date.parse(value || '');
+    return Number.isFinite(timestamp) ? Math.floor(timestamp / 86400000) : -Infinity;
+  };
+  const carouselHighlights = reviews => [...reviews].sort((a, b) => {
+    const aDate = reviewDateValue(a.dateValue || a.date);
+    const bDate = reviewDateValue(b.dateValue || b.date);
+    return (aDate === bDate ? 0 : aDate > bDate ? -1 : 1) || b.score - a.score;
+  }).slice(0, 7);
   const button = (label, className, action) => {
     const el = make('button', className, label);
     el.type = 'button';
@@ -70,7 +83,18 @@
       const header = make('div', 'tasaa-reviews-preview__header');
       const intro = make('div', '');
       intro.append(make('h2', 'tasaa-reviews-preview__heading', heading));
-      if (summary) intro.append(make('p', 'tasaa-reviews-preview__summary', summary.replace(/\s+/g, ' ')));
+      if (summary) {
+        const summaryLine = make('p', 'tasaa-reviews-preview__summary');
+        const [average, ...counts] = summary.split(' · ');
+        summaryLine.append(make('span', 'tasaa-reviews-preview__average', average.replace(/\s+/g, ' ')));
+        if (/^\d+(?:[.,]\d+)?$/.test(average)) {
+          const star = make('span', 'tasaa-reviews-preview__summary-star', '★');
+          star.setAttribute('aria-hidden', 'true');
+          summaryLine.append(star, make('span', 'visually-hidden', ' out of 5 stars'));
+        }
+        if (counts.length) summaryLine.append(document.createTextNode(` · ${counts.join(' · ').replace(/\s+/g, ' ')}`));
+        intro.append(summaryLine);
+      }
       header.append(intro);
       if (canWrite) {
         const write = button('Write a review', 'tasaa-reviews-preview__write', () => {
@@ -107,7 +131,8 @@
       track.tabIndex = 0;
       track.setAttribute('role', 'region');
       track.setAttribute('aria-label', 'Customer reviews carousel');
-      reviews.forEach(review => {
+      const highlights = carouselHighlights(reviews);
+      highlights.forEach(review => {
         const card = make('article', 'tasaa-review-card');
         const top = make('div', 'tasaa-review-card__top');
         if (review.score) {
@@ -135,7 +160,7 @@
         if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); step(event.key === 'ArrowRight' ? 1 : -1); }
       });
       preview.append(track);
-      if (reviews.length > 1) {
+      if (highlights.length > 1) {
         const controls = make('div', 'tasaa-review-slider__controls');
         controls.append(button('←', '', () => step(-1)), button('→', '', () => step(1)));
         controls.children[0].setAttribute('aria-label', 'Previous reviews');
@@ -146,6 +171,9 @@
         openReviewModal(root, show, photoLabel, event);
       });
       show.setAttribute('aria-haspopup', 'dialog');
+      const restoreFocusRing = () => show.classList.remove('tasaa-reviews-show-all--pointer-return');
+      show.addEventListener('blur', restoreFocusRing);
+      show.addEventListener('keydown', restoreFocusRing);
       const chevron = make('span', '', '›');
       chevron.setAttribute('aria-hidden', 'true');
       show.append(chevron);
@@ -190,6 +218,7 @@
         body: paragraphs.length ? paragraphs.map(p => p.textContent.trim()).join('\n\n') : body?.textContent.trim() || '',
         name: text(el, '.jm-reviewer-info__name'),
         date: text(el, '.jm-reviewer-info__details > .jm-cluster:nth-child(2) > .jm-text'),
+        dateValue: el.querySelector('time[datetime]')?.getAttribute('datetime') || '',
         verified: text(el, '.jm-reviewer-info__verified-badge, .jm-verified-badge'),
         photos: [...el.querySelectorAll('.jm-media-thumbnail-list__thumbnail img')].flatMap(img => {
           try {
@@ -238,6 +267,9 @@
   function openReviewModal(root, opener, photoLabel, openingEvent) {
     if (document.querySelector('.tasaa-reviews-modal[open]')) return;
     const dialog = make('dialog', 'tasaa-reviews-modal');
+    let pointerReturn = openingEvent?.detail > 0;
+    dialog.addEventListener('pointerdown', () => { pointerReturn = true; });
+    dialog.addEventListener('keydown', () => { pointerReturn = false; });
     dialog.setAttribute('aria-label', root.hasAttribute('data-sample-reviews') ? 'Sample customer reviews' : 'Customer reviews');
     const panel = make('div', 'tasaa-reviews-modal__panel');
     const header = make('header', 'tasaa-reviews-modal__header');
@@ -417,6 +449,8 @@
       document.documentElement.style.overflow = previousOverflow;
       dialog.remove();
       const target = opener.isConnected ? opener : root.querySelector('.tasaa-reviews-show-all');
+      // Keep the return focus for accessibility, without a touch-induced ring.
+      target?.classList.toggle('tasaa-reviews-show-all--pointer-return', pointerReturn);
       target?.focus({ preventScroll: true });
     }, { once: true });
     document.body.append(dialog);

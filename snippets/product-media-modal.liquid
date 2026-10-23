@@ -9,14 +9,18 @@
   {% render 'product-media-modal' %}
 {% endcomment %}
 
-<product-modal id="ProductModal-{{ section.id }}" class="product-media-modal media-modal">
-  <div
+<product-modal id="ProductModal-{{ section.id }}" class="product-media-modal tasaa-product-lightbox">
+  <dialog
     class="product-media-modal__dialog color-{{ section.settings.color_scheme }} gradient"
     role="dialog"
     aria-label="{{ 'products.modal.label' | t }}"
     aria-modal="true"
     tabindex="-1"
   >
+    <div class="tasaa-product-lightbox__controls">
+    <button type="button" data-gallery-previous aria-label="{{ 'general.slider.previous_slide' | t }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg>
+    </button>
     <button
       id="ModalClose-{{ section.id }}"
       type="button"
@@ -25,6 +29,14 @@
     >
       {{ 'icon-close.svg' | inline_asset_content }}
     </button>
+    <button type="button" data-gallery-next aria-label="{{ 'general.slider.next_slide' | t }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg>
+    </button>
+    </div>
+    <button type="button" class="tasaa-product-lightbox__zoom" data-gallery-zoom aria-label="Zoom in" aria-pressed="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6M7 10h6"/><path class="zoom-plus" d="M10 7v6"/></svg>
+    </button>
+    <span class="visually-hidden" data-gallery-status role="status" aria-live="polite"></span>
 
     <div
       class="product-media-modal__content color-{{ section.settings.color_scheme }} gradient"
@@ -53,5 +65,5 @@
         -%}
       {%- endfor -%}
     </div>
-  </div>
+  </dialog>
 </product-modal>

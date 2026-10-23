@@ -11,13 +11,19 @@ if (!customElements.get('mobile-bottom-menu')) {
       this.cache = new Map();
       this.addEventListener('click', event => {
         const open = event.target.closest('[data-open]');
-        if (open) this.openPanel(open.dataset.open, open);
+        if (open) this.openPanel(open.dataset.open, open, event.detail > 0);
         if (event.target.closest('[data-close]')) this.closePanel();
         if (event.target === this.panel) {
           const rect = this.panel.getBoundingClientRect();
           if (event.clientY < rect.top || event.clientY > rect.bottom) this.closePanel();
         }
         if (event.target.closest('[data-floating-cart]')) this.addProduct();
+      }, opts);
+      // A native dialog focuses its first button even when opened by touch.
+      // Hide only that initial pointer focus ring; keyboard use restores it.
+      this.addEventListener('keydown', () => this.panel?.classList.remove('is-pointer-open'), opts);
+      this.addEventListener('focusout', event => {
+        if (event.target.matches('[data-close]')) this.panel?.classList.remove('is-pointer-open');
       }, opts);
       this.querySelectorAll('dialog').forEach(panel => panel.addEventListener('cancel', event => {
         event.preventDefault();
@@ -51,10 +57,11 @@ if (!customElements.get('mobile-bottom-menu')) {
       clearTimeout(this.searchTimer);
       clearTimeout(this.closeTimer);
     }
-    openPanel(name, opener) {
+    openPanel(name, opener, pointerOpened = false) {
       this.closePanel(true);
       this.opener = opener;
       this.panel = this.querySelector(`[data-panel="${name}"]`);
+      this.panel.classList.toggle('is-pointer-open', name === 'categories' && pointerOpened);
       this.previousOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
       this.panel.showModal();
