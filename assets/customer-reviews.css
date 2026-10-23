@@ -177,7 +177,7 @@
 :is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-review-card__verified { color: #808080; font-size: 12px; }
 :is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-review-slider__controls { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
 :is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-review-slider__controls button { background: #fff; border: 1px solid #ddd; border-radius: 50%; width: 36px; height: 36px; }
-:is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-reviews-show-all { display: flex; justify-content: center; align-items: center; gap: 12px; width: 100%; margin-top: 20px; padding: 14px 20px; border: 1px solid #d2d2d2; border-radius: 14px; background: #fff; color: #303030; font-weight: 600 !important; }
+:is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-reviews-show-all { display: flex; justify-content: center; align-items: center; gap: 12px; width: 100%; margin-top: 20px; padding: 10px 20px; border: 1px solid #d2d2d2; border-radius: 14px; background: #fff; color: #303030; font-weight: 600 !important; }
 :is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-reviews-show-all span { font-size: 25px; line-height: 1; font-weight: 400; }
 :is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-reviews-back { margin: 20px 0 0; border: 1px solid #ddd; border-radius: 10px; background: #fff; color: #333; padding: 10px 16px; }
 :is(#judgeme_product_reviews, #tasaa-sample-reviews) .tasaa-reviews-preview :focus-visible, .tasaa-review-lightbox :focus-visible { outline: 2px solid #333; outline-offset: 3px; }
