@@ -136,7 +136,6 @@
                   quick_add: section.settings.quick_add,
                   product_view_context: 'collection',
                   featured_card: true,
-                  collection_label: section.settings.collection.title,
                   show_collection_label: section.settings.show_collection_label
                 %}
               </li>
@@ -270,9 +269,9 @@
     {
       "type": "checkbox",
       "id": "show_collection_label",
-      "label": "Show collection label on images",
+      "label": "Show collection badges on images",
       "default": true,
-      "info": "Uses the product custom.collection_label metafield when set, otherwise the selected collection title."
+      "info": "Shows the title of an enabled collection the product belongs to. Set Show as product badge and Product badge priority on collections; lower numbers win. No enabled collection means no badge."
     },
     {
       "type": "select",

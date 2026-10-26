@@ -248,6 +248,34 @@ fill in **Default product note** and save. This global rich-text setting appears
 accordion. It applies across product templates using the Product information block and
 in their quick views. Leave it empty to hide it. No per-product entry or metafield is needed.
 
+### Featured collection image badges
+
+The top-left badge on a Featured collection card is chosen from the product's collections,
+independently of the collection displayed by that section. In **Settings → Metafields and
+metaobjects → Collections**, create and pin these definitions (already created on
+`tasaa-dev.myshopify.com` on 2026-10-26):
+
+| Name | Namespace and key | Type |
+| --- | --- | --- |
+| Show as product badge | `custom.show_as_product_badge` | True or false |
+| Product badge priority | `custom.product_badge_priority` | Integer, minimum 1, maximum 9999 |
+
+Open **Products → Collections → a collection → Metafields**. Set **Show as product badge**
+to True and enter a priority to allow its title to appear as a badge. False or an unset
+visibility field excludes the collection. Lower priority numbers win; an unset priority
+ranks after all numbered priorities. Equal priorities are resolved alphabetically by
+collection handle. If no enabled collection belongs to the product, no badge is rendered.
+Only collections available to the Online Store sales channel participate.
+
+Initial Tasaa setup: **New Arrivals** is enabled at priority **1**, **BESTSELLER** at
+priority **2**. All other collections are excluded while their visibility field is unset.
+
+The Featured collection section's **Show collection badges on images** setting is the
+master switch. Existing saved settings retain their value. Product Type/Fabric labels,
+sale indicators and sold-out badges are unchanged. This collection-based selection
+replaces the old product `custom.collection_label` override and section-title fallback.
+Uploading a theme to another store does not create the metafield definitions there.
+
 ### Product title badges
 
 The title automatically displays Product Type followed by Fabric. Set Type in the product's **Product organization** area. Fabric reads **Category metafields → Fabric** (`shopify.fabric`) first, falling back to `custom.fabric`. Supported fabric values are text, text lists, and category/metaobject references with a label or name. Only the first list entry is displayed; comma-separated text also uses its first entry. Missing values are hidden. These are display badges, not Shopify product Tags. Product Type uses warm terracotta; Fabric uses Suta's pale green styling.

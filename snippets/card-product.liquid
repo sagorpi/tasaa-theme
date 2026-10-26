@@ -13,8 +13,7 @@
   - skip_styles: {Boolean} Don't include component styles. Useful when rendering multiple product cards in a loop. Default: false (optional)
   - quick_add: {Boolean} Show the quick add button.
   - featured_card: {Boolean} Use compact featured-collection details and 3:4 portrait media.
-  - collection_label: {String} Collection name used as the image label.
-  - show_collection_label: {Boolean} Show the image label on featured cards.
+  - show_collection_label: {Boolean} Enable collection-sourced badges on featured cards.
   - section_id: {String} The ID of the section that contains this card.
   - horizontal_class: {Boolean} Add a card--horizontal class if set to true. Default: false (optional)
   - horizontal_quick_add: {Boolean} Changes the quick add button styles when set to true. Default: false (optional)
@@ -66,7 +65,20 @@
           style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
         >
           {%- if featured_card -%}
-            {%- assign image_label = card_product.metafields.custom.collection_label.value | default: collection_label -%}
+            {%- liquid
+              assign image_label = ''
+              assign selected_priority = nil
+              assign badge_collections = card_product.collections | sort: 'handle'
+              for badge_collection in badge_collections
+                if badge_collection.metafields.custom.show_as_product_badge.value == true
+                  assign badge_priority = badge_collection.metafields.custom.product_badge_priority.value | default: 10000
+                  if selected_priority == nil or badge_priority < selected_priority
+                    assign selected_priority = badge_priority
+                    assign image_label = badge_collection.title
+                  endif
+                endif
+              endfor
+            -%}
             {%- if show_collection_label and image_label != blank -%}
               <span class="featured-card__label">{{ image_label | escape }}</span>
             {%- endif -%}

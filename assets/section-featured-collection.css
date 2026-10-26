@@ -334,6 +334,42 @@
   }
 }
 
+/* Match Suta's 4px title/tag/price rhythm without Dawn's sibling margin. */
+.featured-collection.collection .card > .card__content .card__information {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.featured-collection.collection .card__heading {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.featured-collection.collection .collection-card__type {
+  max-width: 100%;
+  margin: 0;
+  padding: 0 6px;
+  border: 1px solid #0005;
+  border-radius: 3px;
+  background: transparent;
+  color: #000b;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.7px;
+  overflow-wrap: anywhere;
+}
+
+.featured-collection.collection .card > .card__content .card-information > .price {
+  margin-top: 0;
+  font-size: 10.8px;
+  line-height: 1.7;
+  letter-spacing: 1px;
+  color: #000;
+}
+
 @media screen and (max-width: 749px) {
   .featured-collection .collection__title,
   .featured-collection.collection slider-component.slider-mobile-gutter {
@@ -524,7 +560,13 @@
   .featured-quick-view .product:not(.product--no-media) .product__media-wrapper,
   .featured-quick-view .product:not(.product--no-media) .product__info-wrapper { width: 100% !important; }
   .featured-quick-view .product__media-wrapper { padding: 0; }
-  .featured-quick-view .product-media-container { max-width: 255px; margin-inline: auto; }
+  /* Keep image swipes horizontal; the details area still scrolls the sheet. */
+  .featured-quick-view .product__media-list.slider {
+    overflow-y: hidden;
+    touch-action: pan-x pinch-zoom;
+    overscroll-behavior-x: contain;
+  }
+  .featured-quick-view .product-media-container { max-width: min(280px, 65vw, 30dvh); margin-inline: auto; }
   .featured-quick-view .product__title h2 { font-size: 20px; }
   .featured-quick-view .product__info-container { display: flex; flex-direction: column; }
   .featured-quick-view .product__info-container > * { margin-block: 8px; }
@@ -564,11 +606,9 @@
   .featured-quick-view .product__media-list .product-media-container { max-height: 65dvh; }
 }
 @media (max-width: 699px) {
-  .featured-quick-view .quick-add-modal__content { max-height: 83dvh; }
   .featured-quick-view .quick-add-modal__content-info { padding: 20px; }
   .featured-quick-view .product-gallery-navigation { display: block; }
   .featured-quick-view .product-gallery-navigation > .thumbnail-slider { display: none; }
-  .featured-quick-view .product-media-container { max-width: min(255px, calc((83dvh - 70px) * .75)); }
   .featured-quick-view .product__media-wrapper { margin-bottom: 20px; }
   .featured-quick-view [id^='GalleryViewer-'] > .slider-buttons { position: absolute; inset: 0 -10px; justify-content: space-between; pointer-events: none; }
   .featured-quick-view [id^='GalleryViewer-'] > .slider-buttons .slider-button { pointer-events: auto; width: 30px; height: 44px; align-self: center; color: #333; }
@@ -591,17 +631,16 @@
   .featured-quick-view .product__info-container > .tasaa-product-information { margin: 8px 0 0; }
 }
 
-/* Reserve room for the purchase action and collapsed details on shorter phones. */
+/* Keep mobile controls compact; the larger gallery uses up to 40% of viewport height. */
 @media (max-width: 699px) {
   .featured-quick-view .quick-add-modal__content-info { padding: 12px 20px max(12px, env(safe-area-inset-bottom)); }
   .featured-quick-view__header { padding-block: 12px; }
-  .featured-quick-view .product-media-container { max-width: min(220px, calc(max(130px, 83dvh - 370px) * .75)); }
   .featured-quick-view .product__media-wrapper { margin-bottom: 10px; }
   .featured-quick-view .product__info-container > * { margin-block: 4px; }
   .featured-quick-view .product__info-container > .product__purchase-divider { margin: 6px 0; }
   .featured-quick-view .product__info-container > .tasaa-product-information { margin: 6px 0 0; }
   .featured-quick-view .featured-quick-view__buy .product-form { margin-top: 4px !important; }
-  .featured-quick-view .product__view-details { font-size: 13px; line-height: 1.5; }
+  .featured-quick-view .product:not(.featured-product) .product__view-details { display: none; }
 }
 
 .featured-quick-view .tasaa-product-information__item,
