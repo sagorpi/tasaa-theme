@@ -8,11 +8,11 @@ Chat scope: in the chat **Review project history and context** (`01a17c2a-c2c3-7
 
 Maintain Tasaa's customized Shopify theme with the accepted Suta-inspired storefront and deliberate Sutisancha/Flipkart references. Preserve authorable settings, lightweight implementation and mobile/keyboard behavior.
 
-Latest request: commit all pending changes and push to GitHub. All seven changed files are reviewed; the current branch was refreshed and has no divergence from origin. Commit and push are the remaining delivery steps. D024/D025 fixes are already uploaded, and the D026 pull is complete with saved logo/breadcrumb settings imported and prior local work preserved.
+Latest request: commit all pending changes and push to GitHub. Completed for all source/configuration changes in `49fd9f5` (Fix collection filter motion and card overlay stacking), pushed to origin. This final delivery note is recorded separately in Git. D024/D025 fixes remain uploaded, and the D026 pull is complete with saved logo/breadcrumb settings imported.
 
 ## Repository and delivery snapshot
 
-- Branch: `feature/homepage-redesign`; HEAD `d8c0e93`, synchronized with origin. Earlier storefront/configuration changes were committed in `5530381`; `d8c0e93` records their delivery. D024/D025 source and notes remain uncommitted; their runtime stylesheets are uploaded to Shopify. The pulled `config/settings_data.json` is also uncommitted. No new Git commit/push was requested or performed.
+- Branch: `feature/homepage-redesign`; source/configuration delivery commit `49fd9f5` pushed to origin, containing all seven pending files for D024/D025/D026 and their guidance/history. The branch was clean and synchronized before recording this final note. Consult Git for its subsequent documentation commit and current HEAD/synchronization state.
 - Verified on 2026-10-28: live theme `192399933723`, named `dev-theme-id`, on `tasaa-dev.myshopify.com`. Another unpublished theme shares that name; retain numeric targeting.
 - Latest authorized upload (D025): only `assets/collection-filters.css`, with explicit store/theme, `--allow-live`, `--nodelete` and `--only`. Backed up the live stylesheet and confirmed its only difference from local was the new stacking rule; the post-upload download matches local byte-for-byte.
 - Earlier authorized upload (D024): `assets/base.css` and `assets/collection-filters.css`, also downloaded and verified. Its shared transition rules are retained in the current stylesheet.
@@ -26,7 +26,7 @@ Latest request: commit all pending changes and push to GitHub. All seven changed
 - Stacking fix verification (D025): preview applies grid isolation. At 1280px/390px a visible View button beneath the sticky toolbar cannot paint/receive pointer hits above it. View opens on both sizes with body-mounted product content above filters; settled mobile sheet fits the viewport, and Escape restores View focus. Sort and mobile Filter open/close, with filter trigger/body scrolling restored. No mobile overflow; screenshots inspected and viewport reset. Resized-browser testing only.
 - Scroll-sync verification (D024): at 1280px/990px reveal/hide and reversal samples stay within 0.015625px alignment; sidebar spacing stays 20px. Verified initial instant hide, sort/Escape/focus and footer containment. At 820px/390px no document overflow. Reduced-motion source reviewed without changing the system preference. These timing/offset rules are unchanged by D025.
 - Prior delivery verification: JavaScript syntax and Theme Check passed (zero errors/nine existing warnings). Listing/Featured image hover, prices, View popups, gallery, filters/loading and unique modal IDs were checked as recorded in the earlier work log. The alternate Dawn facet cleanup path was reviewed and syntax-checked without changing the saved filter layout.
-- Remaining: create the descriptive commit, push to `origin/feature/homepage-redesign` and verify remote synchronization. Source/configuration still match the verified Shopify pull, settings JSON is valid and the diff check passes. No additional Shopify upload is requested. Preserve the user-owned preview server.
+- No implementation work remains. Source/configuration delivery is committed and synchronized with origin, matching the verified Shopify pull. Settings JSON and diff checks pass. No additional Shopify upload was performed for Git delivery. Preserve the user-owned preview server; future changes need their own Git/Shopify authorization.
 
 ## Handoff routine
 

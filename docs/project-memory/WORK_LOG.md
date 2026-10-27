@@ -6,7 +6,8 @@ Keep meaningful milestones here, newest first. Record actual outcomes and verifi
 
 - User explicitly requested committing all changes and pushing to GitHub. Reviewed seven pending files: listing/header styles, pulled Shopify settings, AGENTS and the three project-memory documents. Refreshed origin and confirmed no divergence on `feature/homepage-redesign` before committing.
 - Diff check and saved-settings JSON validation pass. The three changed runtime/configuration files still match the verified D026 download; the most recent Theme Check returned zero errors/nine existing warnings. Earlier desktop/mobile interaction checks are recorded below and were not repeated for this Git-only request.
-- Commit/push remain pending at this snapshot. No additional Shopify upload is requested; earlier verified uploads and the configuration pull remain intact.
+- Git delivery: created `49fd9f5` (Fix collection filter motion and card overlay stacking), containing all seven pending files, and pushed it to `origin/feature/homepage-redesign`. Confirmed a clean working tree and zero commits ahead/behind before recording this final delivery note, which is committed separately with the reconciled decision/status entries.
+- Shopify delivery: no additional upload was performed for Git delivery; earlier verified uploads and the configuration pull remain intact.
 
 ## 2026-10-28 — Pull live theme and saved merchant settings
 
