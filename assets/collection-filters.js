@@ -57,6 +57,13 @@ if (!customElements.get('collection-filters')) {
       this.mobile.removeEventListener('change', this.onResize);
     }
     syncPanels() {
+      // Mobile sheets sit outside the sticky toolbar's stacking context.
+      const sortPanel = this.querySelector('[data-panel="sort"]');
+      const sortParent = this.mobile.matches ? this : this.querySelector('.cf-toolbar');
+      if (sortPanel && sortParent && sortPanel.parentElement !== sortParent) {
+        const next = this.mobile.matches ? null : this.querySelector('.cf-filter-toggle');
+        sortParent.insertBefore(sortPanel, next);
+      }
       this.querySelectorAll('[data-panel]').forEach(panel => {
         const opened = this.dataset.openPanel === panel.dataset.panel;
         panel.inert = !opened && (this.mobile.matches || panel.dataset.panel === 'sort');
@@ -81,7 +88,16 @@ if (!customElements.get('collection-filters')) {
       }
       this.syncPanels();
       const panel = this.querySelector(`[data-panel="${name}"]`);
-      panel.querySelector('button, input, summary')?.focus({ preventScroll: true });
+      const focusTarget = panel.querySelector('button, input, summary');
+      focusTarget?.focus({ preventScroll: true });
+      if (this.mobile.matches && name === 'sort') {
+        // The sheet becomes visible after its opening transition starts.
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          if (this.isConnected && this.mobile.matches && this.dataset.openPanel === name) {
+            focusTarget?.focus({ preventScroll: true });
+          }
+        }));
+      }
     }
     close(restoreFocus = true) {
       if (!this.dataset.openPanel) return;

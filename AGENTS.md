@@ -38,7 +38,9 @@ Read this file before changing the theme. Read the relevant custom authoring sec
 - On phones (below 750px), the main product photo aligns with the description at 16px side padding, retains its proportions, and has no extra section-top/slide-top padding after the breadcrumbs. Breadcrumb bottom spacing provides approximately 7px of separation.
 - Most navigation switches to mobile/tablet below 990px. Follow each component's existing breakpoints instead of applying a single breakpoint globally.
 - Mobile upper navigation is not sticky. The secondary navbar appears only on the homepage. Main navigation does not show an active-page indication.
+- Below 990px, keep the mobile/tablet menu drawer above listing filters throughout closing. Retain the header's raised layer while the custom header drawer's main `details[open]` remains open; the existing controller owns close completion, rapid reopen, reduced motion and focus restoration.
 - Touch/click activation must not leave unwanted focus outlines on product accordions, the Categories close button, or Show all reviews after returning. **Preserve semantic focus, keyboard focus indicators, Escape behavior and focus restoration.** Do not globally remove focus styles or blur all controls.
+- Render the cart confirmation with native `hidden` so its message cannot flash before asynchronous CSS loads. `CartNotification.open()` removes `hidden` before measuring the entrance animation; keep the existing countdown, close transition, `aria-hidden`/`inert` state and focus behavior. Its Liquid snippet and JavaScript must be deployed together when authorized.
 
 ## Component map
 
@@ -53,6 +55,7 @@ Read this file before changing the theme. Read the relevant custom authoring sec
 | Related products | `sections/related-products.liquid`, `assets/section-related-products.css`, `assets/product-carousel.js` |
 | Customer reviews | `assets/customer-reviews.js`, `assets/customer-reviews.css`, `sections/apps.liquid`, `snippets/sample-product-reviews.liquid` |
 | Mobile bottom navigation and floating Add To button | `sections/mobile-bottom-menu.liquid`, `assets/mobile-bottom-menu.js`, `assets/mobile-bottom-menu.css` |
+| Cart confirmation notification | `snippets/cart-notification.liquid`, `assets/cart-notification.js`, `assets/component-cart-notification.css`; stylesheet loaded in `sections/header.liquid` |
 | Collection cards and quick view | `sections/main-collection-product-grid.liquid`, `snippets/card-product.liquid`, `assets/template-collection.css`, `assets/section-featured-collection.css`, `assets/quick-add.js` |
 | Collection filters, sorting and loading | `sections/main-collection-product-grid.liquid`, `assets/collection-filters.js`, `assets/collection-filters.css`, `assets/collection-load-more.js`, `assets/collection-discount-sort.js`, `assets/facets.js` |
 
@@ -78,6 +81,7 @@ The editor name is **Image link**, although its section filename still contains 
 - Collection layout defaults to three desktop columns with 2/3/4 controls. Below 990px, use independent 1/2-product view controls on the left, Sort By in the middle and Filter on the right; hide the product total. Mobile grid icons are filled charcoal when selected and grey otherwise, with compact visual spacing and separate 44px touch targets. Mobile starts from the authored mobile columns setting. Include sort/filter icons and a filter-count badge (selected values plus one active price range; exclude sorting, hide zero). Keep view choices and filter/sort state across loading and navigation, and size listing images appropriately for the selected mobile view.
 - Desktop listing toolbar and sidebar follow the main header's `.animate` state and shared `--header-sticky-transition` timing, keeping their sticky offsets synchronized during reveal, hide and direction changes. Preserve the initial instant hide and collection-end containment. Reduced-motion desktop listings stop both header and filter motion together; mobile/tablet behavior stays separate.
 - Keep listing card overlays, including View, below the sticky filter toolbar on mobile and desktop. Isolate `#ProductGridContainer` within `.tasaa-collection-layout`; body-mounted quick-view dialogs remain above the filters. Preserve the View button's existing reveal and popup behavior.
+- Mobile/tablet Sort By must dim the toolbar with the page. Keep its sheet outside `.cf-toolbar` but inside `collection-filters`; `syncPanels()` restores the original desktop dropdown placement. Preserve one panel ID, delegated events, sorting refreshes, focus trapping and focus return. Focus the mobile sheet after it becomes visible, with guards for close/resize/disconnect; retain keyboard focus indicators. Deploy the matching filter JS/CSS together when authorized.
 
 ## Reviews and image behavior
 

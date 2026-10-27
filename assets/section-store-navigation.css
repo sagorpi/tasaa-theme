@@ -193,6 +193,10 @@
 }
 /* Keep the full-height drawer above the announcement and both header rows. */
 .section-header.menu-open { z-index: 20; transform: none; }
+@media screen and (max-width: 989px) {
+  /* The drawer keeps its open attribute until the closing animation finishes. */
+  .section-header:has(.store-navigation header-drawer > details[open]) { z-index: 20; transform: none; }
+}
 
 /* All desktop menu labels share the animated line at the header's lower edge. */
 @media screen and (min-width: 990px) {

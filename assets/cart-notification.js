@@ -16,6 +16,7 @@ class CartNotification extends HTMLElement {
   open() {
     clearTimeout(this.timer);
     this.started = null;
+    this.notification.hidden = false;
     // Restart the countdown for successive additions, without stealing focus.
     this.notification.classList.remove('active');
     this.notification.getBoundingClientRect();
