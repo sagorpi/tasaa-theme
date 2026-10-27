@@ -2,6 +2,35 @@
 
 Keep meaningful milestones here, newest first. Record actual outcomes and verification, not planned success. Detailed diffs belong in Git; authoring instructions belong in README.
 
+## 2026-10-28 — Git delivery of listing fixes and Shopify settings
+
+- User explicitly requested committing all changes and pushing to GitHub. Reviewed seven pending files: listing/header styles, pulled Shopify settings, AGENTS and the three project-memory documents. Refreshed origin and confirmed no divergence on `feature/homepage-redesign` before committing.
+- Diff check and saved-settings JSON validation pass. The three changed runtime/configuration files still match the verified D026 download; the most recent Theme Check returned zero errors/nine existing warnings. Earlier desktop/mobile interaction checks are recorded below and were not repeated for this Git-only request.
+- Commit/push remain pending at this snapshot. No additional Shopify upload is requested; earlier verified uploads and the configuration pull remain intact.
+
+## 2026-10-28 — Pull live theme and saved merchant settings
+
+- User requested pulling from Shopify. Re-verified live theme `192399933723` on `tasaa-dev.myshopify.com`; downloaded all 415 theme files into a temporary snapshot and backed up the six pending local files plus saved settings before applying changes. Existing runtime code, including D024/D025, matched; no files were deleted.
+- Imported only meaningful remote differences in `config/settings_data.json`: selected `tasa_logo.png`, logo width 90→120 and an enabled breadcrumbs section using Jost. The current background differs only in hex case (`#FFFFFF`→`#ffffff`), retaining white. These were existing Shopify settings; their author/time is unverified. Kept the local formatting of 65 semantically identical JSON files, and preserved pending source/documentation work.
+- Verification after import: all 415 files match Shopify (350 bytes, 65 parsed JSON). All six previously pending files were unchanged before updating memory. Diff check and Theme Check pass: zero errors/nine existing warnings. No new browser/physical-device tests for the configuration import. Recorded D026 and current status.
+- Delivery: pull applied locally; configuration, earlier source fixes and notes remain uncommitted. No Git push or new Shopify upload.
+
+## 2026-10-28 — Listing View buttons beneath sticky filters
+
+- Reproduced the desktop overlap: a visible View button and the filter toolbar shared z-index 3, and the View button painted/received pointer hits above the bar. Added a two-line comment/rule in `assets/collection-filters.css` isolating the custom listing product grid. Cards retain their overlay order; the toolbar stays above the grid, and body-mounted quick-view dialogs still open above the filters. The earlier uploaded scroll-sync rules are unchanged. Updated AGENTS and D025; no merchant setting or JavaScript/Liquid change.
+- At 1280px and 390px, positioned a visible View button within the sticky toolbar's bounds and confirmed the toolbar wins hit testing. View opens with product content on both layouts, remains body-mounted at z-index 101, and Escape closes/restores focus; the settled mobile sheet fits within the viewport. Desktop/mobile Sort opens; mobile Filter opens and Escape restores its trigger and body scrolling. No mobile document overflow. Desktop/mobile screenshots saved/inspected and temporary viewport reset; no physical-device testing.
+- Verification: `git diff --check` passes; preview loaded the isolation rule. No new JavaScript or Liquid checks were required for this CSS-only change.
+- Shopify delivery: user subsequently requested upload. Re-verified live theme `192399933723` (`dev-theme-id`) on `tasaa-dev.myshopify.com`; backed up the filter stylesheet and confirmed its only difference from local was the new stacking rule. Uploaded only `assets/collection-filters.css` using explicit store/theme, `--allow-live`, `--nodelete` and `--only`. CLI confirmed success; downloaded saved stylesheet matches local byte-for-byte. D024 remains intact; all other theme files/background settings were excluded.
+- Git delivery: source and notes remain uncommitted; no new Git push.
+
+## 2026-10-28 — Desktop header and listing filter motion
+
+- Reproduced the reported reveal gap: the toolbar jumped to 77px while the navigation bottom was still animating from 0px. Added shared header transition timing in `assets/base.css`; desktop toolbar/sidebar in `assets/collection-filters.css` now follow `.section-header.animate`, including the sidebar's max-height. No new JavaScript, dependencies or merchant settings. Initial instant hide, collection containment and mobile/tablet motion remain. Desktop listing reduced motion stops both pieces together through the same variable. Updated AGENTS and D024.
+- Browser verification at 1280px and 990px: reveal/hide and an interrupted hide-to-reveal stay within 0.015625px alignment throughout sampled moving frames; sidebar spacing stays 20px. First hide has no transition on either component. Sort opens and Escape closes/restores visible keyboard focus. At the loaded collection's end, toolbar/sidebar remain above the footer. At 820px and 390px no document overflow; phone header remains relative, filter opens/Escape closes and body scrolling restores. Reduced-motion source reviewed, without changing the system preference. Screenshot saved/inspected and temporary viewport reset. No physical-device test.
+- Verification: `git diff --check` passed; actual preview parsed and applied both modified stylesheets. No Liquid or JavaScript changed, so no new Theme Check or JavaScript syntax run was needed; the earlier zero-error/nine-warning Theme Check belongs to the prior delivery.
+- Shopify delivery: user subsequently requested upload. Re-verified live theme `192399933723` (`dev-theme-id`) on `tasaa-dev.myshopify.com`, backed up both remote stylesheets and confirmed they matched the committed baseline. Uploaded only `assets/base.css` and `assets/collection-filters.css` with explicit store/theme, `--allow-live`, `--nodelete` and individual `--only` flags. CLI confirmed success; post-upload downloads of both files match local byte-for-byte. Background settings and all other theme files were excluded.
+- Git delivery: source changes and notes remain uncommitted; no new Git push. Earlier Git/Shopify deliveries below remain unchanged.
+
 ## 2026-10-27 — Git delivery of pending storefront changes
 
 - User explicitly requested committing all pending changes and pushing to Git. Reviewed all 17 changed files, including theme settings and project documentation; refreshed `origin/feature/homepage-redesign` and confirmed no divergence from the current branch before committing.

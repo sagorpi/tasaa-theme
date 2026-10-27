@@ -9,7 +9,8 @@
  */
 {
   "current": {
-    "logo_width": 90,
+    "logo": "shopify://shop_images/tasa_logo.png",
+    "logo_width": 120,
     "type_header_font": "playfair_display_n4",
     "heading_scale": 110,
     "type_body_font": "assistant_n4",
@@ -139,6 +140,13 @@
         "settings": {
           "color_scheme": "scheme-1"
         }
+      },
+      "breadcrumbs": {
+        "type": "breadcrumbs",
+        "settings": {
+          "enabled": true,
+          "font": "jost_n4"
+        }
       }
     },
     "content_for_index": [],
@@ -173,7 +181,7 @@
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background": "#FFFFFF",
+          "background": "#ffffff",
           "background_gradient": "",
           "text": "#3a2e26",
           "button": "#a24332",

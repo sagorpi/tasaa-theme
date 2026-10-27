@@ -2,6 +2,8 @@
 .tasaa-collection-layout:not(:has(.cf-filter-panel)) { grid-template-columns: minmax(0, 1fr); }
 .tasaa-collection-layout > aside, collection-filters { display: contents; }
 .tasaa-collection-layout .collection { padding: 0; }
+/* Keep card overlays beneath the sticky listing controls. */
+.tasaa-collection-layout #ProductGridContainer { isolation: isolate; }
 .cf-toolbar { grid-column: 1 / -1; position: relative; display: flex; align-items: center; justify-content: center; min-height: 54px; border-block: 1px solid #e5e5e5; background: #fff; color: #333; }
 collection-filters { font-family: var(--collection-card-label-font, var(--font-body-family)); }
 collection-filters button, collection-filters input { font: inherit; }
@@ -121,6 +123,13 @@ collection-filters[data-open-panel='sort'] .cf-sort-panel { visibility: visible;
   }
 }
 @media (min-width: 990px) {
+  /* Follow the header's animation state and timing in both scroll directions. */
+  body:has(.section-header.animate) .tasaa-collection-layout .cf-toolbar {
+    transition: top var(--header-sticky-transition);
+  }
+  body:has(.section-header.animate) .tasaa-collection-layout .cf-filter-panel {
+    transition: top var(--header-sticky-transition), max-height var(--header-sticky-transition);
+  }
   .cf-filter-panel {
     top: calc(var(--collection-sticky-top) + var(--collection-toolbar-height) + 20px);
     max-height: max(120px, calc(100dvh - var(--collection-sticky-top) - var(--collection-toolbar-height) - 40px));
@@ -130,4 +139,7 @@ collection-filters[data-open-panel='sort'] .cf-sort-panel { visibility: visible;
 @media (max-width: 989px) {
   .tasaa-collection-layout { --collection-toolbar-height: 48px; }
   collection-filters[data-open-panel='sort'] .cf-toolbar { z-index: 2147483647; }
+}
+@media (min-width: 990px) and (prefers-reduced-motion: reduce) {
+  body:has(.tasaa-collection-layout) { --header-sticky-transition: 0s; }
 }

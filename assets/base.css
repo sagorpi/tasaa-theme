@@ -8,6 +8,7 @@ collection-component {
   --alpha-button-border: 1;
   --alpha-link: 0.85;
   --alpha-badge-border: 0.1;
+  --header-sticky-transition: 0.15s ease-out;
   --focused-base-outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
   --focused-base-outline-offset: 0.3rem;
   --focused-base-box-shadow: 0 0 0 0.3rem rgb(var(--color-background)), 0 0 0.5rem 0.4rem rgba(var(--color-foreground), 0.3);
@@ -2343,7 +2344,7 @@ input[type='checkbox'] {
 }
 
 .section-header.animate {
-  transition: top 0.15s ease-out;
+  transition: top var(--header-sticky-transition);
 }
 
 .shopify-section-group-header-group {
