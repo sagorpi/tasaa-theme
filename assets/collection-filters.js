@@ -2,11 +2,16 @@ if (!customElements.get('collection-filters')) {
   customElements.define('collection-filters', class extends HTMLElement {
     connectedCallback() {
       this.root = this.closest('.tasaa-collection-layout');
-      this.setColumns(4);
       this.mobile = matchMedia('(max-width: 989px)');
+      this.originalImageSizes = new WeakMap();
+      this.setColumns(3);
+      this.setMobileColumns(this.dataset.mobileColumns);
       this.onClick = this.onClick.bind(this);
       this.onGridClick = (event) => { if (event.target.closest('.cf-active')) this.onClick(event); };
       this.root.addEventListener('click', this.onGridClick);
+      this.onProductsAdded = () => this.syncImageSizes();
+      this.root.addEventListener('collection:products-added', this.onProductsAdded);
+      window.addEventListener('resize', this.onProductsAdded);
       this.onChange = this.onChange.bind(this);
       this.onKey = this.onKey.bind(this);
       this.onHistory = () => { this.close(); this.load(new URL(location.href), false); };
@@ -38,6 +43,8 @@ if (!customElements.get('collection-filters')) {
     disconnectedCallback() {
       this.controller?.abort();
       this.root.removeEventListener('click', this.onGridClick);
+      this.root.removeEventListener('collection:products-added', this.onProductsAdded);
+      window.removeEventListener('resize', this.onProductsAdded);
       clearTimeout(this.priceTimer);
       this.close();
       this.removeEventListener('click', this.onClick);
@@ -103,7 +110,28 @@ if (!customElements.get('collection-filters')) {
         button.setAttribute('aria-pressed', Number(button.dataset.columns) === Number(columns));
       });
     }
+    setMobileColumns(columns) {
+      if (![1, 2].includes(Number(columns))) return;
+      this.root.style.setProperty('--collection-mobile-columns', columns);
+      this.querySelectorAll('button[data-mobile-columns]').forEach(button => {
+        button.setAttribute('aria-pressed', Number(button.dataset.mobileColumns) === Number(columns));
+      });
+      this.syncImageSizes();
+    }
+    syncImageSizes() {
+      this.root.querySelectorAll('#product-grid .card__media img').forEach(image => {
+        if (!this.originalImageSizes.has(image)) this.originalImageSizes.set(image, image.getAttribute('sizes'));
+        const original = this.originalImageSizes.get(image);
+        const width = image.closest('.card__media').clientWidth;
+        const sizes = this.mobile.matches && width > 0 ? `${width}px` : original;
+        if (image.getAttribute('sizes') === sizes) return;
+        if (sizes === null) image.removeAttribute('sizes');
+        else image.setAttribute('sizes', sizes);
+      });
+    }
     onClick(event) {
+      const mobileGridButton = event.target.closest('button[data-mobile-columns]');
+      if (mobileGridButton) { this.setMobileColumns(mobileGridButton.dataset.mobileColumns); return; }
       const gridButton = event.target.closest('[data-columns]');
       if (gridButton) { this.setColumns(gridButton.dataset.columns); return; }
       const trigger = event.target.closest('[data-open]');
@@ -209,7 +237,24 @@ if (!customElements.get('collection-filters')) {
         const hiddenSort = this.querySelector('.cf-filter-form [name="sort_by"]');
         if (hiddenSort) hiddenSort.value = next.querySelector('.cf-filter-form [name="sort_by"]').value;
         this.querySelector('[data-count]').textContent = next.querySelector('[data-count]').textContent;
+        const filterCount = this.querySelector('[data-filter-count]');
+        if (filterCount) {
+          const nextCount = next.querySelector('[data-filter-count]');
+          filterCount.textContent = nextCount.textContent;
+          filterCount.hidden = nextCount.hidden;
+          this.querySelector('[data-filter-status]').textContent = next.querySelector('[data-filter-status]').textContent;
+        }
+        let modalOpenerId = '';
+        document.querySelectorAll('body > quick-add-modal').forEach(modal => {
+          if (modal.dataset.section !== this.dataset.section) return;
+          if (modal.hasAttribute('open')) {
+            modalOpenerId = modal.openedBy?.id || '';
+            modal.hide(true);
+          }
+          modal.remove();
+        });
         this.root.querySelector('#ProductGridContainer').innerHTML = grid.innerHTML;
+        this.syncImageSizes();
         this.discountSort = discountSort;
         if (discountSort) {
           const radio = this.querySelector('[value="discount-descending"]');
@@ -225,6 +270,11 @@ if (!customElements.get('collection-filters')) {
         this.root.querySelectorAll('.scroll-trigger').forEach(el => el.classList.add('scroll-trigger--cancel'));
         if (history) window.history.pushState({}, '', url);
         if (focused) document.getElementById(focused)?.focus({ preventScroll: true });
+        else if (modalOpenerId) {
+          const replacement = document.getElementById(modalOpenerId) ||
+            [...this.querySelectorAll('button')].find(button => button.getClientRects().length && !button.disabled);
+          replacement?.focus({ preventScroll: true });
+        }
         this.syncPanels();
       } catch (error) {
         if (error.name !== 'AbortError') {

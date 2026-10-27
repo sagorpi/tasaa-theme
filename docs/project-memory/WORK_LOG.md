@@ -2,6 +2,95 @@
 
 Keep meaningful milestones here, newest first. Record actual outcomes and verification, not planned success. Detailed diffs belong in Git; authoring instructions belong in README.
 
+## 2026-10-27 — Git delivery of pending storefront changes
+
+- User explicitly requested committing all pending changes and pushing to Git. Reviewed all 17 changed files, including theme settings and project documentation; refreshed `origin/feature/homepage-redesign` and confirmed no divergence from the current branch before committing.
+- Rechecked whitespace, all three modified JavaScript files, Shopify JSON and Theme Check: zero errors/nine existing warnings. Earlier browser verification remains recorded below; no additional storefront changes were made for this delivery.
+- Git commit/push are the remaining steps at this snapshot. The verified 11-file Shopify upload remains complete; the white-background setting is included in Git only and has not been uploaded to Shopify.
+
+## 2026-10-27 — Featured corrections and authorized Shopify delivery
+
+- User extended photo-only hover and restored price styling to Featured Collection, then explicitly requested Shopify upload. Consolidated both components’ image-hover and sale-price rules in `assets/section-featured-collection.css`, removing the duplicate listing price block from `assets/template-collection.css`. Updated README/AGENTS and D023.
+- Featured desktop pointer verification: over photo, opacities 0/1; below photo, 1/0 while View stays available. Featured View opens with product content and Escape closes. At 390px both sampled sale prices are black/current-first and red/struck-through original, without price/document overflow. Listing correction/View checks are recorded immediately below. Screenshots inspected/saved; viewport reset. No physical-device or purchase test.
+- Pre-upload checks: diff/JS syntax pass; Theme Check returns zero errors/nine existing warnings. Verified live target `192399933723` (`dev-theme-id`) on `tasaa-dev.myshopify.com`. Pulled remote files into a temporary backup; collection template only required the intended Quick add/secondary-image changes. Shared quick-add JS/CSS already matched local and were not uploaded.
+- Uploaded exactly 11 runtime files: six listing/shared assets (`collection-filters.css/js`, `collection-load-more.js`, `facets.js`, `section-featured-collection.css`, `template-collection.css`), two collection sections, two shared card/filter snippets and `templates/collection.json`. Used explicit store/theme, `--allow-live`, `--nodelete`, and individual `--only` flags. CLI confirmed success on the verified live target.
+- Post-upload: downloaded all 11 files; 10 non-JSON files match local byte-for-byte and the collection template matches structurally. This delivery includes earlier pending listing/mobile/badge changes and Featured VIEW ALL/sale-badge changes in the uploaded files. The white-background config and documentation were excluded.
+- Git delivery: no commit or Git push. All working changes remain local and uncommitted. Shopify delivery: complete and saved files verified. Historical entries below retain their original delivery state.
+
+## 2026-10-27 — Photo-only listing hover and price-style correction
+
+- In `assets/section-featured-collection.css`, listing image swapping now uses the photo container instead of the full card. Added listing resets for Dawn’s inherited card-wide swap; Featured hover and View reveal/focus rules stay as before. Restored prior listing sale-price rules in `assets/template-collection.css`: discounted price first/black, original price red/11.2px/line-through and compact wrapping. Updated README, AGENTS and D022; D021 marked partially superseded.
+- Local desktop pointer check: hovering the photo yields image opacities 0/1; moving below the photo yields 1/0 while View remains available. Betul’s computed current/original colors are black/red, original line-through is present and discounted price appears first. View popup opens with content and Escape closes. No JavaScript/Liquid changed; `git diff --check` passed. Mobile screenshot/fit checked at 390px; no physical-device testing. Viewport reset.
+- Delivery: local and uncommitted; no Git push or Shopify upload. Prior unrelated pending changes preserved.
+
+## 2026-10-27 — Listing typography, View popup and hover images
+
+- Shared Featured card CSS now also covers Product listing card details, View controls, photo links and pointer/touch rules. Section width/grid/title/VIEW ALL rules stay scoped to Featured. Removed listing’s duplicate tag/price overrides so title, type tag and current/compare-at prices match Featured exactly. Listing’s existing font setting is now labeled Product card font (same ID). README/AGENTS and D021 record setup and shared ownership.
+- Listing cards reuse the standard View icon/button and compact quick-view branches in `snippets/card-product.liquid`, without using the Featured ratio/badge flag. Enabled Standard quick add and second-image hover in `templates/collection.json` and section defaults; loaded the shared stylesheet in the listing section. Listing ratios, grid choices and discount-first badges remain.
+- Fixed body-mounted popup cleanup on result replacement in `assets/collection-filters.js` and `assets/facets.js`, scoped to the collection section. This prevents duplicate modal IDs after filtering/sorting; other sections remain untouched. Default Suta path browser-tested; alternate Dawn facet cleanup reviewed and syntax-checked, without changing the saved filter layout to exercise it in-browser.
+- Actual desktop comparison for Betul: title/tag/current price/compare-at price computed fonts, colors, spacing and margins match Featured exactly; title/tag/price gaps are 4px. All 16 initial listing cards render View, and nine products have second-image markup. Fine-pointer hover advances to the second image and reveals View. Desktop popup opens, gallery advances to 2/2, details link remains and Escape closes/restores View focus. No cart/purchase submitted.
+- At 390px and 820px listing text/grid has no document or information overflow. Mobile popup hides View full details, retains horizontal gallery containment and fits the viewport. At 320×568 its scrollable sheet reaches Add to cart (scrollTop 51); no physical-device/touch gesture test. Suta filter refresh retains 16 unique popup IDs; Load More yields 18 cards/18 unique popups, and View still opens. Homepage regression: 24 cards/View controls, 22 collection labels and zero sale badges. Screenshots inspected/saved; viewport reset.
+- `node --check` passes for modified JS, JSON parses and `git diff --check` passes. Theme Check: zero errors, nine existing warnings. No dependencies added.
+- Delivery: local and uncommitted; no Git push or Shopify upload. Earlier pending work preserved.
+
+## 2026-10-27 — Listing badge priority: discount then collection
+
+- Added a listing-card flag from `sections/main-collection-product-grid.liquid` to `snippets/card-product.liquid`. Listing image badges now render percentage discount first, otherwise reuse the existing collection-priority selection, otherwise omit the top badge. Removed the duplicate native listing sale path while retaining Sold out. Updated listing-scoped badge CSS in `assets/template-collection.css`, README, AGENTS and D020. No Admin data changed.
+- Actual local preview at desktop and 390px: Betul shows only 24% OFF, Beet And Turnip/Bossy Caramel show New Arrivals, the other five eligible non-discounted sarees/blouses show BESTSELLER, Gift Card/other ineligible products have no upper-left badge. Both discounted products have exactly one discount badge. All nine top badges align at zero top offset and fit on mobile; no document overflow. No broken badge/title accessibility references. Screenshots inspected and saved; viewport reset.
+- Homepage regression checked: 24 Featured cards, 22 existing collection labels, no sale badges and no listing-specific badges. Theme Check: zero errors, nine existing warnings; `git diff --check` passed. No JavaScript changed or physical-device testing. Discounted sold-out branch reviewed, without a dedicated saved test product.
+- Delivery: local and uncommitted; no Git push or Shopify upload. Earlier pending changes preserved.
+
+## 2026-10-27 — Filled mobile grid icons with tighter spacing
+
+- Updated only runtime CSS in `assets/collection-filters.css`: filled mobile icons with charcoal selected / grey inactive state and white divisions for the two-product icon, matching the inspected Suta reference. Shifted each symbol inward 4px to reduce visual center spacing by 8px while retaining separate 44×46px targets. Recorded D019 and active AGENTS guidance.
+- Local preview at 390px confirms fill colors, 36px symbol-center spacing, 1/2 switching and selected-color updates. Tab retains a 2px visible focus outline. Screenshot inspected/saved. At 320px neither toolbar nor document overflows; viewport reset. `git diff --check` passed. No JavaScript/Liquid changes in this task; no physical-device test.
+- Delivery: local and uncommitted; no Git push or Shopify upload. Earlier pending changes preserved.
+
+## 2026-10-27 — Mobile listing toolbar and filter count
+
+- Updated `snippets/collection-filters.liquid` and `assets/collection-filters.css`: below 990px use single/two-product view icons at left, Sort By centered and Filter at right. Hide mobile product total, add inline sort/filter icons and a red applied-filter count badge. Desktop retains its existing controls and default three columns. D018, README and AGENTS record the contract.
+- `assets/collection-filters.js` keeps independent mobile view state on the persistent layout root. `sections/main-collection-product-grid.liquid` initializes the authored mobile-column setting for CSS fallback. Listing main/hover image sizes follow rendered mobile width and restore their original desktop sizes. `assets/collection-load-more.js` emits a small products-added event so new images get the same sizing.
+- Count uses successfully returned Shopify state: each selected value plus one active price range, with sorting excluded and zero hidden. Verified availability alone=1, availability plus both price bounds=2, price removal=1, Reset=hidden, and browser Back restores the filtered state. Invalid price above the allowed range stays unsubmitted, as before.
+- Local preview verified at 320px, 390px, 820px and 1280px. Mobile 1/2 switching, sort persistence and no horizontal overflow checked; desktop starts at 3, switches to 4, shows product total and hides mobile controls. Load More expanded 16 to 18 results with correct sizes on new images. Sort keyboard opening, focus trap, Escape/focus return and filter Escape checked. Screenshots inspected; no physical-device test. Temporary viewport reset after testing.
+- JavaScript syntax checks and `git diff --check` passed; Theme Check returned zero errors and nine existing warnings. Refreshed the preview after code changes to avoid stale scripts during development.
+- Delivery: local and uncommitted; no Git push or Shopify upload. Earlier changes preserved.
+
+## 2026-10-27 — Percentage badge alignment
+
+- Added `display: block` to the listing-scoped discount badge in `assets/template-collection.css`, removing inline baseline spacing from its positioned wrapper.
+- Verification: both visible sale badges measured zero top offset from their images after the change at desktop and 390px phone width; screenshots inspected. The initial desktop measurement also showed zero offset, so the reported gap was not reproduced there before editing. `git diff --check` passed. CSS only; no physical-device test. Temporary viewport reset.
+- Delivery: local, uncommitted; no Git push or Shopify upload. Earlier changes preserved.
+
+## 2026-10-27 — Three-column collection default
+
+- Set desktop listing default to three across grid controller, CSS fallback, Liquid control state, section schema and saved collection template. Updated README and AGENTS; D016 records the decision. Existing 2/3/4 controls remain.
+- Verification: actual local desktop preview starts with three equal columns and the 3 control selected, without horizontal overflow. Switching to 2 then back to 3 works; screenshot inspected. JavaScript syntax and `git diff --check` passed. Theme Check: zero errors, nine existing warnings.
+- Delivery: local and uncommitted; no Git push or Shopify upload. Earlier pending changes preserved.
+
+## 2026-10-27 — Align collection listing width
+
+- Updated `assets/template-collection.css` so the listing/filter container matches product details/footer: centered 1356px cap and 48/24/16px responsive gutters. Nested page-width elements have no duplicate side padding. Homepage Featured collections remain unchanged. Recorded D015 and AGENTS guidance.
+- Verification: local `/collections/all` at 1440px has the same 1356px outer width and 48px padding as the footer; desktop screenshot inspected. At 820px and 390px computed padding matches footer at 24px and 16px; no horizontal document overflow at all three widths. Mobile screenshot/interaction verification was inconclusive: browser viewport rendering changed and filter locator did not resolve. Viewport override reset. `git diff --check` passed. CSS only; no JavaScript or Liquid changed.
+- Delivery: local and uncommitted; no Git push or Shopify upload. All pre-existing changes preserved.
+
+## 2026-10-27 — Match Suta VIEW ALL buttons
+
+- Updated only Featured collection View all CSS to match the live Suta reference: transparent fill, charcoal text, thin grey outline, square corners and compact 12px lettering/padding. Removed Dawn decorative pseudo-borders in this scope and retained a visible keyboard focus outline. Saved style variants now share this appearance; documented in README, AGENTS and D014.
+- Verification: actual local preview at 1280×900, 820×1180 and 390×844 shows both links at about 88×32px with matching colours/border and no text overflow. Desktop/mobile screenshots inspected, keyboard focus verified, destinations remain `/collections/all`, temporary viewport reset. `git diff --check` passed. CSS-only runtime change; no new JavaScript or Liquid changes in this task. No physical-device testing.
+- Delivery: local and uncommitted; no Shopify upload or Git push. Preserved pending white background, sale-badge removal and their notes.
+
+## 2026-10-27 — Remove Featured Collection percentage-off badges
+
+- Featured collection explicitly disables sale badges through `show_sale_badge: false` in the shared product-card snippet. Rendering skips badge markup, wrappers, percentage calculation and associated title accessibility references. Sold-out badges and price details remain. Shared sale logic/styles remain because collection listings still use them. Updated README, AGENTS and D013.
+- Verification: local homepage at 1280×900 and 390×844 has 24 featured cards and zero discount badges; sale/compare-at prices, ratings, 22 collection labels and sold-out badges remain. Screenshots inspected, mobile information has no overflow, viewport reset. Collection listing still renders percentage badges. Theme Check: zero errors, nine existing warnings; `git diff --check` passed. No JavaScript changes or physical-device testing.
+- Delivery: local, uncommitted; no Git push or Shopify upload. Earlier white-background change and user-owned preview server preserved.
+
+## 2026-10-27 — White body background, local only
+
+- Changed only the two Scheme 1 background values in `config/settings_data.json` from cream to `#FFFFFF` (current settings and Dawn preset). Other scheme values, typography and component backgrounds are preserved. Updated AGENTS and D012.
+- Verification: actual local homepage body is white with no background image at 1280×900 and 390×844; screenshots inspected and viewport reset. JSON parses, `git diff --check` passed, Theme Check has zero errors and nine existing warnings. No physical-device testing.
+- Delivery: uncommitted local change. Existing preview server retained; no explicit Shopify push, live-theme upload or Git push.
+
 ## 2026-10-27 — Local commit of pending theme work
 
 - User requested committing all changes. This commit includes Featured collection spacing/tags across devices, mobile quick-view layout/swipe fixes, collection-based badge selection, README authoring guidance, AGENTS and project-memory files. No new storefront behavior was introduced during commit preparation.

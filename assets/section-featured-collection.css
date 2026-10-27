@@ -1,4 +1,4 @@
-/* Featured collections share Suta's compact, image-led layout. */
+/* Featured section layout, plus compact card and quick-view styles shared with listings. */
 .featured-collection {
   font-family: var(--featured-font, sans-serif);
   color: #282828;
@@ -75,7 +75,7 @@
   padding: 0;
 }
 
-.featured-collection .card {
+:is(.featured-collection, .product-listing-section) .card {
   --text-alignment: left;
   --image-padding: 0px;
   --border-width: 0px;
@@ -86,27 +86,27 @@
   box-shadow: none;
 }
 
-.featured-collection .card::after,
-.featured-collection .card__inner::after {
+:is(.featured-collection, .product-listing-section) .card::after,
+:is(.featured-collection, .product-listing-section) .card__inner::after {
   box-shadow: none;
 }
 
-.featured-collection .card__inner {
+:is(.featured-collection, .product-listing-section) .card__inner {
   border: 0;
   border-radius: 0;
 }
 
-.featured-collection .card > .card__content {
+:is(.featured-collection, .product-listing-section) .card > .card__content {
   position: relative;
   display: block;
   padding: 0;
 }
 
-.featured-collection .card > .card__content .card__information {
+:is(.featured-collection, .product-listing-section) .card > .card__content .card__information {
   padding: 6px 6px 0;
 }
 
-.featured-collection .card__heading {
+:is(.featured-collection, .product-listing-section) .card__heading {
   margin: 0 0 5px;
   font-family: inherit;
   font-size: 10.8px;
@@ -116,7 +116,7 @@
   text-transform: uppercase;
 }
 
-.featured-collection .card-wrapper:hover .card__heading a {
+:is(.featured-collection, .product-listing-section) .card-wrapper:hover .card__heading a {
   text-decoration: none;
 }
 
@@ -133,7 +133,7 @@
   color: #555;
 }
 
-.featured-collection .card-information > .price {
+:is(.featured-collection, .product-listing-section) .card-information > .price {
   margin-top: 0;
   font-size: 12px;
   line-height: 1.5;
@@ -182,11 +182,11 @@
   line-height: 1;
 }
 
-.featured-collection .quick-add {
+:is(.featured-collection, .product-listing-section) .quick-add {
   margin: 8px 6px 0;
 }
 
-.featured-collection .quick-add__submit {
+:is(.featured-collection, .product-listing-section) .quick-add__submit {
   min-height: 36px;
   padding: 8px;
   font-family: inherit;
@@ -198,8 +198,37 @@
 .featured-collection .collection__view-all {
   margin-top: 32px;
   font-family: inherit;
-  letter-spacing: 2px;
   text-transform: uppercase;
+}
+
+.featured-collection .collection__view-all > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+  padding: 5px 12px;
+  border: 1px solid #0000008b;
+  border-radius: 0;
+  background: transparent;
+  color: #1c1c1c;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: 1.3px;
+  text-decoration: none;
+}
+
+.featured-collection .collection__view-all > a::before,
+.featured-collection .collection__view-all > a::after {
+  content: none;
+}
+
+.featured-collection .collection__view-all > a:focus-visible {
+  outline: 2px solid #1c1c1c;
+  outline-offset: 3px;
 }
 
 @media screen and (min-width: 750px) {
@@ -226,7 +255,7 @@
 }
 
 /* A compact view control overlays the photo on every input type. */
-.featured-collection .card--media .featured-card__quick-add {
+:is(.featured-collection, .product-listing-section) .card--media .featured-card__quick-add {
   position: absolute;
   bottom: calc(100% + 3.2px);
   right: 3.2px;
@@ -235,7 +264,7 @@
   opacity: 0.8;
 }
 
-.featured-collection .featured-card__quick-add .quick-add__submit {
+:is(.featured-collection, .product-listing-section) .featured-card__quick-add .quick-add__submit {
   display: flex;
   gap: 0;
   width: auto;
@@ -256,8 +285,8 @@
   letter-spacing: 0;
 }
 
-.featured-collection .featured-card__quick-add .quick-add__submit::before,
-.featured-collection .featured-card__quick-add .quick-add__submit::after {
+:is(.featured-collection, .product-listing-section) .featured-card__quick-add .quick-add__submit::before,
+:is(.featured-collection, .product-listing-section) .featured-card__quick-add .quick-add__submit::after {
   display: none;
 }
 
@@ -270,47 +299,56 @@
 }
 
 @media (pointer: fine) {
-  .featured-collection .card--media .featured-card__quick-add {
+  :is(.featured-collection, .product-listing-section) .card--media .featured-card__quick-add {
     opacity: 0;
     pointer-events: none;
     transform: translateY(5px);
     transition: opacity 200ms ease, transform 200ms ease;
   }
 
-  .featured-collection .card-wrapper:hover .featured-card__quick-add,
-  .featured-collection .card-wrapper:focus-within .featured-card__quick-add {
+  :is(.featured-collection, .product-listing-section) .card-wrapper:hover .featured-card__quick-add,
+  :is(.featured-collection, .product-listing-section) .card-wrapper:focus-within .featured-card__quick-add {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
   }
 
-  .featured-collection .media.media--hover-effect > img + img {
+  :is(.featured-collection, .product-listing-section) .media.media--hover-effect > img + img {
     display: block;
     opacity: 0;
   }
 
-  .featured-collection .card-wrapper:hover .media.media--hover-effect > img:first-child:not(:only-child) {
+  /* Keep image swaps within the photo area, overriding Dawn's card-wide hover. */
+  :is(.featured-collection, .product-listing-section) .card-wrapper:hover .media.media--hover-effect > img:first-child:not(:only-child) {
+    opacity: 1;
+  }
+
+  :is(.featured-collection, .product-listing-section) .card-wrapper:hover .media.media--hover-effect > img + img {
     opacity: 0;
   }
 
-  .featured-collection .card-wrapper:hover .media.media--hover-effect > img + img {
+  :is(.featured-collection, .product-listing-section) .card__inner:hover .media.media--hover-effect > img:first-child:not(:only-child) {
+    opacity: 0;
+  }
+
+  :is(.featured-collection, .product-listing-section) .card__inner:hover .media.media--hover-effect > img + img {
     opacity: 1;
   }
 }
 
 /* Touch devices must never need a first tap to dismiss a sticky hover image. */
 @media (pointer: coarse), (hover: none) {
-  .featured-collection .media.media--hover-effect > img:first-child,
-  .featured-collection .card-wrapper:hover .media.media--hover-effect > img:first-child {
+  :is(.featured-collection, .product-listing-section) .media.media--hover-effect > img:first-child,
+  :is(.featured-collection, .product-listing-section) .card-wrapper:hover .media.media--hover-effect > img:first-child {
     opacity: 1;
     transform: none;
   }
 
-  .featured-collection .media.media--hover-effect > img + img {
+  :is(.featured-collection, .product-listing-section) .media.media--hover-effect > img + img {
     display: none;
   }
 
-  .featured-collection .card--media .featured-card__quick-add {
+  :is(.featured-collection, .product-listing-section) .card--media .featured-card__quick-add {
     opacity: 0.8;
     pointer-events: auto;
     transform: none;
@@ -335,19 +373,19 @@
 }
 
 /* Match Suta's 4px title/tag/price rhythm without Dawn's sibling margin. */
-.featured-collection.collection .card > .card__content .card__information {
+:is(.featured-collection.collection, .product-listing-section) .card > .card__content .card__information {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 4px;
 }
 
-.featured-collection.collection .card__heading {
+:is(.featured-collection.collection, .product-listing-section) .card__heading {
   margin: 0;
   line-height: 1.7;
 }
 
-.featured-collection.collection .collection-card__type {
+:is(.featured-collection.collection, .product-listing-section) .collection-card__type {
   max-width: 100%;
   margin: 0;
   padding: 0 6px;
@@ -362,7 +400,7 @@
   overflow-wrap: anywhere;
 }
 
-.featured-collection.collection .card > .card__content .card-information > .price {
+:is(.featured-collection.collection, .product-listing-section) .card > .card__content .card-information > .price {
   margin-top: 0;
   font-size: 10.8px;
   line-height: 1.7;
@@ -414,10 +452,16 @@
     letter-spacing: 0.04em;
   }
 
-  .featured-collection .featured-card__quick-add .quick-add__submit {
+  :is(.featured-collection, .product-listing-section) .featured-card__quick-add .quick-add__submit {
     font-size: 11px;
   }
 }
+
+/* Shared current-price-first sale treatment. */
+:is(.featured-collection, .product-listing-section) .price--on-sale .price__sale { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
+:is(.featured-collection, .product-listing-section) .price--on-sale .price-item--sale { order: -1; color: #000; }
+:is(.featured-collection, .product-listing-section) .price--on-sale .price-item--regular { color: #f00; font-size: 11.2px; font-weight: 400; text-decoration: line-through; }
+:is(.featured-collection, .product-listing-section) .price .price-item { margin: 0; }
 
 /* Quick view: centered desktop dialog and mobile bottom sheet. */
 .featured-quick-view { background: #0006; font-family: var(--featured-font, sans-serif); }
@@ -578,7 +622,7 @@
 @keyframes featured-sheet-in { from { transform: translate(-50%, 100%); } to { transform: translate(-50%, 0); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .featured-collection .quick-add,
+  :is(.featured-collection, .product-listing-section) .quick-add,
   .featured-card__view-icon,
   .featured-quick-view .quick-add-modal__content,
   .featured-quick-view .product__media-list.slider {
@@ -650,13 +694,13 @@
 }
 
 /* Give featured and similar-product photos a real product-page link. */
-.featured-collection .featured-card__photo-link {
+:is(.featured-collection, .product-listing-section) .featured-card__photo-link {
   position: absolute;
   inset: 0;
   z-index: 2;
   display: block;
 }
-.featured-collection .featured-card__photo-link:focus-visible {
+:is(.featured-collection, .product-listing-section) .featured-card__photo-link:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: -3px;
 }

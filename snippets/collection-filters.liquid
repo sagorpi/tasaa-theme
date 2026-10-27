@@ -1,10 +1,22 @@
 {%- assign current_sort = collection.sort_by | default: collection.default_sort_by -%}
-<collection-filters data-section="{{ section.id }}" data-url="{{ collection.url }}">
+{%- liquid
+  assign applied_filter_count = 0
+  assign mobile_columns = section.settings.columns_mobile | plus: 0
+  for filter in collection.filters
+    assign applied_filter_count = applied_filter_count | plus: filter.active_values.size
+    if filter.type == 'price_range'
+      if filter.min_value.value or filter.max_value.value
+        assign applied_filter_count = applied_filter_count | plus: 1
+      endif
+    endif
+  endfor
+-%}
+<collection-filters data-section="{{ section.id }}" data-url="{{ collection.url }}" data-mobile-columns="{{ mobile_columns }}">
   <div class="cf-toolbar">
     <div class="cf-grid-views" role="group" aria-label="Products per row">
       {%- for columns in (2..4) -%}
         {%- assign icon_width = columns | times: 6.5 | plus: 13 -%}
-        <button type="button" class="cf-grid-view" data-columns="{{ columns }}" aria-label="Show {{ columns }} products per row" aria-pressed="{% if columns == 4 %}true{% else %}false{% endif %}" title="{{ columns }} products per row">
+        <button type="button" class="cf-grid-view" data-columns="{{ columns }}" aria-label="Show {{ columns }} products per row" aria-pressed="{% if columns == 3 %}true{% else %}false{% endif %}" title="{{ columns }} products per row">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {{ icon_width }} 20" width="{{ icon_width }}" height="20" fill="none" aria-hidden="true" focusable="false">
             <path d="M1 6.8h4.5M1 13.3h4.5M{{ icon_width | minus: 5.5 }} 6.8h4.5M{{ icon_width | minus: 5.5 }} 13.3h4.5" />
             {%- for column in (0..columns) -%}
@@ -17,12 +29,22 @@
         </button>
       {%- endfor -%}
     </div>
-    {%- if section.settings.enable_filtering -%}
-      <button type="button" class="cf-filter-toggle" data-open="filters" aria-controls="CollectionFiltersPanel" aria-expanded="false">Filter</button>
-    {%- endif -%}
+    <div class="cf-mobile-grid-views" role="group" aria-label="Products per row">
+      {%- for columns in (1..2) -%}
+        <button type="button" class="cf-mobile-grid-view" data-mobile-columns="{{ columns }}" aria-label="Show {{ columns }} {% if columns == 1 %}product{% else %}products{% endif %} per row" aria-pressed="{% if columns == mobile_columns %}true{% else %}false{% endif %}">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+            <rect x="3" y="3" width="18" height="18" />
+            {%- if columns == 2 -%}<path d="M12 3v18M3 12h18" />{%- endif -%}
+          </svg>
+        </button>
+      {%- endfor -%}
+    </div>
     <p class="cf-count" role="status" data-count>Showing {{ collection.products_count }} products</p>
     {%- if section.settings.enable_sorting -%}
-      <button type="button" class="cf-sort-toggle" data-open="sort" aria-controls="CollectionSortPanel" aria-expanded="false">Sort by <span class="cf-chevron" aria-hidden="true"></span></button>
+      <button type="button" class="cf-sort-toggle" data-open="sort" aria-controls="CollectionSortPanel" aria-expanded="false">
+        <svg class="cf-toolbar-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 5h12M3 11h9M3 17h5M18 7v13m-4-4 4 4 4-4" /></svg>
+        <span>Sort by</span><span class="cf-chevron" aria-hidden="true"></span>
+      </button>
       <div id="CollectionSortPanel" class="cf-sort-panel" data-panel="sort" aria-label="Sort by" tabindex="-1">
         <div class="cf-panel-heading"><span>Sort by</span><button type="button" data-close aria-label="Close sort options">×</button></div>
         <form class="cf-sort-form">
@@ -41,6 +63,16 @@
           {%- endfor -%}
         </form>
       </div>
+    {%- endif -%}
+    {%- if section.settings.enable_filtering -%}
+      <button type="button" class="cf-filter-toggle" data-open="filters" aria-controls="CollectionFiltersPanel" aria-expanded="false">
+        <span class="cf-filter-icon-wrap" aria-hidden="true">
+          <svg class="cf-toolbar-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" focusable="false"><path d="M3 7h5m5 0h8M3 17h10m5 0h3" /><circle cx="10.5" cy="7" r="2.5" /><circle cx="15.5" cy="17" r="2.5" /></svg>
+          <span class="cf-filter-count" data-filter-count {% if applied_filter_count == 0 %}hidden{% endif %}>{{ applied_filter_count }}</span>
+        </span>
+        <span>Filter</span>
+        <span class="visually-hidden" data-filter-status aria-live="polite">{% if applied_filter_count > 0 %}{{ applied_filter_count }} {% if applied_filter_count == 1 %}filter{% else %}filters{% endif %} applied{% endif %}</span>
+      </button>
     {%- endif -%}
   </div>
   <button type="button" class="cf-backdrop" data-close aria-label="Close panel" tabindex="-1"></button>

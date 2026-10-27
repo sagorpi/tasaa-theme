@@ -248,6 +248,14 @@ fill in **Default product note** and save. This global rich-text setting appears
 accordion. It applies across product templates using the Product information block and
 in their quick views. Leave it empty to hide it. No per-product entry or metafield is needed.
 
+### Featured collection View all
+
+Featured collection VIEW ALL links use a consistent compact outlined design across
+phone, tablet and desktop, matching Suta: charcoal text, a thin grey border, square
+corners and a transparent background. This scoped design overrides the saved
+**View all style** variants. **Show view all** and collection destinations still
+behave as before; the link appears only when more products are available.
+
 ### Featured collection image badges
 
 The top-left badge on a Featured collection card is chosen from the product's collections,
@@ -271,10 +279,21 @@ Initial Tasaa setup: **New Arrivals** is enabled at priority **1**, **BESTSELLER
 priority **2**. All other collections are excluded while their visibility field is unset.
 
 The Featured collection section's **Show collection badges on images** setting is the
-master switch. Existing saved settings retain their value. Product Type/Fabric labels,
-sale indicators and sold-out badges are unchanged. This collection-based selection
-replaces the old product `custom.collection_label` override and section-title fallback.
+master switch. Existing saved settings retain their value. Featured collection cards omit
+the sale/percentage-off badge; sale and compare-at prices, product type labels, ratings
+and sold-out badges remain visible. Collection listings use the discount-first rule below.
+This collection-based selection replaces the old product `custom.collection_label` override and section-title fallback.
 Uploading a theme to another store does not create the metafield definitions there.
+
+### Product listing image badges
+
+Collection Product listing cards show one upper-left badge, in this order:
+
+1. **Percentage discount** (`% OFF`) when Compare-at price exceeds Price, rounded to a whole percentage, regardless of collection membership.
+2. Otherwise, the winning enabled collection title from **Show as product badge** and **Product badge priority**, using the same rules above (currently New Arrivals priority 1, BESTSELLER priority 2).
+3. No upper-left badge when neither applies.
+
+Discount badges are red; collection badges are charcoal. The separate **Sold out** badge remains, including on discounted sold-out items. Sale and compare-at prices remain unchanged. The Featured collection badge switch controls only Featured collections; listing badges automatically use the collection fields. Filtering, sorting and loading more products use the same badge rules.
 
 ### Product title badges
 
@@ -356,12 +375,20 @@ Definitions used by the theme (for another store):
 
 The default collection uses **Sidebar with mobile panels** under **Theme editor → Collections → Default collection → Product grid → Filter layout**. Desktop shows collapsible filters and a sort dropdown; mobile/tablet (below 990px) uses a right-hand filter drawer and a bottom sort sheet. Filters update Shopify results without a full reload, preserve sorting and support Clear all, removable selections, price ranges and browser Back/Forward. Existing horizontal, vertical and drawer layouts remain selectable.
 
-Available filter groups and values come from Shopify **Search & Discovery → Filters**. Enable Product type, Fabric, Colour or other supported metafields there; the theme does not invent filter values. Sort choices come from Shopify's collection sort options. Suta's custom **Discount: High to Low** option is not available through Shopify's native collection sorting, so it is not shown. It would need an app or a separate indexed catalog service for correct sorting across every page.
+Available filter groups and values come from Shopify **Search & Discovery → Filters**. Enable Product type, Fabric, Colour or other supported metafields there; the theme does not invent filter values. Sort choices use Shopify's collection sorting, plus the theme's **Discount: High to Low** option described below.
 
 **Automatic product loading:** Enabled by default in **Collections → Default collection → Product grid → Automatically load more products**. The next batch loads when the customer approaches the bottom of the grid, on desktop, tablet and mobile. **Products per page** controls batch size. Filtering or sorting starts a fresh result set; subsequent batches retain those selections. The loader stops at the final page, announces loading/results to screen readers and offers a manual retry on failure. The Load more link also works without JavaScript. Disable the setting to restore numbered pagination. No app is required.
 
+### Collection card appearance and View
+
+Product listing cards share Featured Collection’s compact appearance: uppercase 10.8px titles, outlined 12px type tags, 10.8px current prices and 4px title/tag/price gaps. Featured Collection and Product listing discounted prices show the current price first in black, followed by the original price in red with a strike-through. Set **Product grid → Product card font** (default Jost) for titles, tags, prices and the View control; the existing setting ID is preserved.
+
+**Quick add → Standard** now shows the same eye-icon **view** button and compact popup as Featured Collection, including single-variant and sold-out products. The saved default collection template and new section defaults enable this mode. None hides the control; Bulk retains its bulk-order behavior. Photos and titles still link to product pages.
+
+**Show second image on hover** is enabled in the saved default template and new section defaults. In both Listing and Featured Collection, products with a second image switch only while the pointer is over the photo area on desktop/fine-pointer devices (hovering the title, tag or price does not swap images); touch devices keep the main photo and show the View control without a hover step. Products with one image keep it. The popup reuses the existing compact purchase/gallery/Product Details behavior, with a mobile sheet and desktop dialog. Listing image proportions, grid choices and discount-first badges are retained.
+
 ### Collection grid views
-The Sidebar with mobile panels layout includes 2-, 3- and 4-column buttons at the left of the desktop toolbar. Each page starts at 4 columns. Changing the view is instant and stays selected while filtering, sorting and automatically loading more products. Phones and smaller tablets keep the configured mobile layout; the desktop controls appear from 990px. No app or external icon library is required.
+The Sidebar with mobile panels layout includes 2-, 3- and 4-column buttons at the left of the desktop toolbar. Each page starts at 3 columns. Changing the view is instant and stays selected while filtering, sorting and automatically loading more products. Below 990px, the toolbar has single/two-product view icons on the left, Sort By in the middle and Filter on the right. The product total is hidden there. Mobile starts with the section’s **Mobile columns** setting and retains a chosen view through filtering, sorting and product loading; desktop and mobile choices are independent. Sort and Filter have lightweight inline icons. A red badge on Filter counts selected values plus one for an active price range (either or both bounds); sorting is excluded, and zero is hidden. The count updates after results load, including Clear all, individual removal and browser Back/Forward. No app or external icon library is required.
 
 ### Discount sorting
 Collection Sort by offers Featured, Price: Low to High, Price: High to Low, Discount: High to Low, Date old to new, and Date new to old. Discount sorting computes percentage savings from Price and Compare-at price across every page of the filtered collection. It loads matching card markup before sorting, then reveals cards in normal scroll batches. This option can take longer on large collections; normal Shopify sorts retain server pagination. The discount_sort=1 URL flag preserves the custom order across refreshes and browser navigation. No app is required.

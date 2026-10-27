@@ -4,6 +4,7 @@
 {% endif %}
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'section-featured-collection.css' | asset_url | stylesheet_tag }}
 {%- style -%}
   {{ section.settings.card_label_font | font_face: font_display: 'swap' }}
   #shopify-section-{{ section.id }} { --collection-card-label-font: {{ section.settings.card_label_font.family }}, {{ section.settings.card_label_font.fallback_families }}; }
@@ -113,7 +114,10 @@
         </facet-filters-form>
       {%- endif -%}
 
-      <div class="{% if section.settings.filter_type == 'suta' %}tasaa-collection-layout page-width{% elsif section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
+      <div
+        class="{% if section.settings.filter_type == 'suta' %}tasaa-collection-layout page-width{% elsif section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}"
+        {% if section.settings.filter_type == 'suta' %}style="--collection-mobile-columns: {{ section.settings.columns_mobile }};"{% endif %}
+      >
         {% unless section.settings.filter_type == 'suta' %}
           {{ 'component-facets.css' | asset_url | stylesheet_tag }}
           <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
@@ -204,6 +208,7 @@
                       skip_styles: skip_card_product_styles,
                       quick_add: section.settings.quick_add,
                       section_id: section.id,
+                      listing_card: true,
                       product_view_context: 'collection'
                     %}
                   </li>
@@ -240,7 +245,7 @@
     {
       "type": "font_picker",
       "id": "card_label_font",
-      "label": "Product price and type font",
+      "label": "Product card font",
       "default": "jost_n4"
     },
     {
@@ -265,7 +270,7 @@
       "min": 1,
       "max": 6,
       "step": 1,
-      "default": 4,
+      "default": 3,
       "label": "t:sections.main-collection-product-grid.settings.columns_desktop.label"
     },
     {
@@ -358,7 +363,7 @@
     {
       "type": "checkbox",
       "id": "show_secondary_image",
-      "default": false,
+      "default": true,
       "label": "t:sections.main-collection-product-grid.settings.show_secondary_image.label"
     },
     {
@@ -377,7 +382,7 @@
     {
       "type": "select",
       "id": "quick_add",
-      "default": "none",
+      "default": "standard",
       "label": "t:sections.main-collection-product-grid.settings.quick_add.label",
       "options": [
         {

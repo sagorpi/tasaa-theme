@@ -137,16 +137,35 @@ class FacetFiltersForm extends HTMLElement {
   }
 
   static renderProductGridContainer(html) {
-    document.getElementById('ProductGridContainer').innerHTML = new DOMParser()
+    const container = document.getElementById('ProductGridContainer');
+    const source = new DOMParser()
       .parseFromString(html, 'text/html')
-      .getElementById('ProductGridContainer').innerHTML;
-
-    document
-      .getElementById('ProductGridContainer')
-      .querySelectorAll('.scroll-trigger')
-      .forEach((element) => {
-        element.classList.add('scroll-trigger--cancel');
+      .getElementById('ProductGridContainer');
+    const listing = container.closest('.product-listing-section');
+    const sectionId = listing && source.querySelector('#product-grid')?.dataset.id;
+    let modalOpenerId = '';
+    if (sectionId) {
+      document.querySelectorAll('body > quick-add-modal').forEach((modal) => {
+        if (modal.dataset.section !== sectionId) return;
+        if (modal.hasAttribute('open')) {
+          modalOpenerId = modal.openedBy?.id || '';
+          modal.hide(true);
+        }
+        modal.remove();
       });
+    }
+    container.innerHTML = source.innerHTML;
+
+    container.querySelectorAll('.scroll-trigger').forEach((element) => {
+      element.classList.add('scroll-trigger--cancel');
+    });
+    if (modalOpenerId) {
+      const replacement = document.getElementById(modalOpenerId) ||
+        [...listing.querySelectorAll('button, select, summary')].find((element) =>
+          element.getClientRects().length && !element.disabled && getComputedStyle(element).visibility !== 'hidden'
+        );
+      replacement?.focus({ preventScroll: true });
+    }
   }
 
   static renderProductCount(html, updateEvent) {

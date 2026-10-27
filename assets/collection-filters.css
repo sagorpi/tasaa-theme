@@ -11,6 +11,7 @@ collection-filters button { cursor: pointer; }
 .cf-sort-toggle { position: absolute; inset: 0 0 0 auto; min-width: 150px; border-left: 1px solid #eee !important; font-size: 12px !important; }
 .cf-chevron { display: inline-block; width: 6px; height: 6px; border-right: 1px solid; border-bottom: 1px solid; transform: rotate(45deg); margin: 0 3px 3px 12px; transition: transform .2s ease; }
 .cf-filter-toggle { display: none; }
+.cf-mobile-grid-views, .cf-toolbar-icon { display: none; }
 .cf-filter-panel { align-self: start; position: sticky; top: calc(var(--header-height, 100px) + 15px); max-height: 70vh; overflow: auto; scrollbar-width: thin; padding-right: 10px; color: #5c5c5c; background: white; }
 .cf-filter-panel .cf-panel-heading { display: none; }
 .cf-group { border-bottom: 1px solid #e5e5e5; }
@@ -57,9 +58,25 @@ collection-filters[data-open-panel='sort'] .cf-sort-panel { visibility: visible;
 @media (max-width: 989px) {
   .tasaa-collection-layout { display: block; }
   .cf-toolbar { margin-bottom: 20px; justify-content: stretch; min-height: 46px; }
-  .cf-count { flex: 1; text-align: center; font-size: 10px; }
-  .cf-filter-toggle, .cf-sort-toggle { display: block; position: static; min-width: 0; flex: 1; height: 46px; text-transform: uppercase; font-size: 11px !important; letter-spacing: 2px; }
-  .cf-filter-toggle { border-right: 1px solid #eee !important; }
+  .cf-count { display: none; }
+  .cf-mobile-grid-views { order: 1; display: flex; flex: 1; align-items: center; justify-content: center; min-width: 0; }
+  .cf-toolbar .cf-mobile-grid-view { display: flex; align-items: center; justify-content: center; width: 44px; min-height: 46px; padding: 0; color: #8e8e8e; }
+  .cf-toolbar .cf-mobile-grid-view[aria-pressed='true'] { color: #1c1c1c; }
+  .cf-mobile-grid-view svg { width: 24px; height: 24px; stroke: none; }
+  .cf-mobile-grid-view rect { fill: currentColor; }
+  .cf-mobile-grid-view path { stroke: #fff; stroke-width: 2.5; }
+  .cf-mobile-grid-view:first-child svg { transform: translateX(4px); }
+  .cf-mobile-grid-view:last-child svg { transform: translateX(-4px); }
+  .cf-mobile-grid-view:focus-visible, .cf-filter-toggle:focus-visible, .cf-sort-toggle:focus-visible { outline: 2px solid #212326; outline-offset: -3px; }
+  .cf-filter-toggle, .cf-sort-toggle { display: flex; align-items: center; justify-content: center; gap: 7px; position: static; min-width: 0; flex: 1; height: 46px; padding: 0 4px; text-transform: uppercase; font-size: 11px !important; letter-spacing: .8px; }
+  .cf-sort-toggle { order: 2; }
+  .cf-filter-toggle { order: 3; border-left: 1px solid #eee !important; }
+  .cf-toolbar-icon { display: block; flex-shrink: 0; }
+  .cf-filter-icon-wrap { position: relative; display: block; flex-shrink: 0; }
+  .cf-filter-count { position: absolute; top: -5px; right: -6px; display: flex; align-items: center; justify-content: center; min-width: 14px; height: 14px; padding: 0 3px; border-radius: 999px; background: #d70302; color: #fff; font-size: 9px; font-weight: 600; line-height: 1; letter-spacing: 0; box-shadow: 0 0 0 1px #fff; }
+  .cf-filter-count[hidden] { display: none; }
+  .tasaa-collection-layout #product-grid { display: grid; grid-template-columns: repeat(var(--collection-mobile-columns, 2), minmax(0, 1fr)); }
+  .tasaa-collection-layout #product-grid > .grid__item { width: 100%; max-width: 100%; min-width: 0; }
   .cf-sort-toggle .cf-chevron { display: none; }
   .cf-filter-panel, .cf-sort-panel { position: fixed; z-index: 2147483647; visibility: hidden; opacity: 1; background: white; transition: transform .3s ease, visibility .3s; box-shadow: none; }
   .cf-filter-panel { inset: 0 0 0 auto; width: min(85vw, 380px); height: 100dvh; max-height: none; padding: 0; transform: translateX(100%); display: flex; flex-direction: column; overflow: hidden; }
@@ -89,7 +106,7 @@ collection-filters[data-open-panel='sort'] .cf-sort-panel { visibility: visible;
 .cf-grid-view[aria-pressed='true'] svg, .cf-grid-view:hover svg { stroke: #212326; }
 .cf-grid-view:focus-visible { outline: 2px solid #212326; outline-offset: 1px; }
 @media (min-width: 990px) {
-  .tasaa-collection-layout #product-grid { display: grid; grid-template-columns: repeat(var(--collection-columns, 4), minmax(0, 1fr)); }
+  .tasaa-collection-layout #product-grid { display: grid; grid-template-columns: repeat(var(--collection-columns, 3), minmax(0, 1fr)); }
   .tasaa-collection-layout #product-grid > .grid__item { width: 100%; max-width: 100%; min-width: 0; }
 }
 @media (max-width: 989px) { .cf-grid-views { display: none; } }

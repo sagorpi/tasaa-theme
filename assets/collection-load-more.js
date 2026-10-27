@@ -54,6 +54,7 @@ if (!customElements.get('collection-load-more')) {
           card.classList.add('scroll-trigger--cancel');
           this.grid.append(card);
         });
+        this.dispatchEvent(new CustomEvent('collection:products-added', { bubbles: true }));
         if (restoreFocus) cards[0]?.querySelector('a')?.focus({ preventScroll: true });
         this.status.textContent = `${this.grid.children.length} products shown.`;
         if (!this.localCards.length) {
@@ -86,6 +87,7 @@ if (!customElements.get('collection-load-more')) {
           card.classList.add('scroll-trigger--cancel');
           this.grid.append(card);
         });
+        this.dispatchEvent(new CustomEvent('collection:products-added', { bubbles: true }));
         const nextLink = doc.querySelector('collection-load-more a');
         this.setBusy(false);
         this.status.textContent = `${this.grid.children.length} products shown.`;
