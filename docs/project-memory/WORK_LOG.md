@@ -5,7 +5,9 @@ Keep meaningful milestones here, newest first. Record actual outcomes and verifi
 ## 2026-10-28 — Git and Shopify delivery of mobile overlays and cart confirmation
 
 - User explicitly requested committing/pushing all local changes with a proper message, then uploading to Shopify. Reviewed nine pending files: five runtime files for D027/D028/D029, AGENTS and the three project-memory documents. Refreshed origin; `feature/homepage-redesign` has no divergence before committing.
-- JavaScript syntax and diff checks pass. The latest Theme Check has zero errors/nine existing warnings; the reviewed source is unchanged since the recorded mobile/desktop interaction checks. Git commit/push and the final scoped Shopify upload are in progress; final outcomes will be recorded after verification.
+- JavaScript syntax and diff checks pass. The latest Theme Check has zero errors/nine existing warnings; the reviewed source is unchanged since the recorded mobile/desktop interaction checks, so those checks were not repeated for delivery.
+- Git delivery: created `bd57c13` (Fix mobile overlay stacking and initial cart notification flash) containing all nine reviewed files and pushed to `origin/feature/homepage-redesign`. Confirmed no branch divergence and a clean working tree before the Shopify upload. Final delivery notes form a separate documentation update.
+- Shopify delivery: re-verified live `dev-theme-id` theme `192399933723` on `tasaa-dev.myshopify.com`. Backed up all five changed runtime files: D027/D028 already matched local; the D029 snippet/JavaScript matched the pre-fix Git baseline. After the source Git push, uploaded only `assets/cart-notification.js` and `snippets/cart-notification.liquid` with explicit store/theme, `--allow-live`, `--nodelete` and `--only`. CLI confirmed success. Downloaded all five runtime files again and verified byte-for-byte equality with local and `bd57c13`. No settings/templates or unrelated files uploaded.
 
 ## 2026-10-28 — Prevent first-visit cart confirmation flash
 
@@ -13,7 +15,7 @@ Keep meaningful milestones here, newest first. Record actual outcomes and verifi
 - Controlled first-render fixture with no theme CSS/JS: the original markup shows `Added to cart!` at 26px height; fixed markup is `display:none`/0px on desktop 1280px and phone 390px. This reproduces the pre-styles loading failure independently of cache timing. Actual preview pages retain the initial native hide.
 - Actual cart integration: desktop Featured quick-view Add to cart shows the normal confirmation and automatically dismisses after its countdown; mobile 390px product-page Add to cart shows a viewport-contained confirmation whose Close button restores inactive/hidden/inert state. Added two test items in an initially empty separate `localhost` session and removed both afterward; the existing `127.0.0.1` cart was untouched. Saved/inspected the mobile homepage and successful-add screenshots; reset the viewport and stopped only the temporary first-render fixture server. No physical-device test.
 - `node --check assets/cart-notification.js` and `git diff --check` pass. Theme Check: zero errors/nine existing warnings. Existing pending listing/navigation files remain unchanged.
-- Delivery: local/uncommitted; no Git commit/push or Shopify upload requested. A later authorized scoped upload must include both changed notification files.
+- Delivery: source/notes subsequently committed in `bd57c13` and pushed to origin, then both notification files uploaded together to the verified live theme. See the delivery entry above for exact scope and download verification.
 
 ## 2026-10-28 — Inspect first-visit cart text flash
 
@@ -28,7 +30,7 @@ Keep meaningful milestones here, newest first. Record actual outcomes and verifi
 - Responsive check: resizing an open mobile sheet to 1280px closes it, restores scrolling, retains selection and returns it to the toolbar. Desktop dropdown stays 220px wide and right-aligned at the toolbar's lower border (1px shared border). Mobile/tablet and desktop parent transitions are verified; screenshot saved/inspected and viewport reset. No physical-device test.
 - `node --check assets/collection-filters.js` and `git diff --check` pass. No Liquid/schema changes, dependencies or settings added. Earlier pending navigation fix remains intact.
 - Shopify delivery: the user subsequently requested upload. Re-verified live theme `192399933723` on `tasaa-dev.myshopify.com`; backed up both filter files and confirmed they matched the committed baseline. Uploaded only `assets/collection-filters.css` and `assets/collection-filters.js` together using explicit store/theme, `--allow-live`, `--nodelete` and `--only`. CLI confirmed success; both post-upload downloads match local byte-for-byte. No settings/templates uploaded, and the prior navigation fix remains intact.
-- Git delivery: source/notes remain uncommitted; no new Git commit or push was requested.
+- Git delivery: source/notes subsequently committed in `bd57c13` and pushed to origin. Both filter files remain current in the latest live-theme verification.
 
 ## 2026-10-28 — Mobile menu closing above listing filters
 
@@ -36,7 +38,7 @@ Keep meaningful milestones here, newest first. Record actual outcomes and verifi
 - Verification at 390px/820px: zero overlapping filter frames during sampled closing; header remains at 20 while details is open and returns to 3 when closed. Button/Escape closing and Menu focus restoration work; Escape updates aria-expanded false and body scroll unlocks. Rapid reopen cancels the old close deadline and stays open, then Escape closes normally. Desktop 1280px retains hidden drawer/layer 3. No document overflow at any checked width. Reduced-motion lifecycle reviewed without changing system preference; no physical-device test. Closing-frame screenshot saved/inspected and viewport reset.
 - `git diff --check` passes and the preview applies the new CSS rule. No Liquid/schema/JavaScript changed, so no new Theme Check or JavaScript syntax run was needed.
 - Shopify delivery: user subsequently requested upload. Re-verified live theme `192399933723` (`dev-theme-id`) on `tasaa-dev.myshopify.com`, backed up its navigation stylesheet and confirmed it matched the committed baseline. Uploaded only `assets/section-store-navigation.css` with explicit store/theme, `--allow-live`, `--nodelete` and `--only`. CLI confirmed success; post-upload download matches local byte-for-byte. No settings or other theme files uploaded.
-- Git delivery: source/notes remain uncommitted; no new Git push. Previous Git deliveries remain unchanged.
+- Git delivery: source/notes subsequently committed in `bd57c13` and pushed to origin. The navigation stylesheet remains current in the latest live-theme verification.
 
 ## 2026-10-28 — Git delivery of listing fixes and Shopify settings
 
