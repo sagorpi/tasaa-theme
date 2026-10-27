@@ -6,7 +6,8 @@ Keep meaningful milestones here, newest first. Record actual outcomes and verifi
 
 - User explicitly requested committing all pending changes and pushing to Git. Reviewed all 17 changed files, including theme settings and project documentation; refreshed `origin/feature/homepage-redesign` and confirmed no divergence from the current branch before committing.
 - Rechecked whitespace, all three modified JavaScript files, Shopify JSON and Theme Check: zero errors/nine existing warnings. Earlier browser verification remains recorded below; no additional storefront changes were made for this delivery.
-- Git commit/push are the remaining steps at this snapshot. The verified 11-file Shopify upload remains complete; the white-background setting is included in Git only and has not been uploaded to Shopify.
+- Git delivery: created `5530381` (Refine product listing and featured collection cards), containing all 17 pending files, and pushed it to `origin/feature/homepage-redesign`. Confirmed branch tracking has zero commits ahead/behind and a clean working tree before recording this final delivery note. This note and the reconciled delivery statuses are recorded in a separate documentation commit.
+- Shopify delivery: the verified 11-file upload remains complete; no additional upload was performed for this Git request. The white-background setting is included in Git only and has not been uploaded to Shopify.
 
 ## 2026-10-27 — Featured corrections and authorized Shopify delivery
 
